@@ -25,7 +25,7 @@
 					<label for="token">
             Token
           </label>
-					<input type="text" class="form-control" id="token" value = "1891da82070411088505ea838e45a5a8">
+					<input type="text" class="form-control" id="token" value = "e09ff8f559bbe376023eb487bb4f0d13">
 				</div>
 				<div class="form-group" id = "formulaire">
 					<label for="variable">
@@ -43,8 +43,11 @@
 				</div>
         <div>
           <button id="addVar" type="submit" class="btn btn-primary">
-  					Add a variable (+)
-  				</button>
+  					Add a variable
+          </button>
+          <button id = "removeVar" type = "submit" class = "btn btn-primary">
+            Remove
+          </button>
           <br>
           <label for="start">Start date:</label>
             <input type="date" id="startDate" name="trip-start" value="2017-05-20" min="2017-05-20" max="2018-12-31">
@@ -61,16 +64,18 @@
 			</form>
       <hr>
       <br>
-		</div>
+    </div>
     <iframe style="width:50%;height:500px" seamless="seamless" frameborder="0" id = "plot"></iframe>
-
 	</div>
-  <div>
-    <h2>
-      Recherche d'outliers
-    </h2>
-  </div>
+
 </div>
+<div class = "form">
+<h2>
+  Recherche d'outliers
+</h2>
+
+</div>
+
   <script src="js/jquery.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/scripts.js"></script>

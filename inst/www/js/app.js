@@ -5,7 +5,7 @@ $(function(){
   ocpu.seturl("http://localhost/ocpu/library/webapp/R")
    // Initialisation des variables
   console.log("Bonjour en JavaScript !");
-  var nbVar = 0;
+  var nbVar = -1;
   var idSelect = "mySelect";
 
   console.log("nbVar = ", nbVar);
@@ -37,31 +37,58 @@ $(function(){
       btn.removeAttr("disabled");
     });
   });
+
+    // Add a variable on the form
   $("#addVar").click(function(e){
     e.preventDefault();
-    console.log("nbVar = ", nbVar);
     var btn = $(this).attr("disabled", "disabled");
-    console.log("click add var");
-    var myDiv = document.getElementById("formulaire");
-    //Create array of options to be added
-    //var array = ["Wind","Temperature (instant)","Temperature (actinometric)", "Radiation (global)", "Radiation (global PAR)", "Precipitation (hourly)"];
-    var array = ["wind", "temperature_instant","temperature_actinothermic", "radiation_global", "radiation_PAR", "precipitation_hourly rainfall"];
+    // On n'autorise de n'ajouter qu'un select pour l'instant
+    if (nbVar <1){
+      nbVar  = nbVar + 1;
 
-    //Create and append select list
-    var selectList = document.createElement("select");
-    selectList.id = idSelect.concat(nbVar.toString());
-    console.log("Select id", nbVar, " = ",  idSelect.concat(nbVar.toString()));
-    selectList.setAttribute("class", "form-control");
-    myDiv.appendChild(selectList);
-    //Create and append the options
-    for (var i = 0; i < array.length; i++) {
-        var option = document.createElement("option");
-        option.value = array[i];
-        option.text = array[i];
-        selectList.appendChild(option);
+      // Ajout d'un select dans la <div> formulaire
+      var myDiv = document.getElementById("formulaire");
+
+      //Create array of options to be added
+      var arrayText = ["Wind","Temperature (instant)","Temperature (actinometric)", "Radiation (global)", "Radiation (global PAR)", "Precipitation (hourly)"];
+      var array = ["wind", "temperature_instant","temperature_actinothermic", "radiation_global", "radiation_PAR", "precipitation_hourly rainfall"];
+      
+      //Create and append select list
+      var selectList = document.createElement("select");
+      selectList.id = idSelect.concat(nbVar.toString());
+      console.log("Select id", nbVar, " = ",  idSelect.concat(nbVar.toString()));
+      selectList.setAttribute("class", "form-control");
+      myDiv.appendChild(selectList);
+      
+      //Create and append the options
+      for (var i = 0; i < array.length; i++) {
+          var option = document.createElement("option");
+          option.value = array[i];
+          option.text = arrayText[i];
+          selectList.appendChild(option);
+      }
+    } else {
     }
-    nbVar  = nbVar + 1;
-
     btn.removeAttr("disabled");
   });
+
+  // Remove a variable on the form
+  $("#removeVar").click(function(e){
+    e.preventDefault();
+    var btn = $(this).attr("disabled", "disabled");
+    if (nbVar >= 0){
+      console.log("nbVar = ", nbVar);
+
+      // Remove the last select created
+      var element = idSelect.concat(nbVar.toString());
+      element = document.getElementById(element);
+      element.parentNode.removeChild(element);
+
+      nbVar  = nbVar - 1;
+    } else {
+    }
+    btn.removeAttr("disabled");
+  });
+
+  
 });
