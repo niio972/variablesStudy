@@ -118,7 +118,7 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
 
   }
   p
-  #htmlwidgets::saveWidget(p, "test1var.html", selfcontained = FALSE)
+  htmlwidgets::saveWidget(p, "test1var.html", selfcontained = FALSE)
 }
 
 ##' @title getVarPretty
@@ -188,8 +188,8 @@ getDataVarPretty <- function(nameVar, methodVar = NULL, varPretty, token) {
   nameUriVar <- paste(paste(zero, collapse=''), numVar, sep  = "")
 
   # Recuperation of the data from the WS
-  myCount <- phisWSClientR::getEnvironmentData(token = token, variable = paste("http://www.phenome-fppn.fr/ues/id/variables/v", nameUriVar, sep = ""))$totalCount
-  enviroData <- phisWSClientR::getEnvironmentData(token=token, variable = paste("http://www.phenome-fppn.fr/ues/id/variables/v", nameUriVar, sep = "") , verbose = TRUE, pageSize = myCount)$data
+  myCount <- phisWSClientR::getEnvironmentData(token = token, variable = paste("http://www.opensilex.org/demo/id/variables/v", nameUriVar, sep = ""))$totalCount
+  enviroData <- phisWSClientR::getEnvironmentData(token=token, variable = paste("http://www.opensilex.org/demo/id/variables/v", nameUriVar, sep = "") , verbose = TRUE, pageSize = myCount)$data
 
   nomVar <- paste(toupper(substr(levels(droplevels(varPretty$name[numVar])),1,1)), substr(levels(droplevels(varPretty$name[numVar])),2,nchar(levels(droplevels(varPretty$name[numVar])))), sep = "")
   methodVar <- levels(droplevels(varPretty$method[numVar]))
