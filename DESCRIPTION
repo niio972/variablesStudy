@@ -14,5 +14,6 @@ Imports:
     htmlwidgets,
     plotly,
     magrittr,
-    openssl
+    openssl,
+    phisWSClientR
 RoxygenNote: 6.1.1

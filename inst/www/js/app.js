@@ -18,7 +18,7 @@ $(function(){
     var nameVars = [$("#variable").val()];
     console.log("nameVars = ", nameVars);
 
-    for (var i=0;i < nbVar; i++){
+    for (var i=0;i < (nbVar+1); i++){
       var idAddArray = idSelect.concat(i.toString());
       var newElement = document.getElementById(idAddArray).value;
       console.log("ESSAIS NEW ELEMENT", newElement);
@@ -43,8 +43,10 @@ $(function(){
     e.preventDefault();
     var btn = $(this).attr("disabled", "disabled");
     // On n'autorise de n'ajouter qu'un select pour l'instant
-    if (nbVar <1){
+    if (nbVar <0){
       nbVar  = nbVar + 1;
+      console.log("nbVar = ", nbVar);
+
 
       // Ajout d'un select dans la <div> formulaire
       var myDiv = document.getElementById("formulaire");
