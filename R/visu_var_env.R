@@ -29,7 +29,7 @@
 ##' @examples
 ##' \donttest{
 ##'  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
-##'  aToken <- getToken("guest@phis.fr","guest")
+##'  aToken <- getToken("guest@opensilex.org","guest")
 ##'  token <- aToken$data
 ##'  plotVar("temperature", token = token)
 ##'  plotVar("temperature", token = token, sensor = "s18002")
@@ -134,7 +134,7 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
 ##' @examples
 ##' \donttest{
 ##' initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
-##'  aToken <- getToken("guest@phis.fr","guest")
+##'  aToken <- getToken("guest@opensilex.org","guest")
 ##'  token <- aToken$data
 ##'  getVarPretty(token = token)
 ##' }
@@ -169,7 +169,7 @@ getVarPretty <- function(token){
 ##' @examples
 ##' \donttest{
 ##' initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
-##'  aToken <- getToken("guest@phis.fr","guest")
+##'  aToken <- getToken("guest@opensilex.org","guest")
 ##'  token <- aToken$data
 ##'  varPrettyTot <- getVarPretty(token = token)
 ##'  getDataVarPretty(nameVar = "temperature", varPretty = varPrettyTot, token = token)
