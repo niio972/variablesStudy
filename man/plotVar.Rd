@@ -4,12 +4,10 @@
 \alias{plotVar}
 \title{plot.var}
 \usage{
-plotVar(nom_var, startDate = NULL, endDate = NULL, sensor = NULL,
+plotVar(nameVar, startDate = NULL, endDate = NULL, sensor = NULL,
   token)
 }
 \arguments{
-\item{nom_var}{(string) name of the variable to plot}
-
 \item{startDate}{(date format %Y-%m-%d) date from which to plot}
 
 \item{endDate}{(date format %Y-%m-%d) date to which to plot}
@@ -17,17 +15,23 @@ plotVar(nom_var, startDate = NULL, endDate = NULL, sensor = NULL,
 \item{sensor}{(number) sensor's name that recorded the values}
 
 \item{token}{(string) a token from getToken function}
+
+\item{nomVar}{(list) name of the variable to plot}
+}
+\value{
+
 }
 \description{
 plot.var
 }
 \examples{
 \donttest{
- initializeClientConnection(apiID="ws_private", url = "138.102.159.36:8080/uesAPI/rest/")
- aToken <- getToken("guest@phis.fr","guest")
+ initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
+ aToken <- getToken("guest@opensilex.org","guest")
  token <- aToken$data
- plotVar("temperature", token = aToken$data)
- plotVar("temperature", token = aToken$data, sensor = "s18002")
- plotVar("temperature", startDate = "2017-06-26", endDate = "2017-06-28", sensor = "s18002", token = aToken$data)
+ plotVar("temperature", token = token)
+ plotVar("temperature", token = token, sensor = "s18002")
+ plotVar("temperature", startDate = "2017-06-26", endDate = "2017-06-28", sensor = "s18002", token = token)
 }
+
 }
