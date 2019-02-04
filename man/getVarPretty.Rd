@@ -18,7 +18,7 @@ getVarPretty
 \examples{
 \donttest{
 initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
- aToken <- getToken("guest@phis.fr","guest")
+ aToken <- getToken("guest@opensilex.org","guest")
  token <- aToken$data
  getVarPretty(token = token)
 }

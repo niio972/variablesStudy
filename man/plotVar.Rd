@@ -27,7 +27,7 @@ plot.var
 \examples{
 \donttest{
  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
- aToken <- getToken("guest@phis.fr","guest")
+ aToken <- getToken("guest@opensilex.org","guest")
  token <- aToken$data
  plotVar("temperature", token = token)
  plotVar("temperature", token = token, sensor = "s18002")
