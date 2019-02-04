@@ -28,7 +28,7 @@
 ##'
 ##' @examples
 ##' \donttest{
-##'  initializeClientConnection(apiID="ws_private", url = "138.102.159.36:8080/uesAPI/rest/")
+##'  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
 ##'  aToken <- getToken("guest@phis.fr","guest")
 ##'  token <- aToken$data
 ##'  plotVar("temperature", token = token)
@@ -133,13 +133,13 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
 ##'
 ##' @examples
 ##' \donttest{
-##' initializeClientConnection(apiID="ws_private", url = "138.102.159.36:8080/uesAPI/rest/")
+##' initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
 ##'  aToken <- getToken("guest@phis.fr","guest")
 ##'  token <- aToken$data
 ##'  getVarPretty(token = token)
 ##' }
 getVarPretty <- function(token){
-  phisWSClientR::initializeClientConnection(apiID="ws_private", url = "138.102.159.36:8080/uesAPI/rest/")
+  phisWSClientR::initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
   rawVar <- phisWSClientR::getVariables2(token = token)
   names <- rawVar$data$label
   methods <- rawVar$data$label
@@ -168,14 +168,14 @@ getVarPretty <- function(token){
 ##'
 ##' @examples
 ##' \donttest{
-##' initializeClientConnection(apiID="ws_private", url = "138.102.159.36:8080/uesAPI/rest/")
+##' initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
 ##'  aToken <- getToken("guest@phis.fr","guest")
 ##'  token <- aToken$data
 ##'  varPrettyTot <- getVarPretty(token = token)
 ##'  getDataVarPretty(nameVar = "temperature", varPretty = varPrettyTot, token = token)
 ##' }
 getDataVarPretty <- function(nameVar, methodVar = NULL, varPretty, token) {
-  phisWSClientR::initializeClientConnection(apiID="ws_private", url = "138.102.159.36:8080/uesAPI/rest/")
+  phisWSClientR::initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
   if(!is.null(methodVar) && !is.na(methodVar)){
     numVar <- 1
     while(grepl(methodVar, varPretty$method[numVar]) == FALSE && numVar < dim(varPretty)[1]){
