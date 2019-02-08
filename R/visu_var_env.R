@@ -1,30 +1,15 @@
-###############################################################################
-################################### A FAIRE ###################################
-###############################################################################
-###     Ajouter de l'interactivité:                                         ###
-### * recherche d'outliers                                                  ###
-### * pouvoir changer les informations de ce point                          ###
-###                                                                         ###
-###   sources:                                                              ###
-### * http://users.auth.gr/~prinosp/downloads/Galiatsatou_PAPER_416.pdf     ###
-###############################################################################
-###############################################################################
-###############################################################################
-
-##' @title plot.var
+##' @title Plot Environmental Data
 ##'
 ##' @importFrom magrittr %>%
 ##' @importFrom plotly layout
 ##' @importFrom plotly plot_ly
 ##' @importFrom plotly add_trace
 ##'
-##' @param nomVar (list) name of the variable to plot
-##' @param startDate (date format %Y-%m-%d) date from which to plot
-##' @param endDate (date format %Y-%m-%d) date to which to plot
-##' @param sensor (number) sensor's name that recorded the values
-##' @param token (string) a token from getToken function
-##'
-##' @return
+##' @param nameVar name of the variable to plot
+##' @param startDate date from which to plot
+##' @param endDate date to which to plot
+##' @param sensor sensor's name that recorded the values
+##' @param token a token from getToken function
 ##'
 ##' @examples
 ##' \donttest{
@@ -32,20 +17,15 @@
 ##'  aToken <- getToken("guest@opensilex.org","guest")
 ##'  token <- aToken$data
 ##'  plotVar("temperature", token = token)
-##'  plotVar("temperature", token = token, sensor = "s18002")
-##'  plotVar("temperature", startDate = "2017-06-26", endDate = "2017-06-28", sensor = "s18002", token = token)
 ##' }
 ##'
 ##' @export
 ##'
 plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, token){
-  startDate = NULL
-  endDate = NULL
   ## Data recuperation
   # variable's informations
   varPrettyTot <- getVarPretty(token = token)
   Data <- NULL
-  varPretty <- NULL
   # Chosen variable
   for (i in 1: length(nameVar)){
     nameString <- toString(nameVar[i])
@@ -54,8 +34,7 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
     subNameVar <- varMeth[[1]][1]
     # Recuperation of the data from the WS
     enviroData <- getDataVarPretty(nameVar = subNameVar, methodVar = methodVar, varPretty = varPrettyTot, token = token)
-    print(enviroData$varPretty)
-    varPretty <- cbind(varPretty, enviroData$varPretty)
+    varPretty <- cbind(varPrettyTot, enviroData$varPretty)
     enviroData <- enviroData$enviroData
     # Values
     yVar <- enviroData$value
@@ -117,16 +96,15 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
     p <- plotly::layout(p, title = "<b>Tendency of environmental variables among time</br>")
 
   }
-  p
-  #htmlwidgets::saveWidget(p, "test1var.html", selfcontained = FALSE)
+  htmlwidgets::saveWidget(p, "test1var.html", selfcontained = FALSE)
 }
 
-##' @title getVarPretty
+##' @title Get Variable's Names from WS2 and formate them
 ##'
 ##' @importFrom phisWSClientR initializeClientConnection
 ##' @importFrom phisWSClientR getEnvironmentData
 ##'
-##' @param token (string) a token from getToken function
+##' @param token a token from getToken function
 ##'
 ##' @return WSResponse
 ##' @export
@@ -149,19 +127,20 @@ getVarPretty <- function(token){
   }
   acronyms <- rawVar$data$trait$label
   unitVar <- rawVar$data$unit$comment
-  varPretty <- data.frame(name = names, method = methods, acronym = acronyms, unity = unitVar)
+  uriVar <- rawVar$data$uri
+  varPretty <- data.frame(name = names, method = methods, acronym = acronyms, unity = unitVar, uri = uriVar)
   return(varPretty)
 }
 
-##' @title getDataVarPretty
+##' @title Get Data from WS2 and formate them
 ##'
 ##' @importFrom phisWSClientR initializeClientConnection
 ##' @importFrom phisWSClientR getVariables2
 ##'
-##' @param nameVar (string) name of the variable to plot
-##' @param methodVar (string) name of the method used to collect data
-##' @param varPretty (data.frame) from getVarPretty
-##' @param token (string) a token from getToken function
+##' @param nameVar name of the variable to plot
+##' @param methodVar name of the method used to collect data
+##' @param varPretty from getVarPretty
+##' @param token a token from getToken function
 ##'
 ##' @return WSResponse
 ##' @export
@@ -184,19 +163,18 @@ getDataVarPretty <- function(nameVar, methodVar = NULL, varPretty, token) {
   } else {
     numVar <- match(nameVar, varPretty$name)
   }
-  zero <- rep('0', 3-length(numVar))
-  nameUriVar <- paste(paste(zero, collapse=''), numVar, sep  = "")
+  nameUriVar <-  levels(droplevels(varPretty$uri[numVar]))
 
   # Recuperation of the data from the WS
-  myCount <- phisWSClientR::getEnvironmentData(token = token, variable = paste("http://www.phenome-fppn.fr/ues/id/variables/v", nameUriVar, sep = ""))$totalCount
-  enviroData <- phisWSClientR::getEnvironmentData(token=token, variable = paste("http://www.phenome-fppn.fr/ues/id/variables/v", nameUriVar, sep = "") , verbose = TRUE, pageSize = myCount)$data
+  myCount <- phisWSClientR::getEnvironmentData(token = token, variable = nameUriVar)$totalCount
+  enviroData <- phisWSClientR::getEnvironmentData(token=token, variable =  nameUriVar, verbose = TRUE, pageSize = myCount)$data
 
   nomVar <- paste(toupper(substr(levels(droplevels(varPretty$name[numVar])),1,1)), substr(levels(droplevels(varPretty$name[numVar])),2,nchar(levels(droplevels(varPretty$name[numVar])))), sep = "")
   methodVar <- levels(droplevels(varPretty$method[numVar]))
   acronymVar <- levels(droplevels(varPretty$acronym[numVar]))
   unityVar <- levels(droplevels(varPretty$unity[numVar]))
 
-
   varPretty <- list(name = nomVar, method = methodVar, acronym = acronymVar, unity = unityVar)
   return(list(enviroData = enviroData, varPretty = varPretty))
 }
+

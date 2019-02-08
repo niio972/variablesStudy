@@ -2,24 +2,24 @@
 % Please edit documentation in R/visu_var_env.R
 \name{getDataVarPretty}
 \alias{getDataVarPretty}
-\title{getDataVarPretty}
+\title{Get Data from WS2 and formate them}
 \usage{
 getDataVarPretty(nameVar, methodVar = NULL, varPretty, token)
 }
 \arguments{
-\item{nameVar}{(string) name of the variable to plot}
+\item{nameVar}{name of the variable to plot}
 
-\item{methodVar}{(string) name of the method used to collect data}
+\item{methodVar}{name of the method used to collect data}
 
-\item{varPretty}{(data.frame) from getVarPretty}
+\item{varPretty}{from getVarPretty}
 
-\item{token}{(string) a token from getToken function}
+\item{token}{a token from getToken function}
 }
 \value{
 WSResponse
 }
 \description{
-getDataVarPretty
+Get Data from WS2 and formate them
 }
 \examples{
 \donttest{
