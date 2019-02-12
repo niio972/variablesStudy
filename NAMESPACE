@@ -3,6 +3,7 @@
 export(getDataVarPretty)
 export(getVarPretty)
 export(plotVar)
+importFrom(gam,s)
 importFrom(magrittr,"%>%")
 importFrom(phisWSClientR,getEnvironmentData)
 importFrom(phisWSClientR,getVariables2)

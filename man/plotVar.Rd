@@ -2,27 +2,26 @@
 % Please edit documentation in R/visu_var_env.R
 \name{plotVar}
 \alias{plotVar}
-\title{plot.var}
+\title{Plot Environmental Data}
 \usage{
 plotVar(nameVar, startDate = NULL, endDate = NULL, sensor = NULL,
-  token)
+  token, smoothing = TRUE)
 }
 \arguments{
-\item{startDate}{(date format %Y-%m-%d) date from which to plot}
+\item{nameVar}{name of the variable to plot}
 
-\item{endDate}{(date format %Y-%m-%d) date to which to plot}
+\item{startDate}{date from which to plot}
 
-\item{sensor}{(number) sensor's name that recorded the values}
+\item{endDate}{date to which to plot}
 
-\item{token}{(string) a token from getToken function}
+\item{sensor}{sensor's name that recorded the values}
 
-\item{nomVar}{(list) name of the variable to plot}
-}
-\value{
+\item{token}{a token from getToken function}
 
+\item{smoothing}{logical, smoothing of the data}
 }
 \description{
-plot.var
+Plot Environmental Data
 }
 \examples{
 \donttest{
@@ -30,8 +29,6 @@ plot.var
  aToken <- getToken("guest@opensilex.org","guest")
  token <- aToken$data
  plotVar("temperature", token = token)
- plotVar("temperature", token = token, sensor = "s18002")
- plotVar("temperature", startDate = "2017-06-26", endDate = "2017-06-28", sensor = "s18002", token = token)
 }
 
 }
