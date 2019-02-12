@@ -9,80 +9,99 @@
 
     <meta name="description" content="Source code generated using layoutit.com">
     <meta name="author" content="LayoutIt!">
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
-
+    <link href="css/style.css" rel="stylesheet"> 
   </head>
+
+
   <body>
+    <div class="wrap">
+      <ul class="breadcrumb">
+        <li>
+          <a href="/opensilex/web/index.php">Home</a>
+          /
+          Data Visualization 
+        </li>
+      </ul>
+      <h1 class="main-title"> Data Visualization app  </h1>
+      
+      <div class="container-fluid">
+	      <div class="row">
+		      <div class="col-md-12">
+			      <form role="form">
+              <div class="form-group" id = "token">
+                <b >
+                  <label for="token">
+                    Token
+                  </label>
+                </b>
+					      <input type="text" class="form-control" id="token" value = "fe7519f3c87d80e83aa6304172a70e94">
+				      </div>
+        
+
+              <div class="form-group" id = "formulaire">
+                <b >
+                  <label for="variable">
+					          Variable
+                  </label>
+                </b>
+                <select id = "variable" class = "form-control">
+                  <span class="selection"></span>
+                  <option value = "wind">Wind</option>
+                  <option value = "temperature_instant">Temperature (instant)</option>
+                  <option value = "temperature_actinothermic">Temperature (actinometric)</option>
+                  <option value = "radiation_global">Radiation (global)</option>
+                  <option value = "radiation_PAR">Radiation (global PAR)</option>
+                  <option value = "precipitation_hourly rainfall">Precipitation (hourly)</option>
+                </select>
+              </div>
+        
+
+              <div>
+                <button id="addVar" type="submit" class="btn btn-primary">
+                 <i class="material-icons">add</i>
+                </button> 
+                 Add variable
+                <button id = "removeVar" type = "submit" class = "btn btn-primary">
+                 Remove
+                </button>
+                <br>
+                <label for="start">Start date:</label>
+                <input type="date" id="startDate" name="trip-start" value="2017-05-20" min="2017-05-20" max="2018-12-31">
+              </div>
+
+              <div>
+                <label for="start">End date:</label>
+                <input type="date" id="endDate" name="trip-start" value="2017-05-20" min="2017-05-20" max="2018-12-31">
+              </div>
 
 
-    <div class="container-fluid">
-	<div class="row">
-		<div class="col-md-12">
-			<form role="form">
-        <div class="form-group">
-					<label for="token">
-            Token
-          </label>
-					<input type="text" class="form-control" id="token" value = "fe7519f3c87d80e83aa6304172a70e94">
-				</div>
-				<div class="form-group" id = "formulaire">
-					<label for="variable">
-						Variable
-					</label>
-          <select id = "variable" class = "form-control">
-            <option value = "wind">Wind</option>
-            <option value = "temperature_instant">Temperature (instant)</option>
-            <option value = "temperature_actinothermic">Temperature (actinometric)</option>
-            <option value = "radiation_global">Radiation (global)</option>
-            <option value = "radiation_PAR">Radiation (global PAR)</option>
-            <option value = "precipitation_hourly rainfall">Precipitation (hourly)</option>
-          </select>
+			    	  <button id="submit" type="submit" class="btn btn-primary">
+              Show graph!
+				      </button>
+			      </form>
+            <hr>
+            <br>
+          </div>
 
-				</div>
-        <div>
-          <button id="addVar" type="submit" class="btn btn-primary">
-  					Add a variable
-          </button>
-          <button id = "removeVar" type = "submit" class = "btn btn-primary">
-            Remove
-          </button>
-          <br>
-          <label for="start">Start date:</label>
-            <input type="date" id="startDate" name="trip-start" value="2017-05-20" min="2017-05-20" max="2018-12-31">
-        </div>
-        <div>
-          <label for="start">End date:</label>
-            <input type="date" id="endDate" name="trip-start" value="2017-05-20" min="2017-05-20" max="2018-12-31">
-        </div>
+          <iframe style="width:50%;height:300px" seamless="seamless" frameborder="0" id = "plot"></iframe>
+	      </div>
+      </div>
 
+      <div class = "form">
+        <h2>
+          Recherche d'outliers
+        </h2>
+      </div>
 
-				<button id="submit" type="submit" class="btn btn-primary">
-					Show me!
-				</button>
-			</form>
+      <script src="js/jquery.min.js"></script>
+      <script src="js/tether.min.js"></script>
+      <script src="js/bootstrap.min.js"></script>
+      <script src="js/scripts.js"></script>
+      <script src="js/opencpu-0.5.js"></script>
+      <script src="js/app.js"></script>
       <hr>
-      <br>
-    </div>
-    <iframe style="width:50%;height:500px" seamless="seamless" frameborder="0" id = "plot"></iframe>
-	</div>
-
-</div>
-<div class = "form">
-<h2>
-  Recherche d'outliers
-</h2>
-
-</div>
-
-  <script src="js/jquery.min.js"></script>
-  <script src="js/tether.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/scripts.js"></script>
-  <script src="js/opencpu-0.5.js"></script>
-  <script src="js/app.js"></script>
-  <hr>
-
+    </div>  
   </body>
 </html>
