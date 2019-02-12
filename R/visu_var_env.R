@@ -99,8 +99,8 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
       p <- plotly::add_lines(p, x = xVar, y = modele, line = line, name = paste(varPretty$acronym[i], "(smoothed curve)", sep = " "), yaxis = nameY)
       opacity <- 0.5
     } else {
-        opacity <- 1
-      }
+      opacity <- 1
+    }
     p <- plotly::add_markers(p, x = xVar, y = Data[, i], marker = marker, opacity = opacity,name = varPretty$method[i], yaxis = nameY, hoverlabel = hoverlabel,
                              text = ~paste(xVar, '<br>', varPretty$acronym[i], ': <b>', Data[,i], varPretty$unity[i], '</b>'), hoverinfo = 'text')
   }
@@ -116,7 +116,7 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
               gridwidth = 2,  tickfont = list(family = 'serif'), overlaying = "y", side = "right")
     p <- plotly::layout(p, yaxis = y)
     p <- plotly::layout(p, title = "<b>Tendency of environmental variables among time</br>")
-
+  }
   htmlwidgets::saveWidget(p, "test1var.html", selfcontained = FALSE)
 }
 
@@ -198,4 +198,3 @@ getDataVarPretty <- function(nameVar, methodVar = NULL, varPretty, token) {
   varPretty <- list(name = nomVar, method = methodVar, acronym = acronymVar, unity = unityVar)
   return(list(enviroData = enviroData, varPretty = varPretty))
 }
-
