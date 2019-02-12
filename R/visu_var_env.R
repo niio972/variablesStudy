@@ -117,7 +117,6 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
     p <- plotly::layout(p, yaxis = y)
     p <- plotly::layout(p, title = "<b>Tendency of environmental variables among time</br>")
 
-  }
   htmlwidgets::saveWidget(p, "test1var.html", selfcontained = FALSE)
 }
 
