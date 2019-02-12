@@ -2,7 +2,7 @@
 // 1. Plot creation
 $(function(){
   // Remove this line in the final version
-  ocpu.seturl("http://localhost:8004/ocpu/library/webapp/R")
+  //ocpu.seturl("http://localhost:8004/ocpu/library/webapp/R")
    // Initialisation des variables
   console.log("Bonjour en JavaScript !");
   var nbVar = -1;
@@ -52,7 +52,7 @@ $(function(){
 
 
       // Ajout d'un select dans la <div> formulaire
-      var myDiv = document.getElementById("formulaire");
+      var myDiv = document.getElementById("var-form");
 
       //Create array of options to be added
       var arrayText = ["Wind","Temperature (instant)","Temperature (actinometric)", "Radiation (global)", "Radiation (global PAR)", "Precipitation (hourly)"];
