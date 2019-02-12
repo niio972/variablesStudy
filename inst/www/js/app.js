@@ -2,7 +2,7 @@
 // 1. Plot creation
 $(function(){
   // Remove this line in the final version
-  //ocpu.seturl("http://localhost:8004/ocpu/library/webapp/R")
+  ocpu.seturl("http://localhost:8004/ocpu/library/webapp/R")
    // Initialisation des variables
   console.log("Bonjour en JavaScript !");
   var nbVar = -1;
@@ -12,8 +12,8 @@ $(function(){
   $("#submit").click(function(e){
     e.preventDefault();
     var btn = $(this).attr("disabled", "disabled");
-    console.log("variable" +  $("#variable").val()[0]);
-    console.log("token" + $("#token").val()[0]);
+    console.log("variable " +  $("#variable").val()[0]);
+    console.log("token " + $("#token").val()[0]);
     // Use of the R function to create the plot
     smoothing = document.getElementById('smoothing').checked;
     console.log("smoothing = ", smoothing);
