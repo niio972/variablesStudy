@@ -2,18 +2,18 @@
 % Please edit documentation in R/visu_var_env.R
 \name{getVarPretty}
 \alias{getVarPretty}
-\title{getVarPretty}
+\title{Get Variable's Names from WS2 and formate them}
 \usage{
 getVarPretty(token)
 }
 \arguments{
-\item{token}{(string) a token from getToken function}
+\item{token}{a token from getToken function}
 }
 \value{
 WSResponse
 }
 \description{
-getVarPretty
+Get Variable's Names from WS2 and formate them
 }
 \examples{
 \donttest{

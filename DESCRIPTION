@@ -15,5 +15,7 @@ Imports:
     plotly,
     magrittr,
     openssl,
-    phisWSClientR
+    phisWSClientR,
+    gam,
+    stats
 RoxygenNote: 6.1.1
