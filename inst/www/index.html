@@ -25,7 +25,7 @@
 					<label for="token">
             Token
           </label>
-					<input type="text" class="form-control" id="token" value = "79f24b3cb7c80f04ee3c9925d98b89e0">
+					<input type="text" class="form-control" id="token" value = "d1cfc7ecdd2bf4bfd9a6322b667e4950">
 				</div>
 				<div class="form-group" id = "formulaire">
 					<label for="variable">
@@ -49,6 +49,10 @@
             Remove
           </button>
           <br>
+          <input type="checkbox" id="smoothing" name="smoothing"
+         checked>
+         <label for="smoothing">Smoothing</label>
+         <br>
           <label for="start">Start date:</label>
             <input type="date" id="startDate" name="trip-start" value="" min="2017-05-20" max="2018-12-31">
         </div>
@@ -57,23 +61,15 @@
             <input type="date" id="endDate" name="trip-start" value="" min="2017-05-20" max="2018-12-31">
         </div>
 
-
 				<button id="submit" type="submit" class="btn btn-primary">
 					Show me!
 				</button>
+        <hr>
+            <iframe style="width:75%;height:140%" seamless="seamless" frameborder="0" id = "plot" align = "center"></iframe>
 			</form>
-      <hr>
-      <br>
+
     </div>
-    <iframe style="width:50%;height:500px" seamless="seamless" frameborder="0" id = "plot"></iframe>
 	</div>
-
-</div>
-<div class = "form">
-<h2>
-  Recherche d'outliers
-</h2>
-
 </div>
 
   <script src="js/jquery.min.js"></script>
@@ -81,7 +77,6 @@
   <script src="js/scripts.js"></script>
   <script src="js/opencpu-0.5.js"></script>
   <script src="js/app.js"></script>
-  <hr>
 
   </body>
 </html>

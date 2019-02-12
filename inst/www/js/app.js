@@ -15,6 +15,8 @@ $(function(){
     console.log("variable" +  $("#variable").val()[0]);
     console.log("token" + $("#token").val()[0]);
     // Use of the R function to create the plot
+    smoothing = document.getElementById('smoothing').checked;
+    console.log("smoothing = ", smoothing);
     var nameVars = [$("#variable").val()];
     console.log("nameVars = ", nameVars);
 
@@ -28,7 +30,8 @@ $(function(){
 
     var req = ocpu.call("plotVar", {
       nameVar : nameVars,
-      token: $("#token").val()
+      token: $("#token").val(),
+      smoothing: smoothing
     }, function(session){
        $("iframe").attr('src', session.getFileURL("test1var.html"));
     }).fail(function(text){

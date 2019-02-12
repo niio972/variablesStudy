@@ -5,7 +5,7 @@
 \title{Plot Environmental Data}
 \usage{
 plotVar(nameVar, startDate = NULL, endDate = NULL, sensor = NULL,
-  token)
+  token, smoothing = TRUE)
 }
 \arguments{
 \item{nameVar}{name of the variable to plot}
@@ -17,6 +17,8 @@ plotVar(nameVar, startDate = NULL, endDate = NULL, sensor = NULL,
 \item{sensor}{sensor's name that recorded the values}
 
 \item{token}{a token from getToken function}
+
+\item{smoothing}{logical, smoothing of the data}
 }
 \description{
 Plot Environmental Data
