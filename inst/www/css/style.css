@@ -5,6 +5,27 @@ body{
    font-size:85%;
 }
 
+.navbar-inverse {
+	background-color: #222;
+	border-color: #080808;
+}
+
+.navbar-fixed-top {
+	top: 0;
+	border-width: 0 0 1px;
+}
+
+.navbar-fixed-top, .navbar-fixed-bottom {
+	border-radius: 0;
+}
+
+.navbar-fixed-top, .navbar-fixed-bottom {
+	position: fixed;
+	right: 0;
+	left: 0;
+	z-index: 1030;
+}
+
 .wrap {
   min-height: 100%;
   height: auto;

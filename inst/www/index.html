@@ -14,6 +14,66 @@
     <link href="css/style.css" rel="stylesheet"> 
   </head>
 
+  <nav id="w4" class="navbar-inverse navbar-fixed-top navbar">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#w4-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/opensilex/web/index.php">OpenSILEX <i> Demo</i></a>
+      </div>
+      <div id="w4-collapse" class="collapse navbar-collapse">
+        <ul id="w5" class="navbar-nav navbar-right nav">
+          <li class="dropdown">
+            <a class="dropdown-toggle" href="#" data-toggle="dropdown">Organisation expérimentale <span class="caret"></span></a>
+            <ul id="w6" class="dropdown-menu"><li><a href="/opensilex/web/index.php?r=infrastructure" tabindex="-1"><i class="fas fa fa-home"></i>  Cadres scientifiques</a>
+          </li>
+          <li><a href="/opensilex/web/index.php?r=project%2Findex" tabindex="-1"><i class="glyphicon glyphicon-folder-open"></i>  Projets</a>
+          </li>
+          <li><a href="/opensilex/web/index.php?r=experiment%2Findex" tabindex="-1"><i class="fa fa-flask"></i>  Expérimentations</a>
+          </li>
+          <li><a href="/opensilex/web/index.php?r=scientific-object%2Findex" tabindex="-1"><i class="glyphicon glyphicon-leaf"></i>  Objets Scientifiques</a>
+          </li>
+          <li><a href="/opensilex/web/index.php?r=variable%2Findex" tabindex="-1"><i class="glyphicon glyphicon-eye-open"></i>  Variables</a>
+          </li>
+          <li><a href="/opensilex/web/index.php?r=species%2Findex" tabindex="-1"><i class="icofont-lg icofont icofont-wheat"></i>  Species</a>
+          </li>
+          <li><a href="/opensilex/web/index.php?r=event%2Findex" tabindex="-1"><i class="fa fa-flag"></i>  Events</a>
+          </li>
+        </ul>
+  </li>
+    <li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">Installation <span class="caret"></span></a>
+      <ul id="w7" class="dropdown-menu"><li><a href="/opensilex/web/index.php?r=sensor%2Findex" tabindex="-1"><i class="fa-large fa fa-camera"></i>  Capteurs</a>
+       </li>
+       <li><a href="/opensilex/web/index.php?r=vector%2Findex" tabindex="-1"><i class="glyphicon glyphicon-blackboard"></i>  Vecteurs</a>
+       </li>
+       <li><a href="/opensilex/web/index.php?r=radiometric-target%2Findex" tabindex="-1"><i class="glyphicon glyphicon-screenshot"></i>  Cibles Radiométriques</a>
+       </li>
+       </ul>
+  </li>
+    <li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">Outils <span class="caret"></span></a>
+      <ul id="w8" class="dropdown-menu">
+        <li><a href="/opensilex/web/index.php?r=group%2Findex" tabindex="-1"><i class="glyphicon glyphicon-th"></i>  Groupes</a>
+        </li>
+        <li><a href="/opensilex/web/index.php?r=user%2Findex" tabindex="-1"><i class="glyphicon glyphicon-user"></i>  Personnes</a>
+        </li>
+        <li><a href="/opensilex/web/index.php?r=document%2Findex" tabindex="-1"><i class="glyphicon glyphicon-book"></i>  Documents</a>
+        </li>
+        <li><a href="http://www.opensilex.org/openSilexAPI/" tabindex="-1"><i class="glyphicon glyphicon-fire"></i>  Web API</a>
+        </li>
+        <li><a href="https://opensilex.github.io/phis-docs-community/" tabindex="-1"><i class="glyphicon glyphicon-link"></i>  Documentation</a>
+        </li>
+      </ul>
+    </li>
+    <li><a href="/opensilex/web/index.php?r=site%2Fdisconnect"><i class="glyphicon glyphicon-log-out"></i>  Déconnexion (guest@opensilex.org)</a></li>
+  </ul>
+</div>
+</div>
+</nav>
+
 
   <body>
     <div class="wrap">
@@ -112,8 +172,6 @@
       <script src="js/scripts.js"></script>
       <script src="js/opencpu-0.5.js"></script>
       <script src="js/app.js"></script>
-      <hr>
-      <br>
     </div>  
   </body>
 </html>
