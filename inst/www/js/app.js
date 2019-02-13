@@ -2,7 +2,7 @@
 // 1. Plot creation
 $(function(){
   // Remove this line in the final version
-  // ocpu.seturl("http://localhost/ocpu/library/webapp/R")
+  ocpu.seturl("http://localhost/ocpu/library/webapp/R")
    // Initialisation des variables
   console.log("Bonjour en JavaScript !");
   var nbVar = -1;

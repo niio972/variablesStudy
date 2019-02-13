@@ -17,5 +17,6 @@ Imports:
     openssl,
     phisWSClientR,
     gam,
-    stats
+    stats,
+    mgcv
 RoxygenNote: 6.1.1

@@ -28,6 +28,7 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
   # variable's informations
   varPrettyTot <- getVarPretty(token = token)
   Data <- NULL
+  varPretty <- NULL
   # Chosen variable
   for (i in 1: length(nameVar)){
     nameString <- toString(nameVar[i])
@@ -36,12 +37,14 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
     subNameVar <- varMeth[[1]][1]
     # Recuperation of the data from the WS
     enviroData <- getDataVarPretty(nameVar = subNameVar, methodVar = methodVar, varPretty = varPrettyTot, token = token)
-    varPretty <- cbind(varPrettyTot, enviroData$varPretty)
+    varPrettyI <- t(data.frame(matrix(unlist(enviroData$varPretty))))
+    varPretty <- rbind(varPretty, varPrettyI)
     enviroData <- enviroData$enviroData
     # Values
     yVar <- enviroData$value
     if (i == 1){
       xVar <- as.POSIXct(enviroData$date, tz = "UTC", format = "%Y-%m-%dT%H:%M:%S")
+      colnames(varPretty) <- c("name", "method", "acronym", "unity")
     }
     Data <- cbind(Data, y = yVar)
   }
@@ -68,17 +71,22 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
   ## Plotting
   # Labels
   colorVar <- list("#7CB5EC", "#0F528A", "#003152", "#577A003")
+  colorRibbon <- colorVar
+  colorFill <- colorVar
+  for (i in 1:length(colorVar)){
+    colorRibbon[i] <- paste(colorRibbon[i], "0D", sep = "")
+    colorFill[i] <- paste(colorFill[i], "4D", sep = "")
+  }
   colorBgHover <- "#F8F8F8"
   colorText <- "#525252"
-  y <- list(title = paste('<b>', varPretty$name[1], ' (',varPretty$unity[1], ')' , '</b>', sep = ""), color = '#282828',
+  y <- list(title = paste('<b>', varPretty[1,"name"], ' (',varPretty[1,"unity"], ')' , '</b>', sep = ""), color = '#282828',
             tickfont = list(family = 'serif'), gridwidth = 2)
-  x <- list(title = '<b>Time</b>', tickfont = list(family = 'serif'), gridwidth = 2)
+  x <- list(title = '<b>Date</b>', tickfont = list(family = 'serif'), gridwidth = 2)
   title <- list(size = 20, color = '#282828', tickfont = list(family = 'serif'))
   # Plot
   p <- plotly::plot_ly()
   p <- plotly::layout(p, xaxis = x, yaxis = y,
                       titlefont = title,
-                      legend = list(x = 0.80, y = -0.2),
                       margin = list(l = 60, r = 70, t = 70, b =  60))
   # Affichage des variables et leur lissage
   for (i in 1:(length(nameVar))){
@@ -92,22 +100,30 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
     hoverlabel$bordercolor <- as.character(colorVar[i])
     # Ajout des traces au graphique
     if(smoothing == TRUE){
-      line <- NULL
-      line$color <- as.character(colorVar[i])
+      # Création du modèle
       varSpline <- gam::gam(Data[,i]~s(xVar, df = 20))
-      modele <- stats::predict(varSpline, newdata = xVar)
-      p <- plotly::add_lines(p, x = xVar, y = modele, line = line, name = paste(varPretty$acronym[i], "(smoothed curve)", sep = " "), yaxis = nameY)
-      opacity <- 0.5
+      varPred <- stats::predict(varSpline, se.fit = TRUE)
+      modeleDf <- data.frame(x = xVar[order(xVar)] , y = varPred$fit,
+                             lb = as.numeric(varPred$fit - 1.96 * varPred$se.fit),
+                             ub = as.numeric(varPred$fit + 1.96 * varPred$se.fit))
+      # Affichage de la courbe lissée et son intervalle de confiance
+      p <- plotly::add_lines(p, x = xVar, y = varPred$fit, line = list(color = as.character(colorVar[i])), yaxis = nameY,
+                             name = paste(varPretty[i,"acronym"], "(smoothed curve)", sep = " "))
+      p <- plotly::add_ribbons(p, x = xVar, ymin = modeleDf$lb, ymax = modeleDf$ub,  yaxis = nameY,
+                               line = list(color = as.character(colorRibbon[i])),
+                               fillcolor = as.character(colorFill[i]),
+                               name = "Standard Error", showlegend = FALSE)
+      opacity <- 0.19
     } else {
-        opacity <- 1
-      }
-    p <- plotly::add_markers(p, x = xVar, y = Data[, i], marker = marker, opacity = opacity,name = varPretty$method[i], yaxis = nameY, hoverlabel = hoverlabel,
-                             text = ~paste(xVar, '<br>', varPretty$acronym[i], ': <b>', Data[,i], varPretty$unity[i], '</b>'), hoverinfo = 'text')
+      opacity <- 1
+    }
+    p <- plotly::add_markers(p, x = xVar, y = Data[, i], marker = marker, opacity = opacity,name = varPretty[i,"method"], yaxis = nameY, hoverlabel = hoverlabel,
+                             text = ~paste(xVar, '<br>', varPretty[i,"acronym"], ': <b>', Data[,i], varPretty[i,"unity"], '</b>'), hoverinfo = 'text')
   }
   if (length(nameVar) == 1){
-    p <- plotly::layout(p, title = paste('<b>Tendency of ', varPretty$name[1],'</b><br><i>', varPretty$method[1],'</i>' , sep = ""))
+    p <- plotly::layout(p, title = paste('<b>Tendency of ', varPretty[1,"name"],'</b><br><i>', varPretty[1,"method"],'</i>' , sep = ""))
   } else if (i == 2) {
-    y <- list(title = paste('<b>', varPretty$name[2], ' (',varPretty$unity[2], ')' , '</b>', sep = ""), color = '#282828', showgrid = FALSE,
+    y <- list(title = paste('<b>', varPretty[2,"name"], ' (',varPretty[2,"unity"], ')' , '</b>', sep = ""), color = '#282828', showgrid = FALSE,
               gridwidth = 2,  tickfont = list(family = 'serif'), overlaying = "y", side = "right")
     p <- plotly::layout(p, yaxis2 = y)
     p <- plotly::layout(p, title = "<b>Tendency of environmental variables among time</br>")
@@ -116,8 +132,9 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
               gridwidth = 2,  tickfont = list(family = 'serif'), overlaying = "y", side = "right")
     p <- plotly::layout(p, yaxis = y)
     p <- plotly::layout(p, title = "<b>Tendency of environmental variables among time</br>")
-
-  htmlwidgets::saveWidget(p, "test1var.html", selfcontained = FALSE)
+  }
+  p
+  #htmlwidgets::saveWidget(p, "test1var.html", selfcontained = FALSE)
 }
 
 ##' @title Get Variable's Names from WS2 and formate them
