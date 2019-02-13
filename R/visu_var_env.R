@@ -133,8 +133,7 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
     p <- plotly::layout(p, yaxis = y)
     p <- plotly::layout(p, title = "<b>Tendency of environmental variables among time</br>")
   }
-  p
-  #htmlwidgets::saveWidget(p, "test1var.html", selfcontained = FALSE)
+  htmlwidgets::saveWidget(p, "test1var.html", selfcontained = FALSE)
 }
 
 ##' @title Get Variable's Names from WS2 and formate them
@@ -215,4 +214,3 @@ getDataVarPretty <- function(nameVar, methodVar = NULL, varPretty, token) {
   varPretty <- list(name = nomVar, method = methodVar, acronym = acronymVar, unity = unityVar)
   return(list(enviroData = enviroData, varPretty = varPretty))
 }
-

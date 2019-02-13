@@ -2,7 +2,7 @@
 // 1. Plot creation
 $(function(){
   // Remove this line in the final version
-  ocpu.seturl("http://localhost/ocpu/library/webapp/R")
+  //ocpu.seturl("http://localhost:8004/ocpu/library/webapp/R")
    // Initialisation des variables
   console.log("Bonjour en JavaScript !");
   var nbVar = -1;
@@ -12,8 +12,8 @@ $(function(){
   $("#submit").click(function(e){
     e.preventDefault();
     var btn = $(this).attr("disabled", "disabled");
-    console.log("variable" +  $("#variable").val()[0]);
-    console.log("token" + $("#token").val()[0]);
+    console.log("variable " +  $("#variable").val()[0]);
+    console.log("token " + $("#token").val()[0]);
     // Use of the R function to create the plot
     smoothing = document.getElementById('smoothing').checked;
     console.log("smoothing = ", smoothing);
@@ -52,7 +52,7 @@ $(function(){
 
 
       // Ajout d'un select dans la <div> formulaire
-      var myDiv = document.getElementById("formulaire");
+      var myDiv = document.getElementById("var-form");
 
       //Create array of options to be added
       var arrayText = ["Wind","Temperature (instant)","Temperature (actinometric)", "Radiation (global)", "Radiation (global PAR)", "Precipitation (hourly)"];
