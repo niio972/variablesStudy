@@ -139,8 +139,8 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
       varSpline <- gam::gam(yVar~s(Data$date, df = df))
       varPred <- stats::predict(varSpline, se.fit = TRUE)
       modeleDf <- data.frame(x = Data$date[order(Data$date)] , y = varPred$fit,
-                             lb = as.numeric(varPred$fit - 1.96 * varPred$se.fit),
-                             ub = as.numeric(varPred$fit + 1.96 * varPred$se.fit))
+                             lb = as.numeric(varPred$fit - qnorm(0.975) * varPred$se.fit),
+                             ub = as.numeric(varPred$fit + qnorm(0.975) * varPred$se.fit))
       # Affichage de la courbe lissée et son intervalle de confiance
       p <- plotly::add_lines(p, x = Data$date, y = varPred$fit, line = list(color = as.character(colorVar[i])), yaxis = nameY,
                              name = paste(varPretty[i,"acronym"], "(smoothed curve)", sep = " "))
@@ -152,23 +152,21 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
     } else {
       opacity <- 1
     }
-    p <- plotly::add_markers(p, x = Data$date, y = yVar, marker = marker, opacity = opacity,name = varPretty[i,"method"], yaxis = nameY, hoverlabel = hoverlabel,
+    p <- plotly::add_markers(p, x = Data$date, y = yVar, marker = marker, opacity = opacity, name = varPretty[i,"method"], yaxis = nameY, hoverlabel = hoverlabel,
                              text = ~paste(Data$date, '<br>', varPretty[i,"acronym"], ': <b>', yVar, varPretty[i,"unity"], '</b>'), hoverinfo = 'text')
   }
   if (length(nameVar) == 1){
-    p <- plotly::layout(p, title = paste('<b>Tendency of ', varPretty[1,"name"],'</b><br><i>', varPretty[1,"method"],'</i>' , sep = ""))
+    p <- plotly::layout(p, title = paste('<b>Tendency of ', varPretty[1,"name"], '</b><br><i>', varPretty[1,"method"], '</i>' , sep = ""))
   } else if (i == 2) {
-    y <- list(title = paste('<b>', varPretty[2,"name"], ' (',varPretty[2,"unity"], ')' , '</b>', sep = ""), color = '#282828', showgrid = FALSE,
+    y <- list(title = paste('<b>', varPretty[2, "name"], ' (', varPretty[2, "unity"], ')' , '</b>', sep = ""), color = '#282828', showgrid = FALSE,
               gridwidth = 2,  tickfont = list(family = 'serif'), overlaying = "y", side = "right")
     p <- plotly::layout(p, yaxis2 = y)
     p <- plotly::layout(p, title = "<b>Tendency of environmental variables among time</br>")
   } else {
-    y <- list(title = paste('<b>', varPretty[2,"name"], ' (',varPretty[2,"unity"], ')' , '</b>', sep = ""), color = '#282828', showgrid = FALSE,
+    y <- list(title = paste('<b>', varPretty[2, "name"], ' (', varPretty[2, "unity"], ')' , '</b>', sep = ""), color = '#282828', showgrid = FALSE,
               gridwidth = 2,  tickfont = list(family = 'serif'), overlaying = "y", side = "right")
     p <- plotly::layout(p, yaxis = y)
     p <- plotly::layout(p, title = "<b>Tendency of environmental variables among time</br>")
   }
   htmlwidgets::saveWidget(p, "enviroVarPlot.html", selfcontained = FALSE)
 }
-
-
