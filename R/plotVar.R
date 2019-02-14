@@ -5,12 +5,13 @@
 ##' @importFrom plotly layout
 ##' @importFrom plotly plot_ly
 ##' @importFrom plotly add_trace
+##' @importFrom stats qnorm
 ##'
 ##' @param nameVar name of the variable to plot
 ##' @param startDate date from which to plot
 ##' @param endDate date to which to plot
 ##' @param sensor sensor's name that recorded the values
-##' @param token a token from getToken function
+##' @param token a token from \code{\link{getToken}} function
 ##' @param smoothing logical, smoothing of the data
 ##'
 ##' @examples

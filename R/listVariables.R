@@ -1,6 +1,6 @@
 #' @title listVariables
 #'
-#' @param token a token
+#' @param token a token from \code{\link{getToken}}
 #'
 #' @return list
 #' @export

@@ -16,7 +16,7 @@ plotVar(nameVar, startDate = NULL, endDate = NULL, sensor = NULL,
 
 \item{sensor}{sensor's name that recorded the values}
 
-\item{token}{a token from getToken function}
+\item{token}{a token from \code{\link{getToken}} function}
 
 \item{smoothing}{logical, smoothing of the data}
 }

@@ -1,7 +1,7 @@
 #' @title getDF
 #'
 #' @param nameVar name of the variables to add in the data frame
-#' @param token a token from getToken function
+#' @param token a token from \code{\link{getToken}} function
 #' @param smoothing logical, smoothing of the data
 #' @param sensor
 #' @param endDate
