@@ -7,7 +7,10 @@
 #'
 #' @examples
 #' \donttest{
-#' listVariables()
+#'  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
+#'  aToken <- getToken("guest@opensilex.org","guest")
+#'  token <- aToken$data
+#'  listVariables(token = token)
 #' }
 listVariables <-function(token){
   phisWSClientR::initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
