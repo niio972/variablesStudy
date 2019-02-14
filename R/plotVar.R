@@ -26,7 +26,6 @@
 plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, token, smoothing = TRUE){
   ## Data recuperation
   # variable's informations
-  print(nameVar)
   varPrettyTot <- getVarPretty(token = token)
   Data <- NULL
   varPretty <- NULL

@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
+
   </head>
 
   <nav id="w4" class="navbar-inverse navbar-fixed-top navbar">
@@ -149,7 +151,11 @@
       <br>
       <iframe style="width:80%;height:500px;"  frameborder="0" id = "plot"></iframe>
       <br>
-      <table id="dataTable"></table>
+      <table id="mytable">
+        <thead>
+          <tr role="row"></tr>
+        </thead>
+      </table>
       <!-- <div class = "form">
         <h2>
           Recherche d'outliers
@@ -160,8 +166,8 @@
             <p class="pull-left">© OpenSILEX v.3 - 31 January 2019 ; Software is licensed under AGPL-3.0 and data under CC BY-NC-SA 4.0</p>
         </div>
       </footer>
-
       <script src="js/jquery.min.js"></script>
+      <script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
       <script src="js/tether.min.js"></script>
       <script src="js/bootstrap.min.js"></script>
       <script src="js/scripts.js"></script>

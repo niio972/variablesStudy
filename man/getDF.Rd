@@ -4,7 +4,8 @@
 \alias{getDF}
 \title{getDF}
 \usage{
-getDF(nameVar, token, smoothing = FALSE)
+getDF(nameVar, token, smoothing = FALSE, sensor = NULL,
+  endDate = NULL, startDate = NULL)
 }
 \arguments{
 \item{nameVar}{name of the variables to add in the data frame}
@@ -12,6 +13,8 @@ getDF(nameVar, token, smoothing = FALSE)
 \item{token}{a token from getToken function}
 
 \item{smoothing}{logical, smoothing of the data}
+
+\item{startDate}{}
 }
 \value{
 data.frame

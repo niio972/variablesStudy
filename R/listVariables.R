@@ -1,5 +1,7 @@
 #' @title listVariables
 #'
+#' @param token a token
+#'
 #' @return list
 #' @export
 #'
@@ -7,9 +9,9 @@
 #' \donttest{
 #' listVariables()
 #' }
-listVariables <-function(){
+listVariables <-function(token){
   phisWSClientR::initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
-  varPretty <- getVarPretty(token = "c5e123ff73245a77c4147a48aae5c2e2")
+  varPretty <- getVarPretty(token = token)
   listVar <- NULL
   for (i in 1:8){
     listVar$name[i] <-  paste(toupper(substr(varPretty$name[i],1,1)), substr(varPretty$name[i],2,nchar(varPretty$name[i])), " (", varPretty$method[i], ")", sep = "")

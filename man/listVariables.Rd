@@ -4,7 +4,10 @@
 \alias{listVariables}
 \title{listVariables}
 \usage{
-listVariables()
+listVariables(token)
+}
+\arguments{
+\item{token}{a token}
 }
 \value{
 list

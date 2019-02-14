@@ -11,9 +11,9 @@ getDataVarPretty(nameVar, methodVar = NULL, varPretty, token)
 
 \item{methodVar}{name of the method used to collect data}
 
-\item{varPretty}{from output from \code{\link{getVarPretty}}}
+\item{varPretty}{from getVarPretty}
 
-\item{token}{a token from \code{\link{getToken}} function}
+\item{token}{a token from getToken function}
 }
 \value{
 WSResponse

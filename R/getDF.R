@@ -3,6 +3,9 @@
 #' @param nameVar name of the variables to add in the data frame
 #' @param token a token from getToken function
 #' @param smoothing logical, smoothing of the data
+#' @param sensor
+#' @param endDate
+#' @param startDate
 #'
 #' @return data.frame
 #' @export
@@ -14,10 +17,9 @@
 #' token <- aToken$data
 #' getDF(token = token, nameVar = list("wind","temperature"))
 #' }
-getDF <- function(nameVar, token, smoothing = FALSE){
-  print(nameVar)
-  phisWSClientR::initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
+getDF <- function(nameVar, token, smoothing = FALSE, sensor = NULL, endDate = NULL, startDate = NULL){
   varPrettyTot <- getVarPretty(token = token)
+  Data <- NULL
   varPretty <- NULL
   # Chosen variable
   for (i in 1: length(nameVar)){
@@ -27,24 +29,84 @@ getDF <- function(nameVar, token, smoothing = FALSE){
     subNameVar <- varMeth[[1]][1]
     # Recuperation of the data from the WS
     enviroData <- getDataVarPretty(nameVar = subNameVar, methodVar = methodVar, varPretty = varPrettyTot, token = token)
+    varPrettyI <- t(data.frame(matrix(unlist(enviroData$varPretty))))
+    varPretty <- rbind(varPretty, varPrettyI)
     enviroData <- enviroData$enviroData
     # Values
     yVar <- enviroData$value
     if (i == 1){
       xVar <- as.POSIXct(enviroData$date, tz = "UTC", format = "%Y-%m-%dT%H:%M:%S")
-      df <- data.frame(Date = xVar)
+      colnames(varPretty) <- c("name", "method", "acronym", "unity")
+      Data$date <- xVar
     }
-    df[,subNameVar] <-  yVar
-    if(smoothing == TRUE){
-      # Création du modèle
-      print(i)
-      varSpline <- gam::gam(df[,dim(df)[2]]~s(xVar, df = 20))
-      varPred <- stats::predict(varSpline, se.fit = TRUE)
-      distance <- abs(yVar - varPred$fit)
-      nameDist <- paste("Distance of", subNameVar, "from the curve", sep = " ")
-      df[,as.character(nameDist)] <- distance
+    Data$values <- cbind(Data$values, y = yVar)
+  }
+  # Chosen sensor
+
+  if(!is.null(sensor)){
+    sensorsNames <- enviroData$sensorUri
+    for (i in 1:length(sensorsNames)){
+      sensorName <- strsplit(sensorsNames[i], split="/")
+      sensorsNames[i] <- sensorName[[1]][6]
+    }
+    Data$sensorsNames <- sensorsNames
+    if(length(grep(sensor, Data$sensorsNames)) != 0){
+      Data <- Data[which(Data$sensorsNames == sensor),]
     }
   }
-  return(df)
-}
+  # Chosen dates
+  if(!is.null(startDate)){
+    startDate <- as.POSIXct(startDate, tz = "UTC", format = "%Y-%m-%d")
+    if(startDate <= max(Data$date)){
+      if(length(nameVar) == 1){
+        Data$values <- Data$values[which(Data$date >= startDate)]
+      } else {
+        Data$values <- Data$values[which(Data$date >= startDate),]
+      }
+      Data$sensorsNames <- Data$sensorsNames[which(Data$date >= startDate)]
+      Data$date <- Data$date[which(Data$date >= startDate)]
+    }
+  }
+  if (!is.null(endDate)){
+    endDate <- as.POSIXct(endDate, tz = "UTC", format = "%Y-%m-%d")
+    if(endDate >= min(Data$date)){
+      if(length(nameVar) == 1){
+        Data$values <- Data$values[which(Data$date <= endDate)]
 
+      } else {
+        Data$values <- Data$values[which(Data$date <= endDate),]
+
+      }
+
+      Data$sensorsNames <- Data$sensorsNames[which(Data$date <= endDate)]
+      Data$date <- Data$date[which(Data$date <= endDate)]
+    }
+  }
+  dataFrame <- data.frame(Date = Data$date)
+  for (i in 1:(length(nameVar))){
+    if(length(nameVar)==1){
+      yVar <- Data$values
+    } else {
+      yVar <- Data$values[,i]
+
+    }
+    dataFrame <- cbind(dataFrame, yVar)
+    names(dataFrame)[length(dataFrame)] <- as.character(varPretty[i,"name"])
+    if(smoothing == TRUE){
+      # Création du modèle
+      if(length(Data$date) > 20){
+        df = 20
+      } else {
+        df <- length(Data$date)-1
+      }
+
+      varSpline <- gam::gam(yVar~s(Data$date, df = df))
+      varPred <- stats::predict(varSpline, se.fit = TRUE)
+      dist <- abs(as.numeric(yVar) - as.numeric(varPred$fit))
+      dataFrame <- cbind(dataFrame, dist)
+      names(dataFrame)[length(dataFrame)] <- paste("Distance of ",varPretty[i,"name"], " from smoothed curve", sep = "")
+    }
+  }
+
+  return(dataFrame)
+}
