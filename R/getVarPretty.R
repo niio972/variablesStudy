@@ -3,7 +3,7 @@
 ##' @importFrom phisWSClientR initializeClientConnection
 ##' @importFrom phisWSClientR getEnvironmentData
 ##'
-##' @param token a token from getToken function
+##' @param token a token from \code{\link{getToken}} function
 ##'
 ##' @return WSResponse
 ##' @export

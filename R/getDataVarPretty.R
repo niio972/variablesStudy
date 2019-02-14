@@ -5,8 +5,8 @@
 ##'
 ##' @param nameVar name of the variable to plot
 ##' @param methodVar name of the method used to collect data
-##' @param varPretty from getVarPretty
-##' @param token a token from getToken function
+##' @param varPretty from \code{\link{getVarPretty}}
+##' @param token a token from \code{\link{getToken}} function
 ##'
 ##' @return WSResponse
 ##' @export

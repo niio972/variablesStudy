@@ -12,16 +12,17 @@ $(function(){
   //Create array of options to be added
 
   var req3 = ocpu.rpc("listVariables",{
+    token : $("#token").val()
   },function(output){
     arrayText = output.name;
     array = output.value;
     console.log(array);
-var selectvariable = document.getElementById("variable");
+var selectVariable = document.getElementById("variable");
     for (var i = 0; i < array.length; i++) {
         var option = document.createElement("option");
         option.value = array[i];
         option.text = arrayText[i];
-        selectvariable.appendChild(option);
+        selectVariable.appendChild(option);
       }
   });
   console.log("nbVar = ", nbVar);
@@ -57,40 +58,51 @@ var selectvariable = document.getElementById("variable");
         nameVar : nameVars,
         token: $("#token").val()
       });
-      // var req = ocpu.call(
-      //     "getDF",
-      //     {
-      //       nameVar : nameVars,
-      //       token: $("#token").val()
-      //     },
-      //     function(df) {
-      //       console.log(df);
-      //       // get the column names
-      //       var colnames = Object.keys(df[0]);
-      //       // create the JSON array for the columns required by DataTable
-      //       var columns = [];
-      //       for (i = 0; i < colnames.length; i++) {
-      //         var obj = {};
-      //         obj['data'] = colnames[i]
-      //         columns.push(obj);
-      //       }
-      //       // first make the header row, then run DataTable
-      //       $.when($.ajax({
-      //         success: function() {
-      //           $('#mytable thead tr').append(makeHeaders(colnames));
-      //         }
-      //       })).done(function() {
-      //         $('#mytable').DataTable({
-      //           data: df,
-      //           columns: columns
-      //         })
-      //       });
-      //     }
-      // );
+
       btn.removeAttr("disabled");
     }).fail(function(text){
       alert("Error: " + req.responseText);
     });
+
+    var req = ocpu.rpc(
+          "getDF",
+          {
+            nameVar: nameVars,
+            token: $("#token").val(),
+            smoothing: smoothing
+          },
+          function(df) {
+            console.log(df);
+            // get the column names
+            var colnames = Object.keys(df[0]);
+            // create the JSON array for the columns required by DataTable
+            var columns = [];
+            for (i = 0; i < colnames.length; i++) {
+              var obj = {};
+              obj['data'] = colnames[i]
+              columns.push(obj);
+            }
+            // $('#mytable thead tr').append(makeHeaders(colnames));
+            // objet.createTHead(), ou crée un haut de tableau
+            $('#mytable thead tr').append(makeHeaders(colnames));
+            $('#mytable').DataTable({
+                data: df,
+                columns: columns
+              });
+            // first make the header row, then run DataTable
+            // $.when($.ajax({
+            //   success: function() {
+            //     $('#mytable thead tr').append(makeHeaders(colnames));
+            //   }
+            // })).done(function() {
+            //   $('#mytable').DataTable({
+            //     data: df,
+            //     columns: columns
+            //   })
+            // });
+          }
+        );
+
   });
 
     // Add a variable on the form
@@ -153,6 +165,5 @@ var selectvariable = document.getElementById("variable");
     }
     return (str);
   }
-
 
 });

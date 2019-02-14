@@ -4,7 +4,10 @@
 \alias{listVariables}
 \title{listVariables}
 \usage{
-listVariables()
+listVariables(token)
+}
+\arguments{
+\item{token}{a token from \code{\link{getToken}}}
 }
 \value{
 list
@@ -14,6 +17,9 @@ listVariables
 }
 \examples{
 \donttest{
-listVariables()
+ initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
+ aToken <- getToken("guest@opensilex.org","guest")
+ token <- aToken$data
+ listVariables(token = token)
 }
 }
