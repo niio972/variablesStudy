@@ -1,0 +1,34 @@
+##' @title Get Variable's Names from WS2 and formate them
+##'
+##' @importFrom phisWSClientR initializeClientConnection
+##' @importFrom phisWSClientR getEnvironmentData
+##'
+##' @param token a token from getToken function
+##'
+##' @return WSResponse
+##' @export
+##'
+##' @examples
+##' \donttest{
+##' initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
+##'  aToken <- getToken("guest@opensilex.org","guest")
+##'  token <- aToken$data
+##'  getVarPretty(token = token)
+##' }
+getVarPretty <- function(token){
+  phisWSClientR::initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
+  rawVar <- phisWSClientR::getVariables2(token = token)
+  names <- rawVar$data$label
+  methods <- rawVar$data$label
+  for (i in 1:length(names)){
+    names[i] <- strsplit(names[i], split="_")[[1]][1]
+    methods[i] <- strsplit(methods[i], split="_")[[1]][2]
+  }
+  acronyms <- rawVar$data$trait$label
+  unitVar <- rawVar$data$unit$comment
+  uriVar <- rawVar$data$uri
+  varPretty <- data.frame(name = names, method = methods, acronym = acronyms, unity = unitVar, uri = uriVar)
+  varPretty <- data.frame(lapply(varPretty, as.character), stringsAsFactors=FALSE)
+  return(varPretty)
+}
+

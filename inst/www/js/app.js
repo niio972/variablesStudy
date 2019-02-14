@@ -1,13 +1,29 @@
 
 // 1. Plot creation
+var arrayText;
+var array;
 $(function(){
   // Remove this line in the final version
-  //ocpu.seturl("http://localhost:8004/ocpu/library/webapp/R")
+  ocpu.seturl("http://localhost:8004/ocpu/library/webapp/R")
    // Initialisation des variables
   console.log("Bonjour en JavaScript !");
   var nbVar = -1;
   var idSelect = "mySelect";
+  //Create array of options to be added
 
+  var req3 = ocpu.rpc("listVariables",{
+  },function(output){
+    arrayText = output.name;
+    array = output.value;
+    console.log(array);
+var selectvariable = document.getElementById("variable");
+    for (var i = 0; i < array.length; i++) {
+        var option = document.createElement("option");
+        option.value = array[i];
+        option.text = arrayText[i];
+        selectvariable.appendChild(option);
+      }
+  });
   console.log("nbVar = ", nbVar);
   $("#submit").click(function(e){
     e.preventDefault();
@@ -33,11 +49,47 @@ $(function(){
       token: $("#token").val(),
       smoothing: smoothing
     }, function(session){
-       $("iframe").attr('src', session.getFileURL("test1var.html"));
+       $("iframe").attr('src', session.getFileURL("enviroVarPlot.html"));
     }).fail(function(text){
       alert("Error: " + req.responseText);
     }).always(function(){
+      console.log({
+        nameVar : nameVars,
+        token: $("#token").val()
+      });
+      // var req = ocpu.call(
+      //     "getDF",
+      //     {
+      //       nameVar : nameVars,
+      //       token: $("#token").val()
+      //     },
+      //     function(df) {
+      //       console.log(df);
+      //       // get the column names
+      //       var colnames = Object.keys(df[0]);
+      //       // create the JSON array for the columns required by DataTable
+      //       var columns = [];
+      //       for (i = 0; i < colnames.length; i++) {
+      //         var obj = {};
+      //         obj['data'] = colnames[i]
+      //         columns.push(obj);
+      //       }
+      //       // first make the header row, then run DataTable
+      //       $.when($.ajax({
+      //         success: function() {
+      //           $('#mytable thead tr').append(makeHeaders(colnames));
+      //         }
+      //       })).done(function() {
+      //         $('#mytable').DataTable({
+      //           data: df,
+      //           columns: columns
+      //         })
+      //       });
+      //     }
+      // );
       btn.removeAttr("disabled");
+    }).fail(function(text){
+      alert("Error: " + req.responseText);
     });
   });
 
@@ -46,6 +98,7 @@ $(function(){
     e.preventDefault();
     var btn = $(this).attr("disabled", "disabled");
     // On n'autorise de n'ajouter qu'un select pour l'instant
+        console.log(array);
     if (nbVar <0){
       nbVar  = nbVar + 1;
       console.log("nbVar = ", nbVar);
@@ -53,10 +106,6 @@ $(function(){
 
       // Ajout d'un select dans la <div> formulaire
       var myDiv = document.getElementById("var-form");
-
-      //Create array of options to be added
-      var arrayText = ["Wind","Temperature (instant)","Temperature (actinometric)", "Radiation (global)", "Radiation (global PAR)", "Precipitation (hourly)"];
-      var array = ["wind", "temperature_instant","temperature_actinothermic", "radiation_global", "radiation_PAR", "precipitation_hourly rainfall"];
 
       //Create and append select list
       var selectList = document.createElement("select");
@@ -71,6 +120,8 @@ $(function(){
           option.value = array[i];
           option.text = arrayText[i];
           selectList.appendChild(option);
+          //Remplir select variable
+
       }
     } else {
     }
@@ -94,6 +145,14 @@ $(function(){
     }
     btn.removeAttr("disabled");
   });
+
+  function makeHeaders(colnames) {
+    var str = "";
+    for (var i = 0; i < colnames.length; i++) {
+      str += "<th>" + colnames[i] + "</th>";
+    }
+    return (str);
+  }
 
 
 });
