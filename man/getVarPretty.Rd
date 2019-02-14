@@ -7,7 +7,7 @@
 getVarPretty(token)
 }
 \arguments{
-\item{token}{a token from getToken function}
+\item{token}{a token from \code{\link{getToken}} function}
 }
 \value{
 WSResponse
