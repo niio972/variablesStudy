@@ -82,24 +82,17 @@ var selectVariable = document.getElementById("variable");
               obj['data'] = colnames[i]
               columns.push(obj);
             }
-            // $('#mytable thead tr').append(makeHeaders(colnames));
-            // objet.createTHead(), ou crée un haut de tableau
-            $('#mytable thead tr').append(makeHeaders(colnames));
-            $('#mytable').DataTable({
+            
+            if ($.fn.DataTable.isDataTable("#mytable")) {
+              $('#mytable').DataTable().clear().destroy();
+              $('#mytable thead tr').remove();
+            }
+            $('#mytable').append(makeHeaders(colnames));
+            $("#mytable").dataTable({
                 data: df,
                 columns: columns
               });
-            // first make the header row, then run DataTable
-            // $.when($.ajax({
-            //   success: function() {
-            //     $('#mytable thead tr').append(makeHeaders(colnames));
-            //   }
-            // })).done(function() {
-            //   $('#mytable').DataTable({
-            //     data: df,
-            //     columns: columns
-            //   })
-            // });
+
           }
         );
 
@@ -159,10 +152,11 @@ var selectVariable = document.getElementById("variable");
   });
 
   function makeHeaders(colnames) {
-    var str = "";
+    var str = "<thead><tr>";
     for (var i = 0; i < colnames.length; i++) {
       str += "<th>" + colnames[i] + "</th>";
     }
+    str +="</tr></thead>"
     return (str);
   }
 
