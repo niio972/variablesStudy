@@ -1,6 +1,6 @@
 #-------------------------------------------------------------------------------
 # Program: getDF.R
-# Objective: functions to get the incertitude data related to environment measures
+# Objective: retrieve data in suitable form for graph labelling
 # Authors: Chourrout Elise
 # Creation: 15/02/2019
 # Update:

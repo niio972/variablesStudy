@@ -1,6 +1,6 @@
 #-------------------------------------------------------------------------------
 # Program: getDF.R
-# Objective: functions to get the incertitude data related to environment measures
+# Objective: draw graph of environment variable over time
 # Authors: Chourrout Elise
 # Creation: 15/02/2019
 # Update:

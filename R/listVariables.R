@@ -1,6 +1,6 @@
 #-------------------------------------------------------------------------------
 # Program: getDF.R
-# Objective: functions to get the incertitude data related to environment measures
+# Objective: retrieves the list of variables for selection user interface
 # Authors: Chourrout Elise
 # Creation: 15/02/2019
 # Update:
