@@ -1,3 +1,11 @@
+#-------------------------------------------------------------------------------
+# Program: getDF.R
+# Objective: functions to get the incertitude data related to environment measures
+# Authors: Chourrout Elise
+# Creation: 15/02/2019
+# Update:
+#-------------------------------------------------------------------------------
+
 ##' @title Get Variable's Names from WS2 and formate them
 ##'
 ##' @importFrom phisWSClientR initializeClientConnection
