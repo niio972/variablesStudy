@@ -5,19 +5,21 @@ var array;
 $(function(){
   // Remove this line in the final version
   ocpu.seturl("http://localhost:8004/ocpu/library/webapp/R")
-   // Initialisation des variables
+
+  // Variables' initialization
   console.log("Bonjour en JavaScript !");
   var nbVar = -1;
   var idSelect = "mySelect";
-  //Create array of options to be added
 
+  //Form
   var req3 = ocpu.rpc("listVariables",{
+    //Create array of variables' options
     token : $("#token").val()
   },function(output){
-    arrayText = output.name;
-    array = output.value;
-    console.log(array);
-var selectVariable = document.getElementById("variable");
+      arrayText = output.name;
+      array = output.value;
+      // Variable's selector
+  var selectVariable = document.getElementById("variable");
     for (var i = 0; i < array.length; i++) {
         var option = document.createElement("option");
         option.value = array[i];
@@ -25,30 +27,30 @@ var selectVariable = document.getElementById("variable");
         selectVariable.appendChild(option);
       }
   });
-  console.log("nbVar = ", nbVar);
+
+  //Show graph button
   $("#submit").click(function(e){
     e.preventDefault();
     var btn = $(this).attr("disabled", "disabled");
-    console.log("variable " +  $("#variable").val()[0]);
-    console.log("token " + $("#token").val()[0]);
-    // Use of the R function to create the plot
-    smoothing = document.getElementById('smoothing').checked;
-    console.log("smoothing = ", smoothing);
-    var nameVars = [$("#variable").val()];
-    console.log("nameVars = ", nameVars);
 
+    // Parameters of the R function
+    smoothing = document.getElementById('smoothing').checked;
+    var nameVars = [$("#variable").val()];
+    var startDate = $("#startDate").val();
+    var endDate = $("#endDate").val();
     for (var i=0;i < (nbVar+1); i++){
       var idAddArray = idSelect.concat(i.toString());
       var newElement = document.getElementById(idAddArray).value;
-      console.log("ESSAIS NEW ELEMENT", newElement);
       nameVars.push(newElement);
-      console.log("nameVars = ", nameVars);
     }
 
+    // Run the R function
     var req = ocpu.call("plotVar", {
       nameVar : nameVars,
       token: $("#token").val(),
-      smoothing: smoothing
+      smoothing: smoothing,
+      startDate: startDate,
+      endDate: endDate
     }, function(session){
        $("iframe").attr('src', session.getFileURL("enviroVarPlot.html"));
     }).fail(function(text){
@@ -64,15 +66,18 @@ var selectVariable = document.getElementById("variable");
       alert("Error: " + req.responseText);
     });
 
+    // DataTable
+    // Run the R function
     var req = ocpu.rpc(
           "getDF",
           {
             nameVar: nameVars,
             token: $("#token").val(),
-            smoothing: smoothing
+            smoothing: smoothing,
+            startDate: startDate,
+            endDate: endDate
           },
           function(df) {
-            console.log(df);
             // get the column names
             var colnames = Object.keys(df[0]);
             // create the JSON array for the columns required by DataTable
@@ -81,8 +86,9 @@ var selectVariable = document.getElementById("variable");
               var obj = {};
               obj['data'] = colnames[i]
               columns.push(obj);
-            }
-            
+            } 
+
+            // DataTable update
             if ($.fn.DataTable.isDataTable("#mytable")) {
               $('#mytable').DataTable().clear().destroy();
               $('#mytable thead tr').remove();
@@ -92,24 +98,19 @@ var selectVariable = document.getElementById("variable");
                 data: df,
                 columns: columns
               });
-
           }
         );
-
   });
 
-    // Add a variable on the form
+  // Add a variable on the form
   $("#addVar").click(function(e){
     e.preventDefault();
     var btn = $(this).attr("disabled", "disabled");
-    // On n'autorise de n'ajouter qu'un select pour l'instant
-        console.log(array);
     if (nbVar <0){
       nbVar  = nbVar + 1;
       console.log("nbVar = ", nbVar);
 
-
-      // Ajout d'un select dans la <div> formulaire
+      // Adda select in the form
       var myDiv = document.getElementById("var-form");
 
       //Create and append select list
@@ -125,8 +126,6 @@ var selectVariable = document.getElementById("variable");
           option.value = array[i];
           option.text = arrayText[i];
           selectList.appendChild(option);
-          //Remplir select variable
-
       }
     } else {
     }
@@ -151,6 +150,7 @@ var selectVariable = document.getElementById("variable");
     btn.removeAttr("disabled");
   });
 
+  // DataTable's header
   function makeHeaders(colnames) {
     var str = "<thead><tr>";
     for (var i = 0; i < colnames.length; i++) {

@@ -14,7 +14,11 @@ getDF(nameVar, token, smoothing = FALSE, sensor = NULL,
 
 \item{smoothing}{logical, smoothing of the data}
 
-\item{startDate}{}
+\item{sensor}{sensor's name that recorded the values}
+
+\item{endDate}{date to which to plot}
+
+\item{startDate}{date from which to plot}
 }
 \value{
 data.frame

@@ -20,7 +20,10 @@
 ##'  getDataVarPretty(nameVar = "temperature", varPretty = varPrettyTot, token = token)
 ##' }
 getDataVarPretty <- function(nameVar, methodVar = NULL, varPretty, token) {
+
   phisWSClientR::initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
+
+  # Recuperation of the uri of the variable of interest
   if(!is.null(methodVar) && !is.na(methodVar)){
     numVar <- 1
     while(grepl(methodVar, varPretty$method[numVar]) == FALSE && numVar < dim(varPretty)[1]){
@@ -35,10 +38,12 @@ getDataVarPretty <- function(nameVar, methodVar = NULL, varPretty, token) {
   myCount <- phisWSClientR::getEnvironmentData(token = token, variable = nameUriVar)$totalCount
   enviroData <- phisWSClientR::getEnvironmentData(token=token, variable =  nameUriVar, verbose = TRUE, pageSize = myCount)$data
 
+  # Creation of the dataTable to return
   nomVar <- paste(toupper(substr(varPretty$name[numVar],1,1)), substr(varPretty$name[numVar],2,nchar(varPretty$name[numVar])), sep = "")
   methodVar <- as.character(varPretty$method[numVar])
   acronymVar <- as.character(varPretty$acronym[numVar])
   unityVar <- as.character(varPretty$unity[numVar])
   varPretty <- list(name = nomVar, method = methodVar, acronym = acronymVar, unity = unityVar)
+
   return(list(enviroData = enviroData, varPretty = varPretty))
 }
