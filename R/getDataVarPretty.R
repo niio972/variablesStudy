@@ -1,3 +1,11 @@
+#-------------------------------------------------------------------------------
+# Program: getDF.R
+# Objective: transform data in suitable form for graph
+# Authors: Chourrout Elise
+# Creation: 15/02/2019
+# Update:
+#-------------------------------------------------------------------------------
+
 ##' @title Get Data from WS2 and formate them
 ##'
 ##' @importFrom phisWSClientR initializeClientConnection

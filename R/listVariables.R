@@ -1,17 +1,25 @@
-##' @title listVariables
-##'
-##' @param token a token from \code{\link{getToken}}
-##'
-##' @return list
-##' @export
-##'
-##' @examples
-##' \donttest{
-##'  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
-##'  aToken <- getToken("guest@opensilex.org","guest")
-##'  token <- aToken$data
-##'  listVariables(token = token)
-##' }
+#-------------------------------------------------------------------------------
+# Program: getDF.R
+# Objective: retrieves the list of variables for selection user interface
+# Authors: Chourrout Elise
+# Creation: 15/02/2019
+# Update:
+#-------------------------------------------------------------------------------
+
+#' @title listVariables
+#'
+#' @param token a token from \code{\link{getToken}}
+#'
+#' @return list
+#' @export
+#'
+#' @examples
+#' \donttest{
+#'  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
+#'  aToken <- getToken("guest@opensilex.org","guest")
+#'  token <- aToken$data
+#'  listVariables(token = token)
+#' }
 listVariables <-function(token){
 
   phisWSClientR::initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")

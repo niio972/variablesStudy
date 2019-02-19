@@ -14,17 +14,17 @@ getDF(nameVar, token, smoothing = FALSE, sensor = NULL,
 
 \item{smoothing}{logical, smoothing of the data}
 
-\item{sensor}{sensor's name that recorded the values}
+\item{sensor}{character, name of a sensor}
 
-\item{endDate}{date to which to plot}
+\item{endDate}{date, date from which to filter data, format "\%Y-\%m-\%dT\%H:\%M:\%S"}
 
-\item{startDate}{date from which to plot}
+\item{startDate}{date, date to which filter the data, format "\%Y-\%m-\%dT\%H:\%M:\%S"}
 }
 \value{
 data.frame
 }
 \description{
-getDF
+get the dataset of incertitudes for the data selected
 }
 \examples{
 \donttest{

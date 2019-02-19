@@ -1,22 +1,32 @@
-##' @title getDF
-##'
-##' @param nameVar name of the variables to add in the data frame
-##' @param token a token from \code{\link{getToken}} function
-##' @param startDate date from which to plot
-##' @param endDate date to which to plot
-##' @param sensor sensor's name that recorded the values
-##' @param smoothing logical, smoothing of the data
-##'
-##' @return data.frame
-##' @export
-##'
-##' @examples
-##' \donttest{
-##' initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
-##' aToken <- getToken("guest@opensilex.org","guest")
-##' token <- aToken$data
-##' getDF(token = token, nameVar = list("wind","temperature"))
-##' }
+#-------------------------------------------------------------------------------
+# Program: getDF.R
+# Objective: functions to get the incertitude data related to environment measures
+# Authors: Chourrout Elise
+# Creation: 15/02/2019
+# Update:
+#-------------------------------------------------------------------------------
+
+#' @title getDF
+#'
+#' @description get the dataset of incertitudes for the data selected
+#'
+#' @param nameVar name of the variables to add in the data frame
+#' @param token a token from \code{\link{getToken}} function
+#' @param smoothing logical, smoothing of the data
+#' @param sensor character, name of a sensor
+#' @param endDate date, date from which to filter data, format "\%Y-\%m-\%dT\%H:\%M:\%S"
+#' @param startDate date, date to which filter the data, format "\%Y-\%m-\%dT\%H:\%M:\%S"
+#'
+#' @return data.frame
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
+#' aToken <- getToken("guest@opensilex.org","guest")
+#' token <- aToken$data
+#' getDF(token = token, nameVar = list("wind","temperature"))
+#' }
 getDF <- function(nameVar, token, smoothing = FALSE, sensor = NULL, endDate = NULL, startDate = NULL){
 
   ## Data recuperation

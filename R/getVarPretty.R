@@ -1,3 +1,11 @@
+#-------------------------------------------------------------------------------
+# Program: getDF.R
+# Objective: retrieve data in suitable form for graph labelling
+# Authors: Chourrout Elise
+# Creation: 15/02/2019
+# Update:
+#-------------------------------------------------------------------------------
+
 ##' @title Get Variable's Names from WS2 and formate them
 ##'
 ##' @importFrom phisWSClientR initializeClientConnection
