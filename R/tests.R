@@ -89,8 +89,9 @@ plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, token, smoo
 
   varSplineX <- gam::gam(values~s(date, df = df), data = DataX)
   #varPredX <- stats::predict(varSplineX, se.fit=TRUE)
-  varPredX <- stats::predict(varSplineX, newDates)
+  varPredX <- stats::predict(varSplineX, newdata = data.frame(date = newDates), type = "terms")
 
+  data(gam.newdata)
   varSplineY <- gam::gam(values~s(date, df = df), data = DataY)
   varPredY <- stats::predict(varSplineY, newDates)
   #varPredY <- stats::predict(varSplineY, se.fit=TRUE)

@@ -170,7 +170,7 @@ plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, token){
             gridwidth = 2,  tickfont = list(family = 'serif'), overlaying = "y", side = "right")
   p <- plotly::layout(p, yaxis = y)
   p <- plotly::layout(p, title =paste( "<b>Tendency of ", x$title, " ~ ", y$title, "</br>"))
+  p
 
-
-  htmlwidgets::saveWidget(p, "relVarPlot.html", selfcontained = FALSE)
+  #htmlwidgets::saveWidget(p, "relVarPlot.html", selfcontained = FALSE)
 }
