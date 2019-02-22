@@ -1,11 +1,11 @@
-library(plotly)
-library(phisWSClientR)
-library(webapp)
-library(gam)
-initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
-aToken <- getToken("guest@opensilex.org","guest")
-token <- aToken$data
-plotVarRel("precipitation_daily rainfall_millimeter", "wind_hourly maximum wind speed_meter per second", token = token)
+# library(plotly)
+# library(phisWSClientR)
+# library(variablesStudy)
+# library(gam)
+# initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
+# aToken <- getToken("guest@opensilex.org","guest")
+# token <- aToken$data
+# plotVarRel("precipitation_daily rainfall_millimeter", "wind_hourly maximum wind speed_meter per second", token = token)
 
 
 

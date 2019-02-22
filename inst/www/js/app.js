@@ -4,7 +4,7 @@ var arrayText;
 var array;
 $(function(){
   // Remove this line in the final version
-  ocpu.seturl("http://localhost:8004/ocpu/library/webapp/R")
+  ocpu.seturl("http://localhost:8004/ocpu/library/variablesStudy/R")
 
   // Variables' initialization
   console.log("Bonjour en JavaScript !");

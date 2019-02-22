@@ -1,3 +1,3 @@
-# app-visualization
+# variablesstudy
 
 R Application running with OpenCPU 

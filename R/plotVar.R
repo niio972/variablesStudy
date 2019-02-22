@@ -205,6 +205,6 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
     p <- plotly::layout(p, title = "<b>Tendency of environmental variables among time</br>")
   }
 
-  # Creation of the html object to screen in the WebApp
+  # Creation of the html object to screen in the variablesStudy
   htmlwidgets::saveWidget(p, "enviroVarPlot.html", selfcontained = FALSE)
 }
