@@ -1,0 +1,177 @@
+<!-- make a templated app -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Bootstrap 4, from LayoutIt!</title>
+
+    <meta name="description" content="Source code generated using layoutit.com">
+    <meta name="author" content="LayoutIt!">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
+
+  </head>
+
+  <nav id="w4" class="navbar-inverse navbar-fixed-top navbar">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#w4-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/opensilex/web/index.php">OpenSILEX <i> Demo</i></a>
+      </div>
+      <div id="w4-collapse" class="collapse navbar-collapse">
+        <ul id="w5" class="navbar-nav navbar-right nav">
+          <li class="dropdown">
+            <a class="dropdown-toggle" href="#" data-toggle="dropdown">Organisation expérimentale <span class="caret"></span></a>
+            <ul id="w6" class="dropdown-menu"><li><a href="/opensilex/web/index.php?r=infrastructure" tabindex="-1"><i class="fas fa fa-home"></i>  Cadres scientifiques</a>
+          </li>
+          <li><a href="/opensilex/web/index.php?r=project%2Findex" tabindex="-1"><i class="glyphicon glyphicon-folder-open"></i>  Projets</a>
+          </li>
+          <li><a href="/opensilex/web/index.php?r=experiment%2Findex" tabindex="-1"><i class="fa fa-flask"></i>  Expérimentations</a>
+          </li>
+          <li><a href="/opensilex/web/index.php?r=scientific-object%2Findex" tabindex="-1"><i class="glyphicon glyphicon-leaf"></i>  Objets Scientifiques</a>
+          </li>
+          <li><a href="/opensilex/web/index.php?r=variable%2Findex" tabindex="-1"><i class="glyphicon glyphicon-eye-open"></i>  Variables</a>
+          </li>
+          <li><a href="/opensilex/web/index.php?r=species%2Findex" tabindex="-1"><i class="icofont-lg icofont icofont-wheat"></i>  Species</a>
+          </li>
+          <li><a href="/opensilex/web/index.php?r=event%2Findex" tabindex="-1"><i class="fa fa-flag"></i>  Events</a>
+          </li>
+        </ul>
+  </li>
+    <li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">Installation <span class="caret"></span></a>
+      <ul id="w7" class="dropdown-menu"><li><a href="/opensilex/web/index.php?r=sensor%2Findex" tabindex="-1"><i class="fa-large fa fa-camera"></i>  Capteurs</a>
+       </li>
+       <li><a href="/opensilex/web/index.php?r=vector%2Findex" tabindex="-1"><i class="glyphicon glyphicon-blackboard"></i>  Vecteurs</a>
+       </li>
+       <li><a href="/opensilex/web/index.php?r=radiometric-target%2Findex" tabindex="-1"><i class="glyphicon glyphicon-screenshot"></i>  Cibles Radiométriques</a>
+       </li>
+       </ul>
+  </li>
+    <li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">Outils <span class="caret"></span></a>
+      <ul id="w8" class="dropdown-menu">
+        <li><a href="/opensilex/web/index.php?r=group%2Findex" tabindex="-1"><i class="glyphicon glyphicon-th"></i>  Groupes</a>
+        </li>
+        <li><a href="/opensilex/web/index.php?r=user%2Findex" tabindex="-1"><i class="glyphicon glyphicon-user"></i>  Personnes</a>
+        </li>
+        <li><a href="/opensilex/web/index.php?r=document%2Findex" tabindex="-1"><i class="glyphicon glyphicon-book"></i>  Documents</a>
+        </li>
+        <li><a href="http://www.opensilex.org/openSilexAPI/" tabindex="-1"><i class="glyphicon glyphicon-fire"></i>  Web API</a>
+        </li>
+        <li><a href="https://opensilex.github.io/phis-docs-community/" tabindex="-1"><i class="glyphicon glyphicon-link"></i>  Documentation</a>
+        </li>
+      </ul>
+    </li>
+    <li><a href="/opensilex/web/index.php?r=site%2Fdisconnect"><i class="glyphicon glyphicon-log-out"></i>  Déconnexion (guest@opensilex.org)</a></li>
+  </ul>
+</div>
+</div>
+</nav>
+
+
+  <body>
+    <div class="wrap">
+      <ul class="breadcrumb">
+        <li>
+          <a href="/opensilex/web/index.php">Home</a>
+          /
+          Data Visualization
+        </li>
+      </ul>
+      <h1 class="main-title"> Data Visualization app  </h1>
+
+      <div class="container-fluid">
+	      <div class="row">
+		      <div class="col-md-12">
+			      <form role="form">
+              <div class="form-group" id = "token-form">
+                <b >
+                  <label for="token">
+                    Token
+                  </label>
+                </b>
+					      <input type="text" class="form-control" id="token" value = "39c8264dd4e3ca5a26a14679be08aad0">
+				      </div>
+
+
+              <div class="form-group" id = "var-form">
+                <b >
+                  <label for="variable">
+					          Variable
+                  </label>
+                </b>
+                <select id = "variable" class = "form-control">
+                  <span class="selection"></span>
+                </select>
+              </div>
+
+
+              <div>
+                <button id="addVar" type="submit" class="btn btn-primary">
+                 <i class="material-icons">add</i>
+                </button>
+                 Add variable
+                <button id = "removeVar" type = "submit" class = "btn btn-primary">
+                 Remove
+                </button>
+                <br>
+                <br>
+                <input type="checkbox" id="smoothing" name="smoothing"
+               checked>
+               <label for="smoothing">Smoothing</label>
+               <br>
+                <label for="start">Start date:</label>
+                <input type="date" id="startDate" name="trip-start" value="2017-05-27" min="2017-05-20" max="2018-12-31">
+              </div>
+
+              <div>
+                <label for="start">End date:</label>
+                <input type="date" id="endDate" name="trip-start" value="2017-05-20" min="2017-05-20" max="2018-12-31">
+              </div>
+
+
+			    	  <button id="submit" type="submit" class="btn btn-primary">
+              Show graph!
+				      </button>
+			      </form>
+            <hr>
+            <br>
+          </div>
+
+	      </div>
+      </div>
+      <br>
+      <iframe style="width:80%;height:500px;"  frameborder="0" id = "plot"></iframe>
+      <br>
+      <table id="mytable" class="display" style="width:80%">
+
+      </table>
+      <!-- <div class = "form">
+        <h2>
+          Recherche d'outliers
+        </h2>
+      </div> -->
+      <footer class="footer">
+        <div class="container">
+            <p class="pull-left">© OpenSILEX v.3 - 31 January 2019 ; Software is licensed under AGPL-3.0 and data under CC BY-NC-SA 4.0</p>
+        </div>
+      </footer>
+      <script src="js/jquery.min.js"></script>
+      <script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
+      <script src="js/tether.min.js"></script>
+      <script src="js/bootstrap.min.js"></script>
+      <script src="js/scripts.js"></script>
+      <script src="js/opencpu-0.5.js"></script>
+      <script src="js/app.js"></script>
+    </div>
+  </body>
+</html>
