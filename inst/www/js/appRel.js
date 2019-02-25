@@ -4,8 +4,8 @@ var arrayText;
 var array;
 $(function(){
   // Remove this line in the final version
-  ocpu.seturl("http://localhost:8004/ocpu/library/variablesStudy/R")
-   // Initialisation des variables
+  // ocpu.seturl("http://localhost:8004/ocpu/library/variablesStudy/R")
+  // Initialisation des variables
   console.log("Bonjour en JavaScript !");
   var nbVar = -1;
   var idSelect = "mySelect";
