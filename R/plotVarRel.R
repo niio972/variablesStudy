@@ -21,6 +21,8 @@
 ##' @param endDate date to which to plot
 ##' @param token a token from \code{\link{getToken}} function
 ##' @param smoothing logical, smoothing of the data
+##' @param wsUrl url of the webservice
+
 ##'
 ##' @examples
 ##' \donttest{
@@ -32,7 +34,10 @@
 ##'
 ##' @export
 ##'
-plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, token){
+plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, token, url = "www.opensilex.org/openSilexAPI/rest/"){
+
+  phisWSClientR::initializeClientConnection(apiID="ws_private", url = wsUrl)
+
   ## Data recuperation
   # variable's informations
   varPrettyTot <- getVarPretty(token = token)

@@ -29,8 +29,6 @@
 ##' }
 getDataVarPretty <- function(nameVar, methodVar = NULL, varPretty, token) {
 
-  phisWSClientR::initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
-
   # Recuperation of the uri of the variable of interest
   if(!is.null(methodVar) && !is.na(methodVar)){
     numVar <- 1

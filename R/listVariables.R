@@ -6,23 +6,24 @@
 # Update:
 #-------------------------------------------------------------------------------
 
-#' @title listVariables
-#'
-#' @param token a token from \code{\link{getToken}}
-#'
-#' @return list
-#' @export
-#'
-#' @examples
-#' \donttest{
-#'  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
-#'  aToken <- getToken("guest@opensilex.org","guest")
-#'  token <- aToken$data
-#'  listVariables(token = token)
-#' }
-listVariables <-function(token){
+##' @title listVariables
+##'
+##' @param token a token from \code{\link{getToken}}
+##' @param wsUrl url of the webservice
+##'
+##' @return list
+##' @export
+##'
+##' @examples
+##' \donttest{
+##'  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
+##'  aToken <- getToken("guest@opensilex.org","guest")
+##'  token <- aToken$data
+##'  listVariables(token = token)
+##' }
+listVariables <-function(token, wsUrl="www.opensilex.org/openSilexAPI/rest/"){
 
-  phisWSClientR::initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
+  phisWSClientR::initializeClientConnection(apiID="ws_private", url = wsUrl)
   varPretty <- getVarPretty(token = token)
 
   # creation of the dataTable with name and methods of the variables

@@ -21,7 +21,8 @@
 ##' @param sensor sensor's name that recorded the values
 ##' @param token a token from \code{\link{getToken}} function
 ##' @param smoothing logical, smoothing of the data
-##'
+##' @param wsUrl url of the webservice
+
 ##' @examples
 ##' \donttest{
 ##'  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
@@ -32,7 +33,9 @@
 ##'
 ##' @export
 ##'
-plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, token, smoothing = TRUE){
+plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, token, smoothing = TRUE, wsUrl = "www.opensilex.org/openSilexAPI/rest/"){
+
+  phisWSClientR::initializeClientConnection(apiID="ws_private", url = wsUrl)
 
   ## Data recuperation
   # Variable's information

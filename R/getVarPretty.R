@@ -25,8 +25,6 @@
 ##' }
 getVarPretty <- function(token){
 
-  phisWSClientR::initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
-
   # Recuperation of variables information
   rawVar <- phisWSClientR::getVariables2(token = token)
 
