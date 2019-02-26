@@ -29,7 +29,8 @@
 #'  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
 #'  aToken <- getToken("guest@opensilex.org","guest")
 #'  token <- aToken$data
-#'  plotVarRel( "temperature_hourly instant temperature_degree celsius", "radiation_hourly global radiation_joule per square centimeter", token = token, trend = TRUE)
+#'  plotVarRel( "temperature_hourly instant temperature_degree celsius",
+#'        "radiation_hourly global radiation_joule per square centimeter", token = token, trend = TRUE)
 
 #' }
 #'
@@ -184,6 +185,6 @@ plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, trend = FAL
             gridwidth = 2,  tickfont = list(family = 'serif'), overlaying = "y", side = "right")
   p <- plotly::layout(p, yaxis = y)
   p <- plotly::layout(p, title =paste( "<b>Tendency of ", y$title, " ~ ", x$title, "</br>"))
-  
+
   htmlwidgets::saveWidget(p, "relVarPlot.html", selfcontained = FALSE)
 }
