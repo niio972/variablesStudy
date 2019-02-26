@@ -5,7 +5,7 @@
 \title{Plot two Environmental variables relationship}
 \usage{
 plotVarRel(varX, varY, startDate = NULL, endDate = NULL, token,
-  smoothing = TRUE)
+  wsUrl = "www.opensilex.org/openSilexAPI/rest/")
 }
 \arguments{
 \item{varX}{name of the variable to plot in X axis}
@@ -17,8 +17,6 @@ plotVarRel(varX, varY, startDate = NULL, endDate = NULL, token,
 \item{endDate}{date to which to plot}
 
 \item{token}{a token from \code{\link{getToken}} function}
-
-\item{smoothing}{logical, smoothing of the data}
 
 \item{wsUrl}{url of the webservice}
 }
