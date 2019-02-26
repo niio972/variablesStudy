@@ -207,8 +207,10 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
     p <- plotly::layout(p, yaxis = y)
     p <- plotly::layout(p, title = "<b>Tendency of environmental variables among time</br>")
   }
-  graph <- p
+
   # Creation of the html object to screen in the variablesStudy
   # htmlwidgets::saveWidget(p, "enviroVarPlot.html", selfcontained = FALSE)
-  return(graph)
+  test <- p
+  print(str(test))
+  p
 }
