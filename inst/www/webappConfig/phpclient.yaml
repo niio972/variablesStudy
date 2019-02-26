@@ -1,18 +1,17 @@
-functions:
-  plotVar:
-    parameters:
-        endDate :
-          type : date
-        nameVar :
-          type : list
-        smoothing :
-          type : boolean
-        startDate :
-          type : date
-          format : YYYY-DD-MM
-        token :
-          type : string
-          visibility : hidden 
-        wsUrl :
-          type : string
-          visibility : hidden 
+plotVar:
+  parameters:
+    endDate:
+      type: date
+    nameVar:
+      type: list
+    smoothing:
+      type: boolean
+    startDate:
+      type: date
+      format: YYYY-DD-MM
+    token:
+      type: string
+      visibility: hidden
+    wsUrl:
+      type: string
+      visibility: hidden
