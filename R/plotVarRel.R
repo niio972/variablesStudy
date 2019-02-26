@@ -20,7 +20,6 @@
 ##' @param startDate date from which to plot
 ##' @param endDate date to which to plot
 ##' @param token a token from \code{\link{getToken}} function
-##' @param smoothing logical, smoothing of the data
 ##' @param wsUrl url of the webservice
 
 ##'

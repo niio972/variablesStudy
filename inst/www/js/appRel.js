@@ -68,7 +68,7 @@ $(function() {
         token: token,
         varX: varX,
         varY: varY,
-        smoothing: smoothing
+        // smoothing: smoothing
       };
 
       if (wsUrl !== null) {
