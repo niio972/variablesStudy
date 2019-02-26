@@ -7,6 +7,7 @@ plotVar:
     nameVar:
       label : 'variables Name'
       type: list
+      values : listVariables
     smoothing:
       label : 'smoothing'
       type: boolean
