@@ -209,6 +209,6 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
   }
   graph <- p
   # Creation of the html object to screen in the variablesStudy
-  htmlwidgets::saveWidget(p, "enviroVarPlot.html", selfcontained = FALSE)
+  # htmlwidgets::saveWidget(p, "enviroVarPlot.html", selfcontained = FALSE)
   return(graph)
 }
