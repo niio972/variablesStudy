@@ -9,7 +9,10 @@
 
 
 
-plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, token, smoothing = TRUE){
+plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, token, smoothing = TRUE, wsUrl = "www.opensilex.org/openSilexAPI/rest/")
+  {
+  phisWSClientR::initializeClientConnection(apiID="ws_private", url = wsUrl)
+
   varX = "temperature_hourly instant temperature_degree celsius"
     varY = "precipitation_daily rainfall_millimeter"
     token=token
