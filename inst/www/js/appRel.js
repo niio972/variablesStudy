@@ -59,9 +59,7 @@ $(function() {
       for (var i = 0; i < nbVar + 1; i++) {
         var idAddArray = idSelect.concat(i.toString());
         var newElement = document.getElementById(idAddArray).value;
-        console.log("ESSAIS NEW ELEMENT", newElement);
         nameVars.push(newElement);
-        console.log("nameVars = ", nameVars);
       }
 
       plotVarRelParameters = {
@@ -86,11 +84,6 @@ $(function() {
           alert("Error: " + req.responseText);
         })
         .always(function() {
-          console.log({
-            nameVar: nameVars,
-            token: token
-          });
-
           btn.removeAttr("disabled");
         })
         .fail(function(text) {
