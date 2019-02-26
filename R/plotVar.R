@@ -210,6 +210,7 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
 
   # Creation of the html object to screen in the variablesStudy
   htmlwidgets::saveWidget(p, "enviroVarPlot.html", selfcontained = FALSE)
-  write(p, file = "plot")
-  write(Data, file = "plot")
+
+  jsonlite::write_json(str(p), "plot")
+  jsonlite::write_json(tmpData,"data")
 }
