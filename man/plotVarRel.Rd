@@ -19,6 +19,8 @@ plotVarRel(varX, varY, startDate = NULL, endDate = NULL, token,
 \item{token}{a token from \code{\link{getToken}} function}
 
 \item{smoothing}{logical, smoothing of the data}
+
+\item{wsUrl}{url of the webservice}
 }
 \description{
 Plot two Environmental variables relationship

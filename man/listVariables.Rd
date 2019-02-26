@@ -4,10 +4,12 @@
 \alias{listVariables}
 \title{listVariables}
 \usage{
-listVariables(token)
+listVariables(token, wsUrl = "www.opensilex.org/openSilexAPI/rest/")
 }
 \arguments{
 \item{token}{a token from \code{\link{getToken}}}
+
+\item{wsUrl}{url of the webservice}
 }
 \value{
 list

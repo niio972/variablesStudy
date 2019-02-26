@@ -5,7 +5,8 @@
 \title{getDF}
 \usage{
 getDF(nameVar, token, smoothing = FALSE, sensor = NULL,
-  endDate = NULL, startDate = NULL)
+  endDate = NULL, startDate = NULL,
+  wsUrl = "www.opensilex.org/openSilexAPI/rest/")
 }
 \arguments{
 \item{nameVar}{name of the variables to add in the data frame}
@@ -19,6 +20,8 @@ getDF(nameVar, token, smoothing = FALSE, sensor = NULL,
 \item{endDate}{date, date from which to filter data, format "\%Y-\%m-\%dT\%H:\%M:\%S"}
 
 \item{startDate}{date, date to which filter the data, format "\%Y-\%m-\%dT\%H:\%M:\%S"}
+
+\item{wsUrl}{url of the webservice}
 }
 \value{
 data.frame
