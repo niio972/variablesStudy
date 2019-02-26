@@ -4,11 +4,13 @@ var array;
 $(function() {
   // Remove this line in the final version
   // ocpu.seturl("http://localhost:8004/ocpu/library/variablesStudy/R")
+  
   // Initialisation des variables
   console.log("Bonjour en JavaScript !");
   var nbVar = -1;
   var idSelect = "mySelect";
 
+  // ocpu.seturl("http://localhost:8004/ocpu/apps/niio972/variablesStudy/R");
   var params = new window.URLSearchParams(window.location.search);
   var token = params.get("access_token");
   var wsUrl = params.get("wsUrl");
@@ -27,12 +29,17 @@ $(function() {
         arrayText = output.name;
         array = output.value;
         console.log(array);
-        var selectVariable = document.getElementById("variable");
+        var selectVariableY = document.getElementById("variableX");
+        var selectVariableX = document.getElementById("variableY");
         for (var i = 0; i < array.length; i++) {
-          var option = document.createElement("option");
-          option.value = array[i];
-          option.text = arrayText[i];
-          selectVariable.appendChild(option);
+          var optionX = document.createElement("option");
+          optionX.value = array[i];
+          optionX.text = arrayText[i];
+          selectVariableX.appendChild(optionX);
+          var optionY = document.createElement("option");
+          optionY.value = array[i];
+          optionY.text = arrayText[i];
+          selectVariableY.appendChild(optionY);
         }
       }
     );
@@ -40,8 +47,7 @@ $(function() {
     $("#submit").click(function(e) {
       e.preventDefault();
       var btn = $(this).attr("disabled", "disabled");
-      console.log("variable " + $("#variable").val()[0]);
-      console.log("token " + $("#token").val()[0]);
+  
       // Use of the R function to create the plot
       smoothing = document.getElementById("smoothing").checked;
       console.log("smoothing = ", smoothing);

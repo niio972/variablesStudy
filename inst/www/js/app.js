@@ -3,7 +3,8 @@ var arrayText;
 var array;
 $(function() {
   // Remove this line in the final version
-  // ocpu.seturl("http://localhost:8004/ocpu/library/variablesStudy/R");
+  // ocpu.seturl("http://localhost:8004/ocpu/apps/niio972/variablesStudy/R");
+
   var params = new window.URLSearchParams(window.location.search);
   var token = params.get("access_token");
   var wsUrl = params.get("wsUrl");
