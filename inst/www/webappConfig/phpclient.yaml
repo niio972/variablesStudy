@@ -7,7 +7,7 @@ plotVar:
     nameVar:
       label : 'variables Name'
       type: list
-      values : listVariables
+      RfunctionValues : listVariables
     smoothing:
       label : 'smoothing'
       type: boolean
