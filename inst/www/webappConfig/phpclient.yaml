@@ -3,7 +3,8 @@ plotVar:
     endDate:
       label : 'end Date'
       type: date
-      format: YYYY-DD-MM
+      format: yyyy-dd-mm
+      value: Y-m-d
     nameVar:
       label : 'variables Name'
       type: list
@@ -14,7 +15,8 @@ plotVar:
     startDate:
       label : 'start Date'
       type: date
-      format: YYYY-DD-MM
+      format: yyyy-dd-mm
+      value: Y-m-d
     token:
       type: string
       visibility: hidden
