@@ -34,7 +34,7 @@
 ##'
 ##' @export
 ##'
-plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, token, url = "www.opensilex.org/openSilexAPI/rest/"){
+plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, token, wsUrl = "www.opensilex.org/openSilexAPI/rest/"){
 
   phisWSClientR::initializeClientConnection(apiID="ws_private", url = wsUrl)
 
