@@ -213,5 +213,6 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
   htmlwidgets::saveWidget(p, "enviroVarPlot.html", selfcontained = FALSE)
   # htmlwidgets::
   jsonlite::write_json(plotly::plotly_json(p), "plot")
+  jsonlite::write_json(plotly::plotly_json(p), "plotData")
   jsonlite::write_json(Data,"data")
 }
