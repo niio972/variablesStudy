@@ -13,7 +13,7 @@ plotVar:
       dateValue: Y-m-d
     nameVar:
       label : 'Variables'
-      valueType: list
+      type: list
       RfunctionValues : listVariables
     smoothing:
       label : 'smoothing'
