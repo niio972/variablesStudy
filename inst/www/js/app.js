@@ -69,7 +69,7 @@ $(function() {
       // Run the R function
       var req = ocpu
         .call("plotVar", plotVarParameters, function(session) {
-          $("iframe").attr("src", session.getFileURL("enviroVarPlot.html"));
+          $("iframe").attr("src", session.getFileURL("plotVarWidget.html"));
         })
         .fail(function(text) {
           alert("Error: " + req.responseText);
@@ -82,10 +82,6 @@ $(function() {
 
           btn.removeAttr("disabled");
         })
-        .fail(function(text) {
-          alert("Error: " + req.responseText);
-        });
-
       // DataTable
       getDFParameters = {
         nameVar: nameVars,

@@ -176,5 +176,5 @@ plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, token, wsUr
   p <- plotly::layout(p, title =paste( "<b>Tendency of ", x$title, " ~ ", y$title, "</br>"))
   p
 
-  htmlwidgets::saveWidget(p, "relVarPlot.html", selfcontained = FALSE)
+  htmlwidgets::saveWidget(p, "plotVarRelWidget.html", selfcontained = FALSE)
 }

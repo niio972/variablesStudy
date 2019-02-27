@@ -4,15 +4,15 @@ plotVar:
       label : 'start Date'
       type: date
       format: yyyy-dd-mm
-      value: Y-m-d
+      dateValue: Y-m-d
     endDate:
       label : 'end Date'
       type: date
       format: yyyy-dd-mm
-      value: Y-m-d
+      dateValue: Y-m-d
     nameVar:
-      label : 'variables Name'
-      type: list
+      label : 'Variables'
+      valueType: list
       RfunctionValues : listVariables
     smoothing:
       label : 'smoothing'

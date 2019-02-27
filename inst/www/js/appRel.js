@@ -77,7 +77,7 @@ $(function() {
           "plotVarRel",
           plotVarRelParameters,
           function(session) {
-            $("iframe").attr("src", session.getFileURL("relVarPlot.html"));
+            $("iframe").attr("src", session.getFileURL("plotVarRelWidget.html"));
           }
         )
         .fail(function(text) {

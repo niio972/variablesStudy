@@ -210,9 +210,9 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
 
   # Creation of the html object to screen in the variablesStudy
   # print(plotly::plotly_json(p))
-  htmlwidgets::saveWidget(p, "enviroVarPlot.html", selfcontained = FALSE)
+  htmlwidgets::saveWidget(p, "plotVarWidget.html", selfcontained = FALSE)
   # htmlwidgets::
-  jsonlite::write_json(plotly::plotly_json(p), "plot")
-  jsonlite::write_json(jsonlite::fromJSON(plotly::plotly_json(p)), "plotData")
-  jsonlite::write_json(Data,"data")
+  jsonlite::write_json(plotly::plotly_json(p), "plotlySchema")
+  jsonlite::write_json(jsonlite::fromJSON(plotly::plotly_json(p)), "plotlyData")
+  jsonlite::write_json(Data,"gridData")
 }
