@@ -59,16 +59,14 @@ $(function() {
       for (var i = 0; i < nbVar + 1; i++) {
         var idAddArray = idSelect.concat(i.toString());
         var newElement = document.getElementById(idAddArray).value;
-        console.log("ESSAIS NEW ELEMENT", newElement);
         nameVars.push(newElement);
-        console.log("nameVars = ", nameVars);
       }
 
       plotVarRelParameters = {
         token: token,
         varX: varX,
         varY: varY,
-        smoothing: smoothing
+        // smoothing: smoothing
       };
 
       if (wsUrl !== null) {
@@ -79,18 +77,13 @@ $(function() {
           "plotVarRel",
           plotVarRelParameters,
           function(session) {
-            $("iframe").attr("src", session.getFileURL("relVarPlot.html"));
+            $("iframe").attr("src", session.getFileURL("plotVarRelWidget.html"));
           }
         )
         .fail(function(text) {
           alert("Error: " + req.responseText);
         })
         .always(function() {
-          console.log({
-            nameVar: nameVars,
-            token: token
-          });
-
           btn.removeAttr("disabled");
         })
         .fail(function(text) {

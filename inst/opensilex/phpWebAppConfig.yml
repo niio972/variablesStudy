@@ -1,0 +1,30 @@
+plotVar:
+  label : 'Two variables comparison'
+  parameters:
+    startDate:
+      label : 'start Date'
+      type: date
+      format: yyyy-dd-mm
+      dateValue: Y-m-d
+    endDate:
+      label : 'end Date'
+      type: date
+      format: yyyy-dd-mm
+      dateValue: Y-m-d
+    nameVar:
+      label : 'Variables'
+      type: list
+      RfunctionValues : listVariables
+      required : true
+    smoothing:
+      label : 'smoothing'
+      type: boolean
+      default: false
+    token:
+      type: string
+      visibility: hidden
+      required : true
+    wsUrl:
+      type: string
+      visibility: hidden
+      required : true

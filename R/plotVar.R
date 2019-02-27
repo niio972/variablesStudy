@@ -204,5 +204,10 @@ plotVar <- function(varURI, startDate = NULL, endDate = NULL, sensor = NULL, tok
   }
 
   # Creation of the html object to screen in the variablesStudy
-  htmlwidgets::saveWidget(p, "enviroVarPlot.html", selfcontained = FALSE)
+  # print(plotly::plotly_json(p))
+  htmlwidgets::saveWidget(p, "plotVarWidget.html", selfcontained = FALSE)
+  # htmlwidgets::
+  jsonlite::write_json(plotly::plotly_json(p), "plotlySchema")
+  jsonlite::write_json(jsonlite::fromJSON(plotly::plotly_json(p)), "plotlyData")
+  jsonlite::write_json(Data,"gridData")
 }

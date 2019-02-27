@@ -6,6 +6,7 @@
 # Update:
 #-------------------------------------------------------------------------------
 
+
 #' @title Plot two Environmental variables relationship
 #'
 #' @importFrom magrittr %>%
@@ -186,5 +187,6 @@ plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, trend = FAL
   p <- plotly::layout(p, yaxis = y)
   p <- plotly::layout(p, title =paste( "<b>Tendency of ", y$title, " ~ ", x$title, "</br>"))
 
-  htmlwidgets::saveWidget(p, "relVarPlot.html", selfcontained = FALSE)
+  htmlwidgets::saveWidget(p, "plotVarRelWidget.html", selfcontained = FALSE)
+
 }
