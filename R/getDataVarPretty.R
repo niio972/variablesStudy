@@ -27,22 +27,17 @@
 ##'  varPrettyTot <- getVarPretty(token = token)
 ##'  getDataVarPretty(nameVar = "temperature", varPretty = varPrettyTot, token = token)
 ##' }
-getDataVarPretty <- function(nameVar, methodVar = NULL, varPretty, token) {
+#getDataVarPretty <- function(nameVar, methodVar = NULL, varPretty, token) {
+getDataVarPretty <- function(varURI, varPretty, token) {
 
   # Recuperation of the uri of the variable of interest
-  if(!is.null(methodVar) && !is.na(methodVar)){
-    numVar <- 1
-    while(grepl(methodVar, varPretty$method[numVar]) == FALSE && numVar < dim(varPretty)[1]){
-      numVar <- numVar+1
-    }
-  } else {
-    numVar <- match(nameVar, varPretty$name)
-  }
+  numVar <- match(varURI, varPretty$uri)
+
   nameUriVar <-  varPretty$uri[numVar]
 
   # Recuperation of the data from the WS
-  myCount <- phisWSClientR::getEnvironmentData(token = token, variable = nameUriVar)$totalCount
-  enviroData <- phisWSClientR::getEnvironmentData(token=token, variable =  nameUriVar, verbose = TRUE, pageSize = myCount)$data
+  myCount <- phisWSClientR::getEnvironmentData(token = token, variable = varURI)$totalCount
+  enviroData <- phisWSClientR::getEnvironmentData(token = token, variable =  varURI, verbose = TRUE, pageSize = myCount)$data
 
   # Creation of the dataTable to return
   nomVar <- paste(toupper(substr(varPretty$name[numVar],1,1)), substr(varPretty$name[numVar],2,nchar(varPretty$name[numVar])), sep = "")

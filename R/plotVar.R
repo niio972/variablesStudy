@@ -47,13 +47,15 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
   for (i in 1: length(nameVar)){
 
     # Extraction of the variable's name
-    nameString <- toString(nameVar[i])
-    varMeth <- strsplit(nameString, split="_")
-    methodVar <- varMeth[[1]][2]
-    subNameVar <- varMeth[[1]][1]
+    # nameString <- toString(nameVar[i])
+    # varMeth <- strsplit(nameString, split="_")
+    # methodVar <- varMeth[[1]][2]
+    # subNameVar <- varMeth[[1]][1]
 
+    # Use var URI
     # Recuperation of the variable's data from the WS
-    enviroData <- getDataVarPretty(nameVar = subNameVar, methodVar = methodVar, varPretty = varPrettyTot, token = token)
+    #enviroData <- getDataVarPretty(nameVar = subNameVar, methodVar = methodVar, varPretty = varPrettyTot, token = token)
+    enviroData <- getDataVarPretty(varURI = nameVar[i], varPretty = varPrettyTot, token = token)
     varPrettyI <- t(data.frame(matrix(unlist(enviroData$varPretty))))
 
     # Variable's information
@@ -207,7 +209,7 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
     p <- plotly::layout(p, yaxis = y)
     p <- plotly::layout(p, title = "<b>Tendency of environmental variables among time</br>")
   }
-
+p
   # Creation of the html object to screen in the variablesStudy
-  htmlwidgets::saveWidget(p, "enviroVarPlot.html", selfcontained = FALSE)
+  #htmlwidgets::saveWidget(p, "enviroVarPlot.html", selfcontained = FALSE)
 }
