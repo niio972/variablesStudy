@@ -1,5 +1,5 @@
 plotVar:
-  label : 'Variable comparison'
+  label : 'Two variables comparison'
   parameters:
     startDate:
       label : 'start Date'
