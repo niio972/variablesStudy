@@ -2,7 +2,7 @@ plotVar:
   label : 'Variable comparison'
   parameters:
     startDate:
-      label : 'start Date'
+      label : 'start Datesss'
       type: date
       format: yyyy-dd-mm
       dateValue: Y-m-d
@@ -20,8 +20,8 @@ plotVar:
       type: boolean
       default: false
     token:
-      type: string
-      visibility: hidden
+      type: boolean
+      # visibility: hidden
     wsUrl:
       type: string
       visibility: hidden
