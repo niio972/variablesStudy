@@ -15,6 +15,7 @@ plotVar:
       label : 'Variables'
       type: list
       RfunctionValues : listVariables
+      required : true
     smoothing:
       label : 'smoothing'
       type: boolean
@@ -22,6 +23,8 @@ plotVar:
     token:
       type: string
       visibility: hidden
+      required : true
     wsUrl:
       type: string
       visibility: hidden
+      required : true
