@@ -6,38 +6,42 @@
 # Update:
 #-------------------------------------------------------------------------------
 
-##' @title Plot two Environmental variables relationship
-##'
-##' @importFrom magrittr %>%
-##' @importFrom gam s
-##' @importFrom plotly layout
-##' @importFrom plotly plot_ly
-##' @importFrom plotly add_trace
-##' @importFrom stats qnorm
-##'
-##' @param varX name of the variable to plot in X axis
-##' @param varY name of the variable to plot in Y axis
-##' @param startDate date from which to plot
-##' @param endDate date to which to plot
-##' @param token a token from \code{\link{getToken}} function
-##' @param wsUrl url of the webservice
 
-##'
-##' @examples
-##' \donttest{
-##'  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
-##'  aToken <- getToken("guest@opensilex.org","guest")
-##'  token <- aToken$data
-##'  plotVar("temperature", "radiation", token = token)
-##' }
-##'
-##' @export
-##'
-plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, token, wsUrl = "www.opensilex.org/openSilexAPI/rest/"){
+#' @title Plot two Environmental variables relationship
+#'
+#' @importFrom magrittr %>%
+#' @importFrom gam s
+#' @importFrom plotly layout
+#' @importFrom plotly plot_ly
+#' @importFrom plotly add_trace
+#' @importFrom stats qnorm
+#'
+#' @param varX name of the variable to plot in X axis
+#' @param varY name of the variable to plot in Y axis
+#' @param startDate date from which to plot
+#' @param endDate date to which to plot
+#' @param trend logical, draw the trend of the scatterplot
+#' @param wsUrl url of the webservice
+#' @param token a token from \code{\link{getToken}} function
+#'
+
+#' @examples
+#' \donttest{
+#'  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
+#'  aToken <- getToken("guest@opensilex.org","guest")
+#'  token <- aToken$data
+#'  plotVarRel( "temperature_hourly instant temperature_degree celsius",
+#'        "radiation_hourly global radiation_joule per square centimeter", token = token, trend = TRUE)
+
+#' }
+#'
+#' @export
+#'
+plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, trend = FALSE, wsUrl = "www.opensilex.org/openSilexAPI/rest/", token){
 
   phisWSClientR::initializeClientConnection(apiID="ws_private", url = wsUrl)
 
-  ## Data recuperation
+  # Data recuperation
   # variable's informations
   varPrettyTot <- getVarPretty(token = token)
   Data <- NULL
@@ -62,9 +66,9 @@ plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, token, wsUr
     nbVar <- rep(i, length(enviroData))
 
     if(i==1){
-      DataX <- data.frame(nbVar = nbVar, date = dates, values = value)
+      DataX <- data.frame(nbVar = nbVar, dates = dates, values = value)
     }else{
-      DataY <- data.frame(nbVar = nbVar, date = dates, values = value)
+      DataY <- data.frame(nbVar = nbVar, dates = dates, values = value)
     }
   }
   Data <- rbind(DataX, DataY)
@@ -72,43 +76,58 @@ plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, token, wsUr
   # Chosen dates
   if(!is.null(startDate)){
     startDate <- as.POSIXct(startDate, tz = "UTC", format = "%Y-%m-%d")
-    if(startDate <= max(Data$date)){
-      Data <- Data[which(Data$date >= startDate),]
+    if(startDate <= max(Data$dates)){
+      Data <- Data[which(Data$dates >= startDate), ]
     }
   }
   if (!is.null(endDate)){
     endDate <- as.POSIXct(endDate, tz = "UTC", format = "%Y-%m-%d")
-    if(endDate >= min(Data$date)){
-      Data <- Data[which(Data$date <= endDate),]
+    if(endDate >= min(Data$dates)){
+      Data <- Data[which(Data$dates <= endDate), ]
     }
   }
-  DataX = Data[which(Data$nbVar==1), ]
-  DataY = Data[which(Data$nbVar==2), ]
+  DataX = Data[which(Data$nbVar == 1), ]
+  DataY = Data[which(Data$nbVar == 2), ]
 
-  # Test synchonisation
-  if(max(DataX$date) != max(DataY$date) | min(DataX$date) != min(DataY$date)){
-    stop("the two variables are not synchronised or avaliable during this period of time")
+
+  # Test synchronization
+  if(max(DataX$dates) != max(DataY$dates) | min(DataX$dates) != min(DataY$dates)){
+    Interpolation = TRUE
+    warning("The two variables are not synchronised or avaliable during this period of time. \n Interpolation realized on a new common time period.")
+    upper <- min( max(DataX$dates) , max(DataY$dates))
+    lower <- max( min(DataX$dates) , min(DataY$dates))
+    Data <- Data[ which(Data$dates >= lower & Data$dates<=upper),]
+  }else{
+    Interpolation = FALSE
+    Data <- cbind(DataX, Y = DataY$values)
+    names(Data) = c("nbVar", "dates", "X", "Y")
   }
+
+
 
   ## Interpolation over the same dates
-  timeDuration <- max(Data$date)-min(Data$date)
-  stepDuration <- min(length(DataX$date), length(DataY$date))
-  newDates <- seq(from = min(Data$date), to = max(Data$date), by = timeDuration/stepDuration)[-1]
-  if(length(Data$date) > 20){
-    df = 20
-  } else {
-    df <- length(Data$date)-1
+  if( Interpolation == TRUE){
+    timeDuration <- max(Data$dates)-min(Data$dates)
+    stepDuration <- min(length(DataX$dates), length(DataY$dates))
+    newDates <- seq(from = min(Data$dates), to = max(Data$dates), by = timeDuration/stepDuration)[-1]
+    if(length(Data$dates) > 20){
+      degFree <- 20
+    } else {
+      degFree <- length(Data$dates)-1
+    }
+
+
+    varSplineX <- gam::gam(values~s(dates, df = 20), data = DataX)
+    varPredX <- stats::predict(object = varSplineX, newdata = data.frame(dates = newDates), type = "response")
+
+    varSplineY <- gam::gam(values~s(dates, df = 20), data = DataY)
+    varPredY <- stats::predict(object = varSplineY, newdata = data.frame(dates = newDates), type = "response")
+    Data <- data.frame(dates = newDates, X = varPredX, Y = varPredY)
+
+  }else{
   }
 
-  varSplineX <- gam::gam(values~s(date, df = df), data = DataX)
-  #varPredX <- stats::predict(varSplineX, newDates)
-  varPredX <- stats::predict(varSplineX, se.fit=TRUE)
 
-  varSplineY <- gam::gam(values~s(date, df = df), data = DataY)
-  #varPredY <- stats::predict(varSplineY, newDates)
-  varPredY <- stats::predict(varSplineY, se.fit=TRUE)
-
-  predData <- data.frame(newDates, varPredX, varPredY)
 
   ## Plotting
   # Labels
@@ -127,54 +146,47 @@ plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, token, wsUr
             tickfont = list(family = 'serif'), gridwidth = 2)
 
   title <- list(size = 20, color = '#282828', tickfont = list(family = 'serif'))
+
   # Plot
   p <- plotly::plot_ly()
-  p <- layout(p, xaxis = x, yaxis = y,
-              titlefont = title,
-              margin = list(l = 60, r = 70, t = 70, b =  60))
-  # Affichage des variables et leur lissage
-  # Lissage non paramétrique par B-spline
-
+  p <- plotly::layout(p, xaxis = x, yaxis = y,
+                      titlefont = title,
+                      margin = list(l = 60, r = 70, t = 70, b =  60))
   # Mise en forme des traces
   marker <- NULL
   marker$color <- as.character(colorVar[1])
   hoverlabel <- list(bgcolor = colorBgHover, font = list(color = colorText), hoveron = "")
   hoverlabel$bordercolor <- as.character(colorVar[1])
 
-  # Ajout de modèle et traces au graphique
-  # if(smoothing == TRUE){
-  #   # Création du modèle
-  #   varSplineXY <- gam::gam(varPredY~s(varPredY, df = df))
-  #   varPredXY <- stats::predict(varSplineXY, se.fit = TRUE)
-  #
-  #   modeleDf <- data.frame(y = varPredXY$fit,
-  #                          lb = as.numeric(varPredXY$fit - qnorm(0.975) * varPredXY$se.fit),
-  #                          ub = as.numeric(varPredXY$fit + qnorm(0.975) * varPredXY$se.fit))
-  #   # Affichage de la courbe lissée et son intervalle de confiance
-  #   p <- plotly::add_lines(p, x = Data$date, y = varPredXY$fit, line = list(color = as.character(colorVar[1])), yaxis = nameY,
-  #                          name = "smoothed curve")
-  #   p <- plotly::add_ribbons(p, x = Data$date, ymin = modeleDf$lb, ymax = modeleDf$ub,  yaxis = nameY,
-  #                            line = list(color = as.character(colorRibbon[i])),
-  #                            fillcolor = as.character(colorFill[i]),
-  #                            name = "Standard Error", showlegend = FALSE)
-  #   opacity <- 0.19
-  # } else {
-  #   opacity <- 1
-  # }
-
-  p <- plotly::add_markers(p, x = predData$fit, y = predData$fit.1, marker = marker, name = varPretty[1,"method"], yaxis = y$title, hoverlabel = hoverlabel,
+  p <- plotly::add_markers(p, x = Data$X, y = Data$Y, marker = marker, name = varPretty[1,"method"], yaxis = y$title, hoverlabel = hoverlabel,
                            text = paste(
-                             paste( round(predData$fit.1, digits = 2),varPretty[2,"unity"]),
-                             paste(" ~ ", round(predData$fit,2),varPretty[1,"unity"] ),
+                             paste( round(Data$Y, digits = 2),varPretty[2,"unity"]),
+                             paste(" ~ ", round(Data$X,2),varPretty[1,"unity"] ),
                              sep = "\n"),
                            hoverinfo = 'text')
+
+  if(trend==TRUE){
+    if(length(Data$dates) > 20){
+      degFree <- 20
+    } else {
+      degFree <- length(Data$dates)-1
+    }
+    varSpline <- gam::gam(Y ~ s(X, df = 20), data = Data)
+    varPred<- stats::predict(object = varSpline, se.fit = TRUE)
+
+    smoothData <- data.frame(Dates = Data$dates, X = Data$X, Y = varPred$fit)
+
+
+    p <- plotly::add_lines(p, x = smoothData$X, y = smoothData$Y, line = list(color = as.character(colorVar[i])), yaxis = y$title,
+                           name = "smoothed curve)")
+  }
 
 
   y <- list(title = paste('<b>', varPretty[2, "name"], ' (', varPretty[2, "unity"], ')' , '</b>', sep = ""), color = '#282828', showgrid = FALSE,
             gridwidth = 2,  tickfont = list(family = 'serif'), overlaying = "y", side = "right")
   p <- plotly::layout(p, yaxis = y)
-  p <- plotly::layout(p, title =paste( "<b>Tendency of ", x$title, " ~ ", y$title, "</br>"))
-  p
+  p <- plotly::layout(p, title =paste( "<b>Tendency of ", y$title, " ~ ", x$title, "</br>"))
 
   htmlwidgets::saveWidget(p, "plotVarRelWidget.html", selfcontained = FALSE)
+
 }

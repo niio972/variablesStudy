@@ -4,8 +4,8 @@
 \alias{plotVarRel}
 \title{Plot two Environmental variables relationship}
 \usage{
-plotVarRel(varX, varY, startDate = NULL, endDate = NULL, token,
-  wsUrl = "www.opensilex.org/openSilexAPI/rest/")
+plotVarRel(varX, varY, startDate = NULL, endDate = NULL,
+  trend = FALSE, wsUrl = "www.opensilex.org/openSilexAPI/rest/", token)
 }
 \arguments{
 \item{varX}{name of the variable to plot in X axis}
@@ -16,9 +16,11 @@ plotVarRel(varX, varY, startDate = NULL, endDate = NULL, token,
 
 \item{endDate}{date to which to plot}
 
-\item{token}{a token from \code{\link{getToken}} function}
+\item{trend}{logical, draw the trend of the scatterplot}
 
 \item{wsUrl}{url of the webservice}
+
+\item{token}{a token from \code{\link{getToken}} function}
 }
 \description{
 Plot two Environmental variables relationship
@@ -28,7 +30,8 @@ Plot two Environmental variables relationship
  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
  aToken <- getToken("guest@opensilex.org","guest")
  token <- aToken$data
- plotVar("temperature", "radiation", token = token)
+ plotVarRel( "temperature_hourly instant temperature_degree celsius",
+       "radiation_hourly global radiation_joule per square centimeter", token = token, trend = TRUE)
 }
 
 }
