@@ -4,12 +4,12 @@
 \alias{plotVar}
 \title{Plot Environmental Data}
 \usage{
-plotVar(nameVar, startDate = NULL, endDate = NULL, sensor = NULL,
+plotVar(varURI, startDate = NULL, endDate = NULL, sensor = NULL,
   token, smoothing = TRUE,
   wsUrl = "www.opensilex.org/openSilexAPI/rest/")
 }
 \arguments{
-\item{nameVar}{name of the variable to plot}
+\item{varURI}{uri of the variable to plot from the \code{\link{listVariables}} function or the web service directly}
 
 \item{startDate}{date from which to plot}
 

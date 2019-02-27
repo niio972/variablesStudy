@@ -11,8 +11,7 @@
 ##' @importFrom phisWSClientR initializeClientConnection
 ##' @importFrom phisWSClientR getVariables2
 ##'
-##' @param nameVar name of the variable to plot
-##' @param methodVar name of the method used to collect data
+##' @param varURI uri of the variable to plot, from the \code{\link{listVariables}} function or the web service directly
 ##' @param varPretty from \code{\link{getVarPretty}}
 ##' @param token a token from \code{\link{getToken}} function
 ##'
@@ -25,9 +24,11 @@
 ##'  aToken <- getToken("guest@opensilex.org","guest")
 ##'  token <- aToken$data
 ##'  varPrettyTot <- getVarPretty(token = token)
-##'  getDataVarPretty(nameVar = "temperature", varPretty = varPrettyTot, token = token)
+##'  getDataVarPretty(varURI = listVariables(token,
+##'                   wsUrl="www.opensilex.org/openSilexAPI/rest/")$value[1],
+##'                   varPretty = varPrettyTot,
+##'                   token = token)
 ##' }
-#getDataVarPretty <- function(nameVar, methodVar = NULL, varPretty, token) {
 getDataVarPretty <- function(varURI, varPretty, token) {
 
   # Recuperation of the uri of the variable of interest

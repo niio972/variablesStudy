@@ -4,12 +4,10 @@
 \alias{getDataVarPretty}
 \title{Get Data from WS2 and formate them}
 \usage{
-getDataVarPretty(nameVar, methodVar = NULL, varPretty, token)
+getDataVarPretty(varURI, varPretty, token)
 }
 \arguments{
-\item{nameVar}{name of the variable to plot}
-
-\item{methodVar}{name of the method used to collect data}
+\item{varURI}{uri of the variable to plot, from the \code{\link{listVariables}} function or the web service directly}
 
 \item{varPretty}{from \code{\link{getVarPretty}}}
 
@@ -27,6 +25,9 @@ initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSile
  aToken <- getToken("guest@opensilex.org","guest")
  token <- aToken$data
  varPrettyTot <- getVarPretty(token = token)
- getDataVarPretty(nameVar = "temperature", varPretty = varPrettyTot, token = token)
+ getDataVarPretty(varURI = listVariables(token,
+                  wsUrl="www.opensilex.org/openSilexAPI/rest/")$value[1],
+                  varPretty = varPrettyTot,
+                  token = token)
 }
 }

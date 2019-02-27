@@ -53,7 +53,7 @@ plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, trend = FAL
     methodVar <- varMeth[[1]][2]
     subNameVar <- varMeth[[1]][1]
     # Recuperation of the data from the WS
-    enviroData <- getDataVarPretty(nameVar = subNameVar, methodVar = methodVar, varPretty = varPrettyTot, token = token)
+    enviroData <- getDataVarPretty(varURI = subNameVar, varPretty = varPrettyTot, token = token)
     varPrettyI <- t(data.frame(matrix(unlist(enviroData$varPretty))))
     varPretty <- rbind(varPretty, varPrettyI)
     enviroData <- enviroData$enviroData

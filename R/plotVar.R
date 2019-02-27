@@ -15,7 +15,7 @@
 ##' @importFrom plotly add_trace
 ##' @importFrom stats qnorm
 ##'
-##' @param nameVar name of the variable to plot
+##' @param varURI uri of the variable to plot from the \code{\link{listVariables}} function or the web service directly
 ##' @param startDate date from which to plot
 ##' @param endDate date to which to plot
 ##' @param sensor sensor's name that recorded the values
@@ -33,7 +33,7 @@
 ##'
 ##' @export
 ##'
-plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, token, smoothing = TRUE, wsUrl = "www.opensilex.org/openSilexAPI/rest/"){
+plotVar <- function(varURI, startDate = NULL, endDate = NULL, sensor = NULL, token, smoothing = TRUE, wsUrl = "www.opensilex.org/openSilexAPI/rest/"){
 
   phisWSClientR::initializeClientConnection(apiID="ws_private", url = wsUrl)
 
@@ -44,18 +44,11 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
   # Data
   Data <- NULL
   varPretty <- NULL
-  for (i in 1: length(nameVar)){
-
-    # Extraction of the variable's name
-    # nameString <- toString(nameVar[i])
-    # varMeth <- strsplit(nameString, split="_")
-    # methodVar <- varMeth[[1]][2]
-    # subNameVar <- varMeth[[1]][1]
+  for (i in 1: length(varURI)){
 
     # Use var URI
     # Recuperation of the variable's data from the WS
-    #enviroData <- getDataVarPretty(nameVar = subNameVar, methodVar = methodVar, varPretty = varPrettyTot, token = token)
-    enviroData <- getDataVarPretty(varURI = nameVar[i], varPretty = varPrettyTot, token = token)
+    enviroData <- getDataVarPretty(varURI = varURI[i], varPretty = varPrettyTot, token = token)
     varPrettyI <- t(data.frame(matrix(unlist(enviroData$varPretty))))
 
     # Variable's information
@@ -92,7 +85,7 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
   if(!is.null(startDate)){
     startDate <- as.POSIXct(startDate, tz = "UTC", format = "%Y-%m-%d")
     if(startDate <= max(Data$date)){
-      if(length(nameVar) == 1){
+      if(length(varURI) == 1){
         Data$values <- Data$values[which(Data$date >= startDate)]
       } else {
         Data$values <- Data$values[which(Data$date >= startDate),]
@@ -104,7 +97,7 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
   if (!is.null(endDate)){
     endDate <- as.POSIXct(endDate, tz = "UTC", format = "%Y-%m-%d")
     if(endDate >= min(Data$date)){
-      if(length(nameVar) == 1){
+      if(length(varURI) == 1){
         Data$values <- Data$values[which(Data$date <= endDate)]
       } else {
         Data$values <- Data$values[which(Data$date <= endDate),]
@@ -142,7 +135,7 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
                       titlefont = title,
                       margin = list(l = 60, r = 70, t = 70, b =  60))
 
-  for (i in 1:(length(nameVar))){
+  for (i in 1:(length(varURI))){
 
     # Markers and Lines formatting
     nameY <- paste('y', i, sep = "")
@@ -152,7 +145,7 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
     hoverlabel$bordercolor <- as.character(colorVar[i])
 
     # Values of the graph
-    if(length(nameVar)==1){
+    if(length(varURI)==1){
       yVar <- Data$values
     } else {
       yVar <- Data$values[,i]
@@ -196,7 +189,7 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
 
   }
   # Labels
-  if (length(nameVar) == 1){
+  if (length(varURI) == 1){
     p <- plotly::layout(p, title = paste('<b>Tendency of ', varPretty[1,"name"], '</b><br><i>', varPretty[1,"method"], '</i>' , sep = ""))
   } else if (i == 2) {
     y <- list(title = paste('<b>', varPretty[2, "name"], ' (', varPretty[2, "unity"], ')' , '</b>', sep = ""), color = '#282828', showgrid = FALSE,
@@ -209,7 +202,7 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
     p <- plotly::layout(p, yaxis = y)
     p <- plotly::layout(p, title = "<b>Tendency of environmental variables among time</br>")
   }
-p
+
   # Creation of the html object to screen in the variablesStudy
-  #htmlwidgets::saveWidget(p, "enviroVarPlot.html", selfcontained = FALSE)
+  htmlwidgets::saveWidget(p, "enviroVarPlot.html", selfcontained = FALSE)
 }

@@ -33,5 +33,5 @@ listVariables <-function(token, wsUrl="www.opensilex.org/openSilexAPI/rest/"){
     listVar$value[i] <- varPretty$uri[i]
 
   }
-  return(listVar)
+  return(as.data.frame(listVar))
 }
