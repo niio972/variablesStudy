@@ -19,7 +19,7 @@ plotVar:
     smoothing:
       label : 'smoothing'
       type: boolean
-      default: false
+      defaultValue: false
     token:
       type: string
       visibility: hidden
