@@ -6,33 +6,37 @@
 # Update:
 #-------------------------------------------------------------------------------
 
-##' @title Plot Environmental Data
-##'
-##' @importFrom magrittr %>%
-##' @importFrom gam s
-##' @importFrom plotly layout
-##' @importFrom plotly plot_ly
-##' @importFrom plotly add_trace
-##' @importFrom stats qnorm
-##'
-##' @param varURI uri of the variable to plot from the \code{\link{listVariables}} function or the web service directly
-##' @param startDate date from which to plot
-##' @param endDate date to which to plot
-##' @param sensor sensor's name that recorded the values
-##' @param token a token from \code{\link{getToken}} function
-##' @param smoothing logical, smoothing of the data
-##' @param wsUrl url of the webservice
+#' @title Plot Environmental Data
+#'
+#' @importFrom magrittr %>%
+#' @importFrom gam s
+#' @importFrom plotly layout
+#' @importFrom plotly plot_ly
+#' @importFrom plotly add_trace
+#' @importFrom plotly plotly_json
+#' @importFrom stats qnorm
+#' @importFrom jsonlite fromJSON
+#' @importFrom jsonlite write_json
+#'
+#' @param varURI uri of the variable to plot from the \code{\link{listVariables}} function or the web service directly
+#' @param startDate date from which to plot
+#' @param endDate date to which to plot
+#' @param sensor sensor's name that recorded the values
+#' @param token a token from \code{\link{getToken}} function
+#' @param smoothing logical, smoothing of the data
+#' @param wsUrl url of the webservice
 
-##' @examples
-##' \donttest{
-##'  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
-##'  aToken <- getToken("guest@opensilex.org","guest")
-##'  token <- aToken$data
-##'  plotVar("temperature", token = token)
-##' }
-##'
-##' @export
-##'
+#' @examples
+#' \donttest{
+#'  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
+#'  aToken <- getToken("guest@opensilex.org","guest")
+#'  token <- aToken$data
+#'  vars <- listVariables(token = token)
+#'  plotVar(vars$value[1], token = token)
+#' }
+#'
+#' @export
+
 plotVar <- function(varURI, startDate = NULL, endDate = NULL, sensor = NULL, token, smoothing = TRUE, wsUrl = "www.opensilex.org/openSilexAPI/rest/"){
 
   phisWSClientR::initializeClientConnection(apiID="ws_private", url = wsUrl)

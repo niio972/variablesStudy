@@ -31,7 +31,8 @@ Plot Environmental Data
  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
  aToken <- getToken("guest@opensilex.org","guest")
  token <- aToken$data
- plotVar("temperature", token = token)
+ vars <- listVariables(token = token)
+ plotVar(vars$value[1], token = token)
 }
 
 }

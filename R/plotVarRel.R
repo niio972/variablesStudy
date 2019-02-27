@@ -16,8 +16,8 @@
 #' @importFrom plotly add_trace
 #' @importFrom stats qnorm
 #'
-#' @param varX name of the variable to plot in X axis
-#' @param varY name of the variable to plot in Y axis
+#' @param varX uri of the variable to plot in X axis, from the \code{\link{listVariables}} function or the web service directly
+#' @param varY uri of the variable to plot in Y axis, from the \code{\link{listVariables}} function or the web service directly
 #' @param startDate date from which to plot
 #' @param endDate date to which to plot
 #' @param trend logical, draw the trend of the scatterplot
@@ -30,8 +30,11 @@
 #'  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
 #'  aToken <- getToken("guest@opensilex.org","guest")
 #'  token <- aToken$data
-#'  plotVarRel( "temperature_hourly instant temperature_degree celsius",
-#'        "radiation_hourly global radiation_joule per square centimeter", token = token, trend = TRUE)
+#'  vars <- listVariables(token = token)
+#'  plotVarRel( vars$value[1],
+#'        vars$value[2],
+#'        token = token,
+#'        trend = TRUE)
 
 #' }
 #'
