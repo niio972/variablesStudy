@@ -213,6 +213,6 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
   htmlwidgets::saveWidget(p, "plotVarWidget.html", selfcontained = FALSE)
   # htmlwidgets::
   jsonlite::write_json(plotly::plotly_json(p), "plotlySchema")
-  write(plotly::plotly_json(p),"plotlyData")
+  write(plotly::plotly_json(p, pretty = FALSE),"plotlyData")
   jsonlite::write_json(Data,"gridData")
 }
