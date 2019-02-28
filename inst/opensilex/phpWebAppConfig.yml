@@ -1,13 +1,13 @@
 plotVar:
-  label : 'Two variables comparison'
+  label : 'Compare two variables'
   parameters:
     startDate:
-      label : 'start Date'
+      label : 'Start date of data'
       type: date
       format: yyyy-mm-dd
       dateValue: Y-m-d
     endDate:
-      label : 'end Date'
+      label : 'End date of data'
       type: date
       format: yyyy-mm-dd
       dateValue: Y-m-d
@@ -17,7 +17,37 @@ plotVar:
       RfunctionValues : listVariables
       required : true
     smoothing:
-      label : 'smoothing'
+      label : 'Smoothing'
+      type: boolean
+      defaultValue: false
+    token:
+      type: string
+      visibility: hidden
+      required : true
+    wsUrl:
+      type: string
+      visibility: hidden
+      required : true
+plotVarRel:
+  label : 'Confront two variables'
+  parameters:
+    startDate:
+      label : 'Start date of data'
+      type: date
+      format: yyyy-mm-dd
+      dateValue: Y-m-d
+    endDate:
+      label : 'End date of data'
+      type: date
+      format: yyyy-mm-dd
+      dateValue: Y-m-d
+    nameVar:
+      label : 'Variables'
+      type: list
+      RfunctionValues : listVariables
+      required : true
+    trend:
+      label : 'Trend'
       type: boolean
       defaultValue: false
     token:

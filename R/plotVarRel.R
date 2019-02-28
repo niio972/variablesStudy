@@ -189,4 +189,10 @@ plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, trend = FAL
 
   htmlwidgets::saveWidget(p, "plotVarRelWidget.html", selfcontained = FALSE)
 
+  # export PlotlySchema and configuration
+  jsonlite::write_json(plotly::plotly_json(p), "plotlyData")
+  plotlyJson <- plotly::plotly_json(p, pretty = FALSE)
+  plot <- jsonlite::fromJSON(plotlyJson)
+  jsonlite::write_json(plot, "plotlySchema")
+  jsonlite::write_json(Data,"gridData")
 }
