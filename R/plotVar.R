@@ -209,10 +209,11 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
   }
 
   # Creation of the html object to screen in the variablesStudy
-  # print(plotly::plotly_json(p))
   htmlwidgets::saveWidget(p, "plotVarWidget.html", selfcontained = FALSE)
-  # htmlwidgets::
+
+  # export PlotlySchema and configuration
   jsonlite::write_json(plotly::plotly_json(p), "plotlySchema")
-  write(plotly::plotly_json(p, pretty = FALSE),"plotlyData")
+  plotlyData <- file("plotlyData", "wb")
+  writeChar(plotly::plotly_json(p, pretty = FALSE), zz, eos = NULL)
   jsonlite::write_json(Data,"gridData")
 }
