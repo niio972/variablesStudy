@@ -41,8 +41,13 @@ plotVarRel:
       type: date
       format: yyyy-mm-dd
       dateValue: Y-m-d
-    nameVar:
-      label : 'Variables'
+    varY:
+      label : 'Variable Y'
+      type: list
+      RfunctionValues : listVariables
+      required : true
+    varX:
+      label : 'Variable X'
       type: list
       RfunctionValues : listVariables
       required : true
