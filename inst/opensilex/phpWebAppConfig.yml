@@ -4,12 +4,12 @@ plotVar:
     startDate:
       label : 'start Date'
       type: date
-      format: yyyy-dd-mm
+      format: yyyy-mm-dd
       dateValue: Y-m-d
     endDate:
       label : 'end Date'
       type: date
-      format: yyyy-dd-mm
+      format: yyyy-mm-dd
       dateValue: Y-m-d
     nameVar:
       label : 'Variables'
