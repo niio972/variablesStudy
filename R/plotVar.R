@@ -212,7 +212,7 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
   htmlwidgets::saveWidget(p, "plotVarWidget.html", selfcontained = FALSE)
 
   # export PlotlySchema and configuration
-  jsonlite::write_json(plotly::plotly_json(p), "plotlyData")
+  jsonlite::write_json(plotly::plotly_data(p), "plotlyData")
   plotlyJson <- plotly::plotly_json(p, pretty = FALSE)
   plot <- jsonlite::fromJSON(plotlyJson)
   jsonlite::write_json(plot, "plotlySchema")
