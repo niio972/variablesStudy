@@ -214,6 +214,6 @@ plotVar <- function(nameVar, startDate = NULL, endDate = NULL, sensor = NULL, to
   # export PlotlySchema and configuration
   jsonlite::write_json(plotly::plotly_json(p), "plotlySchema")
   plotlyData <- file("plotlyData", "wb")
-  writeChar(plotly::plotly_json(p, pretty = FALSE), zz, eos = NULL)
+  writeChar(plotly::plotly_json(p, pretty = FALSE), plotlyData, eos = NULL)
   jsonlite::write_json(Data,"gridData")
 }
