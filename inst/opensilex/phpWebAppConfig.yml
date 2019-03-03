@@ -4,7 +4,7 @@ plotVar:
   graphicType : plotly
   linkedFunctions :
     getDF:
-      label : See compute data
+      label : 'See compute data'
       name : getDF
       type : grid
       parameters :
