@@ -1,5 +1,17 @@
 plotVar:
   label : 'Compare two variables'
+  type : graphic
+  graphicType : plotly
+  linkedFunctions :
+    getDf:
+      type : grid
+      parameters :
+        - startDate
+        - endDate
+        - nameVar
+        - smoothing
+        - token
+        - wsUrl
   parameters:
     startDate:
       label : 'Start date of data'
