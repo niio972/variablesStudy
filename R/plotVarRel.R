@@ -44,93 +44,73 @@ plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, trend = FAL
 
   phisWSClientR::initializeClientConnection(apiID="ws_private", url = wsUrl)
 
-  # Data recuperation
-  # variable's informations
+  ### Collecting Data
   varPrettyTot <- getVarPretty(token = token)
-  Data <- NULL
+  ## Data
+  Data <- list()
   varPretty <- NULL
-  # Chosen variable
-  nameVar <- list(varX, varY)
-  for (i in 1: length(nameVar)){
-    nameString <- toString(nameVar[i])
-    varMeth <- strsplit(nameString, split="_")
-    methodVar <- varMeth[[1]][2]
-    subNameVar <- varMeth[[1]][1]
-    # Recuperation of the data from the WS
-    enviroData <- getDataVarPretty(varURI = subNameVar, varPretty = varPrettyTot, token = token)
+  varURI <- list(varX, varY)
+  Data = lapply(varURI,FUN = function(uri){
+    enviroData <- getDataVarPretty(varURI = uri, varPretty = varPrettyTot, token = token)$enviroData
+    yVar <- enviroData$value
+    # Casting Date in the right format
+    xVar <- as.POSIXct(enviroData$date, tz = "UTC", format = "%Y-%m-%dT%H:%M:%S")
+    DataX <- data.frame(date = xVar, value = yVar)
+
+    ## Filtering
+    if(!is.null(startDate)){
+      startDate <- as.POSIXct(startDate, tz = "UTC", format = "%Y-%m-%d")
+      DataX <- DataX[which(DataX$date >= startDate),]
+    }
+    if (!is.null(endDate)){
+      endDate <- as.POSIXct(endDate, tz = "UTC", format = "%Y-%m-%d")
+      DataX <- DataX[which(DataX$date <= endDate),]
+    }
+    return(DataX)
+  })
+  for(uri in varURI){
+    enviroData <- getDataVarPretty(varURI = uri, varPretty = varPrettyTot, token = token)
     varPrettyI <- t(data.frame(matrix(unlist(enviroData$varPretty))))
     varPretty <- rbind(varPretty, varPrettyI)
-    enviroData <- enviroData$enviroData
-
-    # Values
-    value <- enviroData$value
-    dates <- as.POSIXct(enviroData$date, tz = "UTC", format = "%Y-%m-%dT%H:%M:%S")
-    colnames(varPretty) <- c("name", "method", "acronym", "unity")
-    nbVar <- rep(i, length(enviroData))
-
-    if(i==1){
-      DataX <- data.frame(nbVar = nbVar, dates = dates, values = value)
-    }else{
-      DataY <- data.frame(nbVar = nbVar, dates = dates, values = value)
-    }
+    varPretty
   }
-  Data <- rbind(DataX, DataY)
-
-  # Chosen dates
-  if(!is.null(startDate)){
-    startDate <- as.POSIXct(startDate, tz = "UTC", format = "%Y-%m-%d")
-    if(startDate <= max(Data$dates)){
-      Data <- Data[which(Data$dates >= startDate), ]
-    }
-  }
-  if (!is.null(endDate)){
-    endDate <- as.POSIXct(endDate, tz = "UTC", format = "%Y-%m-%d")
-    if(endDate >= min(Data$dates)){
-      Data <- Data[which(Data$dates <= endDate), ]
-    }
-  }
-  DataX = Data[which(Data$nbVar == 1), ]
-  DataY = Data[which(Data$nbVar == 2), ]
-
+  colnames(varPretty) <- c("name", "method", "acronym", "unity")
+  DataX <- Data[[1]]
+  DataY <- Data[[2]]
 
   # Test synchronization
-  if(max(DataX$dates) != max(DataY$dates) | min(DataX$dates) != min(DataY$dates)){
+  if(max(DataX$date) != max(DataY$date) | min(DataX$date) != min(DataY$date)){
     Interpolation = TRUE
     warning("The two variables are not synchronised or avaliable during this period of time. \n Interpolation realized on a new common time period.")
-    upper <- min( max(DataX$dates) , max(DataY$dates))
-    lower <- max( min(DataX$dates) , min(DataY$dates))
-    Data <- Data[ which(Data$dates >= lower & Data$dates<=upper),]
+    upper <- min( max(DataX$date) , max(DataY$date))
+    lower <- max( min(DataX$date) , min(DataY$date))
+    Data <- lapply(X = Data, FUN =  function(Data){
+      return(Data[ which(Data$date >= lower & Data$date<=upper),])
+    })
   }else{
     Interpolation = FALSE
-    Data <- cbind(DataX, Y = DataY$values)
-    names(Data) = c("nbVar", "dates", "X", "Y")
   }
-
-
+  DataX <- Data[[1]]
+  DataY <- Data[[2]]
 
   ## Interpolation over the same dates
   if( Interpolation == TRUE){
-    timeDuration <- max(Data$dates)-min(Data$dates)
-    stepDuration <- min(length(DataX$dates), length(DataY$dates))
-    newDates <- seq(from = min(Data$dates), to = max(Data$dates), by = timeDuration/stepDuration)[-1]
-    if(length(Data$dates) > 20){
+    timeDuration <- max(DataX$date, DataY$date)-min(DataX$date, DataY$date)
+    stepDuration <- min(length(DataX$date), length(DataY$date))
+    newDates <- seq(from = min(DataX$date, DataY$date), to = max(DataX$date, DataY$date), by = timeDuration/stepDuration)[-1]
+    if(length(Data$date) > 20){
       degFree <- 20
     } else {
-      degFree <- length(Data$dates)-1
+      degFree <- length(Data$date)-1
     }
-
-
     varSplineX <- gam::gam(values~s(dates, df = 20), data = DataX)
     varPredX <- stats::predict(object = varSplineX, newdata = data.frame(dates = newDates), type = "response")
 
     varSplineY <- gam::gam(values~s(dates, df = 20), data = DataY)
     varPredY <- stats::predict(object = varSplineY, newdata = data.frame(dates = newDates), type = "response")
-    Data <- data.frame(dates = newDates, X = varPredX, Y = varPredY)
-
+    DataPred <- data.frame(dates = newDates, X = varPredX, Y = varPredY)
   }else{
   }
-
-
 
   ## Plotting
   # Labels
@@ -161,29 +141,27 @@ plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, trend = FAL
   hoverlabel <- list(bgcolor = colorBgHover, font = list(color = colorText), hoveron = "")
   hoverlabel$bordercolor <- as.character(colorVar[1])
 
-  p <- plotly::add_markers(p, x = Data$X, y = Data$Y, marker = marker, name = varPretty[1,"method"], yaxis = y$title, hoverlabel = hoverlabel,
+  p <- plotly::add_markers(p, x = DataPred$X, y = DataPred$Y, marker = marker, name = varPretty[1,"method"], yaxis = y$title, hoverlabel = hoverlabel,
                            text = paste(
-                             paste( round(Data$Y, digits = 2),varPretty[2,"unity"]),
-                             paste(" ~ ", round(Data$X,2),varPretty[1,"unity"] ),
+                             paste( round(DataPred$Y, digits = 2),varPretty[2,"unity"]),
+                             paste(" ~ ", round(DataPred$X,2),varPretty[1,"unity"] ),
                              sep = "\n"),
                            hoverinfo = 'text')
 
   if(trend==TRUE){
-    if(length(Data$dates) > 20){
+    if(length(DataPred$dates) > 20){
       degFree <- 20
     } else {
-      degFree <- length(Data$dates)-1
+      degFree <- length(DataPred$dates)-1
     }
-    varSpline <- gam::gam(Y ~ s(X, df = 20), data = Data)
+    varSpline <- gam::gam(Y ~ s(X, df = 20), data = DataPred)
     varPred<- stats::predict(object = varSpline, se.fit = TRUE)
 
-    smoothData <- data.frame(Dates = Data$dates, X = Data$X, Y = varPred$fit)
-
+    smoothData <- data.frame(Dates = DataPred$dates, X = DataPred$X, Y = varPred$fit)
 
     p <- plotly::add_lines(p, x = smoothData$X, y = smoothData$Y, line = list(color = as.character(colorVar[i])), yaxis = y$title,
                            name = "smoothed curve)")
   }
-
 
   y <- list(title = paste('<b>', varPretty[2, "name"], ' (', varPretty[2, "unity"], ')' , '</b>', sep = ""), color = '#282828', showgrid = FALSE,
             gridwidth = 2,  tickfont = list(family = 'serif'), overlaying = "y", side = "right")
