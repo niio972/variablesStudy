@@ -32,6 +32,7 @@
 #'  aToken <- getToken("guest@opensilex.org","guest")
 #'  token <- aToken$data
 #'  vars <- listVariables(token = token)
+#'  vars
 #'  plotVar(vars$value[1], token = token)
 #' }
 #'
