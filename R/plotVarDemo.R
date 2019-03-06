@@ -7,7 +7,7 @@
 #-------------------------------------------------------------------------------
 
 #' @title Plot Environmental Data
-#'
+#' @description Demonstration function
 #' @importFrom magrittr %>%
 #' @importFrom gam s
 #' @importFrom plotly layout
@@ -21,7 +21,7 @@
 #' @param varURI uri of the variable to plot from the \code{\link{listVariables}} function or the web service directly
 #' @param startDate date from which to plot
 #' @param endDate date to which to plot
-#' @param sensor uri of the sensor that recorded the values
+#' @param sensor uri if the sensor that recorded the values
 #' @param token a token from \code{\link{getToken}} function
 #' @param smoothing logical, smoothing of the data
 #' @param wsUrl url of the webservice
@@ -32,15 +32,16 @@
 #'  aToken <- getToken("guest@opensilex.org","guest")
 #'  token <- aToken$data
 #'  vars <- listVariables(token = token)
+#'  vars
 #'  plotVar(vars$value[1], token = token)
 #' }
 #'
 #' @export
 
-plotVar <- function(varURI, startDate = NULL, endDate = NULL, sensor = NULL, token, smoothing = TRUE, wsUrl = "www.opensilex.org/openSilexAPI/rest/"){
+plotVarDemo <- function(varURI, startDate = NULL, endDate = NULL, sensor = NULL, token, smoothing = TRUE, wsUrl = "www.opensilex.org/openSilexAPI/rest/"){
   phisWSClientR::initializeClientConnection(apiID="ws_private", url = wsUrl)
 
-  ### Data recuperation
+  ### Collecting Data
   varPrettyTot <- getVarPretty(token = token)
   ## Data
   Data <- list()
@@ -52,8 +53,7 @@ plotVar <- function(varURI, startDate = NULL, endDate = NULL, sensor = NULL, tok
     xVar <- as.POSIXct(enviroData$date, tz = "UTC", format = "%Y-%m-%dT%H:%M:%S")
     DataX <- data.frame(date = xVar, value = yVar)
 
-    ## Data filtering
-    # Chosen dates
+    ## Filtering
     if(!is.null(startDate)){
       startDate <- as.POSIXct(startDate, tz = "UTC", format = "%Y-%m-%d")
       DataX <- DataX[which(DataX$date >= startDate),]
@@ -62,15 +62,14 @@ plotVar <- function(varURI, startDate = NULL, endDate = NULL, sensor = NULL, tok
       endDate <- as.POSIXct(endDate, tz = "UTC", format = "%Y-%m-%d")
       DataX <- DataX[which(DataX$date <= endDate),]
     }
-    # Chosen sensor
     if(!is.null(sensor)){
       if(length(grep(sensor, enviroData$sensorUri)) != 0){
-        DataX <- DataX[which(enviroData$sensorUri == sensor),]
+        Data <- Data[which(enviroData$sensorUri == sensor),]
       }else{
         warning("This variable is not measured by the sensor. Change either one or the two.")
       }
     }
-    return(DataX)
+    DataX
   })
   for(uri in varURI){
     enviroData <- getDataVarPretty(varURI = uri, varPretty = varPrettyTot, token = token)
@@ -92,7 +91,6 @@ plotVar <- function(varURI, startDate = NULL, endDate = NULL, sensor = NULL, tok
   }
   colorBgHover <- "#F8F8F8"
   colorText <- "#525252"
-
   # Labels and grid
   y <- list(title = paste('<b>', varPretty[1,"name"], ' (',varPretty[1,"unity"], ')' , '</b>', sep = ""), color = '#282828',
             tickfont = list(family = 'serif'), gridwidth = 2)
@@ -105,9 +103,7 @@ plotVar <- function(varURI, startDate = NULL, endDate = NULL, sensor = NULL, tok
   p <- plotly::layout(p, xaxis = x, yaxis = y,
                       titlefont = title,
                       margin = list(l = 60, r = 70, t = 70, b =  60))
-
-  for (i in 1:(length(varURI))){
-
+  for (i in 1:(length(Data))){
     # Markers and Lines formatting
     nameY <- paste('y', i, sep = "")
     marker <- NULL
@@ -116,43 +112,39 @@ plotVar <- function(varURI, startDate = NULL, endDate = NULL, sensor = NULL, tok
     hoverlabel$bordercolor <- as.character(colorVar[i])
     # Values of the graph
     yVar <- Data[[i]]$value
-    # Smoothing - Generalized additive model
-    if(smoothing == TRUE){
 
+    ## Smoothing - Generalized Additive Model
+    if(smoothing == TRUE){
       # Parameters of the model
       if(length(Data[[i]]$date) > 20){
         df = 20
       } else {
         df <- length(Data[[i]]$date)-1
       }
-
       # Model creation
       varSpline <- gam::gam(yVar~s(Data[[i]]$date, df = df))
       varPred <- stats::predict(varSpline, se.fit = TRUE)
       modeleDf <- data.frame(x = Data[[i]]$date[order(Data[[i]]$date)] , y = varPred$fit,
                              lb = as.numeric(varPred$fit - qnorm(0.975) * varPred$se.fit),
                              ub = as.numeric(varPred$fit + qnorm(0.975) * varPred$se.fit))
-
       # Screening of the smoothed curve
       p <- plotly::add_lines(p, x = Data[[i]]$date, y = varPred$fit, line = list(color = as.character(colorVar[i])), yaxis = nameY,
                              name = paste(varPretty[i,"acronym"], "(smoothed curve)", sep = " "))
-
       # Screening of the confidence interval
       p <- plotly::add_ribbons(p, x = Data[[i]]$date, ymin = modeleDf$lb, ymax = modeleDf$ub,  yaxis = nameY,
                                line = list(color = as.character(colorRibbon[i])),
                                fillcolor = as.character(colorFill[i]),
                                name = "Standard Error", showlegend = FALSE)
-
       # Screening of the values as markers
       p <- plotly::add_markers(p, x = Data[[i]]$date, y = yVar, marker = marker, opacity = 0.2, name = varPretty[i,"method"], yaxis = nameY, hoverlabel = hoverlabel,
                                text = ~paste(Data[[i]]$date, '<br>', varPretty[i,"acronym"], ': <b>', yVar, varPretty[i,"unity"], '</b>'), hoverinfo = 'text')
     } else {
       # Screening of the values without smoothing as lines
       p <- plotly::add_lines(p, x = Data[[i]]$date, y = yVar, line = list(color = as.character(colorVar[i])), name = varPretty[i,"method"], yaxis = nameY, hoverlabel = hoverlabel,
-                               text = ~paste(Data[[i]]$date, '<br>', varPretty[i,"acronym"], ': <b>', yVar, varPretty[i,"unity"], '</b>'), hoverinfo = 'text')    }
-
+                             text = ~paste(Data[[i]]$date, '<br>', varPretty[i,"acronym"], ': <b>', yVar, varPretty[i,"unity"], '</b>'), hoverinfo = 'text')    }
   }
-  # Labels
+
+  ## Labels
   if (length(varURI) == 1){
     p <- plotly::layout(p, title = paste('<b>Tendency of ', varPretty[1,"name"], '</b><br><i>', varPretty[1,"method"], '</i>' , sep = ""))
   } else if (i == 2) {
@@ -171,7 +163,8 @@ plotVar <- function(varURI, startDate = NULL, endDate = NULL, sensor = NULL, tok
   # print(plotly::plotly_json(p))
   htmlwidgets::saveWidget(p, "plotVarWidget.html", selfcontained = FALSE)
   # htmlwidgets::
-  jsonlite::write_json(plotly::plotly_json(p), "plotlySchema")
-  jsonlite::write_json(jsonlite::fromJSON(plotly::plotly_json(p)), "plotlyData")
-  jsonlite::write_json(Data,"gridData")
+  # jsonlite::write_json(plotly::plotly_json(p), "plotlySchema")
+  # jsonlite::write_json(jsonlite::fromJSON(plotly::plotly_json(p)), "plotlyData")
+  # jsonlite::write_json(Data,"gridData")
+  return(Data)
 }
