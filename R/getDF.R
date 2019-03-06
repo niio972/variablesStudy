@@ -10,7 +10,7 @@
 ##'
 ##' @description get the dataset of incertitudes for the data selected
 ##'
-##' @param nameVar name of the variables to add in the data frame
+##' @param varURI uri of the variable to plot, from the \code{\link{listVariables}} function or the web service directly
 ##' @param token a token from \code{\link{getToken}} function
 ##' @param smoothing logical, smoothing of the data
 ##' @param sensor character, name of a sensor
@@ -27,9 +27,10 @@
 ##' initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
 ##' aToken <- getToken("guest@opensilex.org","guest")
 ##' token <- aToken$data
-##' getDF(token = token, nameVar = list("wind","temperature"))
+##' getDF(token = token, varURI = list("http://www.opensilex.org/demo/id/variables/v004",
+##'                                          "http://www.opensilex.org/demo/id/variables/v007"))
 ##' }
-getDF <- function(nameVar, token, smoothing = FALSE, sensor = NULL, endDate = NULL, startDate = NULL, wsUrl = "www.opensilex.org/openSilexAPI/rest/"){
+getDF <- function(varURI, token, smoothing = FALSE, sensor = NULL, endDate = NULL, startDate = NULL, wsUrl = "www.opensilex.org/openSilexAPI/rest/"){
 
   phisWSClientR::initializeClientConnection(apiID="ws_private", url = wsUrl)
   ## Data recuperation
@@ -40,16 +41,10 @@ getDF <- function(nameVar, token, smoothing = FALSE, sensor = NULL, endDate = NU
   Data <- NULL
   varPretty <- NULL
   # Chosen variable
-  for (i in 1: length(nameVar)){
-
-    # Extraction of the variable's name
-    nameString <- toString(nameVar[i])
-    varMeth <- strsplit(nameString, split="_")
-    methodVar <- varMeth[[1]][2]
-    subNameVar <- varMeth[[1]][1]
+  for (i in 1: length(varURI)){
 
     # Recuperation of the variable's data from the WS
-    enviroData <- getDataVarPretty(nameVar = subNameVar, methodVar = methodVar, varPretty = varPrettyTot, token = token)
+    enviroData <- getDataVarPretty(varURI = varURI, varPretty = varPrettyTot, token = token)
     varPrettyI <- t(data.frame(matrix(unlist(enviroData$varPretty))))
 
     # Variable's information
@@ -88,7 +83,7 @@ getDF <- function(nameVar, token, smoothing = FALSE, sensor = NULL, endDate = NU
   if(!is.null(startDate)){
     startDate <- as.POSIXct(startDate, tz = "UTC", format = "%Y-%m-%d")
     if(startDate <= max(Data$date)){
-      if(length(nameVar) == 1){
+      if(length(varURI) == 1){
         Data$values <- Data$values[which(Data$date >= startDate)]
       } else {
         Data$values <- Data$values[which(Data$date >= startDate),]
@@ -100,7 +95,7 @@ getDF <- function(nameVar, token, smoothing = FALSE, sensor = NULL, endDate = NU
   if (!is.null(endDate)){
     endDate <- as.POSIXct(endDate, tz = "UTC", format = "%Y-%m-%d")
     if(endDate >= min(Data$date)){
-      if(length(nameVar) == 1){
+      if(length(varURI) == 1){
         Data$values <- Data$values[which(Data$date <= endDate)]
       } else {
         Data$values <- Data$values[which(Data$date <= endDate),]
@@ -114,8 +109,8 @@ getDF <- function(nameVar, token, smoothing = FALSE, sensor = NULL, endDate = NU
   dataFrame <- data.frame(Date = Data$date)
 
   # Values
-  for (i in 1:(length(nameVar))){
-    if(length(nameVar)==1){
+  for (i in 1:(length(varURI))){
+    if(length(varURI)==1){
       yVar <- Data$values
     } else {
       yVar <- Data$values[,i]

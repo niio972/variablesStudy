@@ -11,8 +11,7 @@
 ##' @importFrom phisWSClientR initializeClientConnection
 ##' @importFrom phisWSClientR getVariables2
 ##'
-##' @param nameVar name of the variable to plot
-##' @param methodVar name of the method used to collect data
+##' @param varURI uri of the variable to plot, from the \code{\link{listVariables}} function or the web service directly
 ##' @param varPretty from \code{\link{getVarPretty}}
 ##' @param token a token from \code{\link{getToken}} function
 ##'
@@ -25,24 +24,21 @@
 ##'  aToken <- getToken("guest@opensilex.org","guest")
 ##'  token <- aToken$data
 ##'  varPrettyTot <- getVarPretty(token = token)
-##'  getDataVarPretty(nameVar = "temperature", varPretty = varPrettyTot, token = token)
+##'  getDataVarPretty(varURI = listVariables(token,
+##'                   wsUrl="www.opensilex.org/openSilexAPI/rest/")$value[1],
+##'                   varPretty = varPrettyTot,
+##'                   token = token)
 ##' }
-getDataVarPretty <- function(nameVar, methodVar = NULL, varPretty, token) {
+getDataVarPretty <- function(varURI, varPretty, token) {
 
   # Recuperation of the uri of the variable of interest
-  if(!is.null(methodVar) && !is.na(methodVar)){
-    numVar <- 1
-    while(grepl(methodVar, varPretty$method[numVar]) == FALSE && numVar < dim(varPretty)[1]){
-      numVar <- numVar+1
-    }
-  } else {
-    numVar <- match(nameVar, varPretty$name)
-  }
+  numVar <- match(varURI, varPretty$uri)
+
   nameUriVar <-  varPretty$uri[numVar]
 
   # Recuperation of the data from the WS
-  myCount <- phisWSClientR::getEnvironmentData(token = token, variable = nameUriVar)$totalCount
-  enviroData <- phisWSClientR::getEnvironmentData(token=token, variable =  nameUriVar, verbose = TRUE, pageSize = myCount)$data
+  myCount <- phisWSClientR::getEnvironmentData(token = token, variable = varURI)$totalCount
+  enviroData <- phisWSClientR::getEnvironmentData(token = token, variable =  varURI, verbose = TRUE, pageSize = myCount)$data
 
   # Creation of the dataTable to return
   nomVar <- paste(toupper(substr(varPretty$name[numVar],1,1)), substr(varPretty$name[numVar],2,nchar(varPretty$name[numVar])), sep = "")

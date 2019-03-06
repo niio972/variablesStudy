@@ -16,5 +16,6 @@ Imports:
     openssl,
     phisWSClientR,
     gam,
-    stats
+    stats,
+    jsonlite
 RoxygenNote: 6.1.1
