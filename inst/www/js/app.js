@@ -70,6 +70,7 @@ function makeDatatable(inputId, getDFParameters) {
       obj["title"] = colnames[i];
       columns.push(obj);
     }
+    console.log(columns)
     data =[]
     df.forEach(function(dataVal){
       temp_array = [];
@@ -78,6 +79,7 @@ function makeDatatable(inputId, getDFParameters) {
       });
       data.push(temp_array);
     });
+    console.log(data)
 
     // DataTable update
     if ($.fn.DataTable.isDataTable(tableId)) {
