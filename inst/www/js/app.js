@@ -130,7 +130,7 @@ $(function() {
       };
       var btn = $(this).attr("disabled", "disabled");
       if (config.wsUrl !== null) {
-        functionsParameters["wsUrl"] = wsUrl;
+        functionsParameters["wsUrl"] = config.wsUrl;
       }
       if (startDate !== "") {
         functionsParameters["startDate"] = startDate;
