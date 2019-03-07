@@ -13,9 +13,9 @@ getDF(varURI, token, smoothing = FALSE, sensor = NULL,
 
 \item{token}{a token from \code{\link{getToken}} function}
 
-\item{smoothing}{logical, smoothing of the data}
+\item{smoothing}{logical, smoothing of the data,  returns the incertitudes from the smoothing}
 
-\item{sensor}{character, name of a sensor}
+\item{sensor}{character, uri of a sensor to filter with}
 
 \item{endDate}{date, date from which to filter data, format "\%Y-\%m-\%dT\%H:\%M:\%S"}
 
@@ -34,6 +34,8 @@ get the dataset of incertitudes for the data selected
 initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
 aToken <- getToken("guest@opensilex.org","guest")
 token <- aToken$data
+vars <- listVariables(token = token, wsUrl = "www.opensilex.org/openSilexAPI/rest/")
+vars
 getDF(token = token, varURI = list("http://www.opensilex.org/demo/id/variables/v004",
                                          "http://www.opensilex.org/demo/id/variables/v007"))
 }
