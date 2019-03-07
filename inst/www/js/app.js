@@ -60,15 +60,24 @@ function makeHeaders(colnames) {
 function makeDatatable(inputId, getDFParameters) {
   var tableId = "#" + inputId;
   return ocpu.rpc("getDF", getDFParameters, function(df) {
+    console.log(df);
     // get the column names
     var colnames = Object.keys(df[0]);
     // create the JSON array for the columns required by DataTable
     var columns = [];
     for (i = 0; i < colnames.length; i++) {
       var obj = {};
-      obj["data"] = colnames[i];
+      obj["title"] = colnames[i];
       columns.push(obj);
     }
+    data =[]
+    df.forEach(function(dataVal){
+      temp_array = [];
+      colnames.forEach(function(col){
+        temp_array.push[dataVal["col"]];
+      });
+      data.push(temp_array);
+    });
 
     // DataTable update
     if ($.fn.DataTable.isDataTable(tableId)) {
@@ -80,7 +89,7 @@ function makeDatatable(inputId, getDFParameters) {
     }
     $(tableId).append(makeHeaders(colnames));
     $(tableId).dataTable({
-      data: df,
+      data: data,
       columns: columns
     });
   }).fail(function(){
@@ -99,7 +108,7 @@ function makeDatatable(inputId, getDFParameters) {
 
 $(function() {
   // Remove this line in the final version
-  // ocpu.seturl("http://localhost:8004/ocpu/apps/niio972/variablesStudy/R");
+  ocpu.seturl("http://localhost:8004/ocpu/apps/niio972/variablesStudy/R");
   $( "#startDate" ).datepicker({"dateFormat": "yy-mm-dd"});
   $( "#endDate" ).datepicker({"dateFormat": "yy-mm-dd"});
   var config = initOpenSilexConnection();

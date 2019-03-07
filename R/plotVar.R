@@ -168,7 +168,7 @@ plotVar <- function(varURI, startDate = NULL, endDate = NULL, sensor = NULL, tok
   }
 
   # Creation of the html object to screen in the variablesStudy
-  htmlwidgets::saveWidget(p, "plotVarWidget.html", selfcontained = FALSE)
+  htmlwidgets::saveWidget(p, "plotVarWidget.html", selfcontained = TRUE)
 
   # export PlotlySchema and configuration
   # jsonlite::write_json(plotly::plotly_data(p), "plotlyData")
