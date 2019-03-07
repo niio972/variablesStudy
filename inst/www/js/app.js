@@ -99,7 +99,7 @@ function makeDatatable(inputId, getDFParameters) {
 
 $(function() {
   // Remove this line in the final version
-  ocpu.seturl("http://localhost:8004/ocpu/apps/niio972/variablesStudy/R");
+  // ocpu.seturl("http://localhost:8004/ocpu/apps/niio972/variablesStudy/R");
   $( "#startDate" ).datepicker({"dateFormat": "yy-mm-dd"});
   $( "#endDate" ).datepicker({"dateFormat": "yy-mm-dd"});
   var config = initOpenSilexConnection();
@@ -112,7 +112,6 @@ $(function() {
     //Show graph button
     $("#submit").click(function(e) {
       e.preventDefault();
-     
 
       // Parameters of the R function
       smoothing = document.getElementById("smoothing").checked;

@@ -37,7 +37,7 @@ $(function() {
   var nbVar = -1;
   var idSelect = "mySelect";
 
-  ocpu.seturl("http://localhost:8004/ocpu/apps/niio972/variablesStudy/R");
+  // ocpu.seturl("http://localhost:8004/ocpu/apps/niio972/variablesStudy/R");
   var params = new window.URLSearchParams(window.location.search);
   var token = params.get("access_token");
   var wsUrl = params.get("wsUrl");
