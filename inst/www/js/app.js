@@ -62,20 +62,24 @@ function makeDatatable(inputId, getDFParameters) {
   return ocpu.rpc("getDF", getDFParameters, function(df) {
     console.log(df);
     // get the column names
-    var colnames = Object.keys(df[0]);
+    var colnames = Object.keys(df[0][0]);
     // create the JSON array for the columns required by DataTable
     var columns = [];
-    for (i = 0; i < colnames.length; i++) {
-      var obj = {};
-      obj["title"] = colnames[i];
-      columns.push(obj);
-    }
+    getDFParameters.varURI.forEach(function(columnName){
+      colnames.forEach(function(columnName){
+          var obj = {};
+          obj["data"] = colnames;
+          columns.push(obj);
+      });
+    });
     console.log(columns)
     data =[]
     df.forEach(function(dataVal){
       temp_array = [];
-      colnames.forEach(function(col){
-        temp_array.push[dataVal["col"]];
+      getDFParameters.varURI.forEach(function(columnName){
+        colnames.forEach(function(col){
+          temp_array.push[dataVal[col]];
+        });
       });
       data.push(temp_array);
     });
