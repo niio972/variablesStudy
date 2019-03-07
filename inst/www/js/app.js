@@ -60,7 +60,6 @@ function makeHeaders(colnames) {
 function makeDatatable(inputId, getDFParameters) {
   var tableId = "#" + inputId;
   return ocpu.rpc("getDF", getDFParameters, function(df) {
-    console.log(df);
     // get the column names
     var colnames = Object.keys(df[0][0]);
     // create the JSON array for the columns required by DataTable
@@ -77,7 +76,7 @@ function makeDatatable(inputId, getDFParameters) {
     df.forEach(function(dataVal){
       temp_array = [];
       getDFParameters.varURI.forEach(function(columnName){
-        colnames.forEach(function(col){
+        columns.forEach(function(col){
           temp_array.push[dataVal[col]];
         });
       });
