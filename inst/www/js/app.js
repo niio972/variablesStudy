@@ -68,7 +68,7 @@ function makeDatatable(inputId, getDFParameters) {
     getDFParameters.varURI.forEach(function(columnName){
       colnames.forEach(function(columnName){
           var obj = {};
-          obj["data"] = colnames;
+          obj["data"] = columnName;
           columns.push(obj);
       });
     });
