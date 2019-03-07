@@ -1,187 +1,153 @@
-// 1. Plot creation
-var arrayText;
-var array;
+/*
+ * ******************************************************************************
+ *                                     app.js
+ *  js
+ *  Copyright © INRA 2019
+ *  Creation date:  06 March, 2019
+ *  Contact: arnaud.charleroy@inra.fr
+ * ******************************************************************************
+ */
+
+function plotVar(iframeInput, plotVarParameters) {
+  // Run the R function
+  return req = ocpu
+    .call("plotVar", plotVarParameters, function(session) {
+      $("#" + iframeInput).attr("src", session.getFileURL("plotVarWidget.html"));
+    })
+    .fail(function(text) {
+      alert("Error: " + req.responseText);
+    })
+}
+
+function fillInputWithVariables(inputId, config) {
+  listVariableParameters = { token: config.token };
+  if (config.wsUrl !== null) {
+    listVariableParameters["wsUrl"] = config.wsUrl;
+  }
+  inputData = [];
+  // Fill variables
+  var variables = ocpu.rpc(
+    //Create array of variables' options
+    "listVariables",
+    listVariableParameters,
+    function(variables) {
+      variables.forEach(function(rVariables) {
+        variable = {};
+        variable.id = rVariables.value;
+        variable.text = rVariables.name;
+        inputData.push(variable);
+      });
+      // console.log(inputData);
+      $("#" + inputId).select2({
+        data: inputData,
+        maximumSelectionLength: 2,
+        multiple: true
+      });
+    }
+  );
+}
+
+// DataTable's header
+function makeHeaders(colnames) {
+  var str = "<thead><tr>";
+  for (var i = 0; i < colnames.length; i++) {
+    str += "<th>" + colnames[i] + "</th>";
+  }
+  str += "</tr></thead>";
+  return str;
+}
+
+function makeDatatable(inputId, getDFParameters) {
+  var tableId = "#" + inputId;
+  return ocpu.rpc("getDF", getDFParameters, function(df) {
+    // get the column names
+    var colnames = Object.keys(df[0]);
+    // create the JSON array for the columns required by DataTable
+    var columns = [];
+    for (i = 0; i < colnames.length; i++) {
+      var obj = {};
+      obj["data"] = colnames[i];
+      columns.push(obj);
+    }
+
+    // DataTable update
+    if ($.fn.DataTable.isDataTable(tableId)) {
+      $(tableId)
+        .DataTable()
+        .clear()
+        .destroy();
+      $(tableId).html("");
+    }
+    $(tableId).append(makeHeaders(colnames));
+    $(tableId).dataTable({
+      data: df,
+      columns: columns
+    });
+  }).fail(function(){
+     // DataTable update
+     if ($.fn.DataTable.isDataTable(tableId)) {
+      $(tableId)
+        .DataTable()
+        .clear()
+        .destroy();
+      $(tableId).html("");
+    }
+    alert("Error: " + req.responseText);
+
+  });
+}
+
 $(function() {
   // Remove this line in the final version
-  // ocpu.seturl("http://localhost:8004/ocpu/apps/niio972/variablesStudy/R");
+  ocpu.seturl("http://localhost:8004/ocpu/apps/niio972/variablesStudy/R");
+  $( "#startDate" ).datepicker({"dateFormat": "yy-mm-dd"});
+  $( "#endDate" ).datepicker({"dateFormat": "yy-mm-dd"});
+  var config = initOpenSilexConnection();
 
-  var params = new window.URLSearchParams(window.location.search);
-  var token = params.get("access_token");
-  var wsUrl = params.get("wsUrl");
-
-  if (token == null) {
+  if (config.token == null) {
     alert("A token is needed");
   } else {
     // Variables' initialization
-    console.log("Bonjour en JavaScript !");
-    var nbVar = -1;
-    var idSelect = "mySelect";
-    listVariableParameters = { token: token };
-    if (wsUrl !== null) {
-      listVariableParameters["wsUrl"] = wsUrl;
-    }
-    console.log(listVariableParameters);
-    //Form
-    var req3 = ocpu.rpc(
-      //Create array of variables' options
-      "listVariables",
-      listVariableParameters,
-      function(output) {
-        arrayText = output.name;
-        array = output.value;
-        // Variable's selector
-        var selectVariable = document.getElementById("variable");
-        for (var i = 0; i < array.length; i++) {
-          var option = document.createElement("option");
-          option.value = array[i];
-          option.text = arrayText[i];
-          selectVariable.appendChild(option);
-        }
-      }
-    );
-
+    fillInputWithVariables("variable", config);
     //Show graph button
     $("#submit").click(function(e) {
       e.preventDefault();
-      var btn = $(this).attr("disabled", "disabled");
+     
 
       // Parameters of the R function
       smoothing = document.getElementById("smoothing").checked;
-      var nameVars = [$("#variable").val()];
+      var nameVars = $("#variable").val();
       var startDate = $("#startDate").val();
       var endDate = $("#endDate").val();
-      for (var i = 0; i < nbVar + 1; i++) {
-        var idAddArray = idSelect.concat(i.toString());
-        var newElement = document.getElementById(idAddArray).value;
-        nameVars.push(newElement);
+      if($("#variable").val().length == 0){
+        alert("you must choose at least one variable")
+          return false;
       }
-      plotVarParameters = {
-        nameVar: nameVars,
-        token: token,
+      functionsParameters = {
+        varURI: nameVars,
+        token: config.token,
         smoothing: smoothing,
-        startDate: startDate,
-        endDate: endDate
       };
-
-      if (wsUrl !== null) {
-        plotVarParameters["wsUrl"] = wsUrl;
+      var btn = $(this).attr("disabled", "disabled");
+      if (config.wsUrl !== null) {
+        functionsParameters["wsUrl"] = wsUrl;
       }
-      // Run the R function
-      var req = ocpu
-        .call("plotVar", plotVarParameters, function(session) {
-          $("iframe").attr("src", session.getFileURL("plotVarWidget.html"));
-        })
-        .fail(function(text) {
-          alert("Error: " + req.responseText);
-        })
-        .always(function() {
-          console.log({
-            nameVar: nameVars,
-            token: $("#token").val()
-          });
-
-          btn.removeAttr("disabled");
-        })
+      if (startDate !== "") {
+        functionsParameters["startDate"] = startDate;
+      }
+      if (endDate !== "") {
+        functionsParameters["endDate"] = endDate;
+      }
+      plotVar("plotVarFrame", functionsParameters)
+      .always(function() {
+        btn.removeAttr("disabled");
+      });;
       // DataTable
-      getDFParameters = {
-        nameVar: nameVars,
-        token: token,
-        smoothing: smoothing,
-        startDate: startDate,
-        endDate: endDate
-      };
-      if (wsUrl !== null) {
-        getDFParameters["wsUrl"] = wsUrl;
-      }
-      // Run the R function
-      var req = ocpu.rpc("getDF", getDFParameters, function(df) {
-        // get the column names
-        var colnames = Object.keys(df[0]);
-        // create the JSON array for the columns required by DataTable
-        var columns = [];
-        for (i = 0; i < colnames.length; i++) {
-          var obj = {};
-          obj["data"] = colnames[i];
-          columns.push(obj);
-        }
-
-        // DataTable update
-        if ($.fn.DataTable.isDataTable("#mytable")) {
-          $("#mytable")
-            .DataTable()
-            .clear()
-            .destroy();
-          $("#mytable thead tr").remove();
-        }
-        $("#mytable").append(makeHeaders(colnames));
-        $("#mytable").dataTable({
-          data: df,
-          columns: columns
-        });
+      makeDatatable("getDFDatatable", functionsParameters)
+      .always(function() {
+        btn.removeAttr("disabled");
       });
+      // Run the R function
     });
-
-    // Add a variable on the form
-    $("#addVar").click(function(e) {
-      e.preventDefault();
-      var btn = $(this).attr("disabled", "disabled");
-      if (nbVar < 0) {
-        nbVar = nbVar + 1;
-        console.log("nbVar = ", nbVar);
-
-        // Adda select in the form
-        var myDiv = document.getElementById("var-form");
-
-        //Create and append select list
-        var selectList = document.createElement("select");
-        selectList.id = idSelect.concat(nbVar.toString());
-        console.log(
-          "Select id",
-          nbVar,
-          " = ",
-          idSelect.concat(nbVar.toString())
-        );
-        selectList.setAttribute("class", "form-control");
-        myDiv.appendChild(selectList);
-
-        //Create and append the options
-        for (var i = 0; i < array.length; i++) {
-          var option = document.createElement("option");
-          option.value = array[i];
-          option.text = arrayText[i];
-          selectList.appendChild(option);
-        }
-      } else {
-      }
-      btn.removeAttr("disabled");
-    });
-
-    // Remove a variable on the form
-    $("#removeVar").click(function(e) {
-      e.preventDefault();
-      var btn = $(this).attr("disabled", "disabled");
-      if (nbVar >= 0) {
-        console.log("nbVar = ", nbVar);
-
-        // Remove the last select created
-        var element = idSelect.concat(nbVar.toString());
-        element = document.getElementById(element);
-        element.parentNode.removeChild(element);
-
-        nbVar = nbVar - 1;
-      } else {
-      }
-      btn.removeAttr("disabled");
-    });
-
-    // DataTable's header
-    function makeHeaders(colnames) {
-      var str = "<thead><tr>";
-      for (var i = 0; i < colnames.length; i++) {
-        str += "<th>" + colnames[i] + "</th>";
-      }
-      str += "</tr></thead>";
-      return str;
-    }
   }
 });

@@ -1,6 +1,33 @@
 // 1. Plot creation
 var arrayText;
 var array;
+
+function fillInputWithVariables(inputId, config) {
+  listVariableParameters = { token: config.token };
+  if (config.wsUrl !== null) {
+    listVariableParameters["wsUrl"] = config.wsUrl;
+  }
+  inputData = [];
+  // Fill variables
+  var variables = ocpu.rpc(
+    //Create array of variables' options
+    "listVariables",
+    listVariableParameters,
+    function(variables) {
+      variables.forEach(function(rVariables) {
+        variable = {};
+        variable.id = rVariables.value;
+        variable.text = rVariables.name;
+        inputData.push(variable);
+      });
+      // console.log(inputData);
+      $("#" + inputId).select2({
+        data: inputData,
+      });
+    }
+  );
+}
+
 $(function() {
   // Remove this line in the final version
   // ocpu.seturl("http://localhost:8004/ocpu/library/variablesStudy/R")
@@ -10,7 +37,7 @@ $(function() {
   var nbVar = -1;
   var idSelect = "mySelect";
 
-  // ocpu.seturl("http://localhost:8004/ocpu/apps/niio972/variablesStudy/R");
+  ocpu.seturl("http://localhost:8004/ocpu/apps/niio972/variablesStudy/R");
   var params = new window.URLSearchParams(window.location.search);
   var token = params.get("access_token");
   var wsUrl = params.get("wsUrl");
@@ -18,39 +45,19 @@ $(function() {
   if (token == null) {
     alert("A token is needed");
   } else {
-    listVariableParameters = { token: token };
-    if (wsUrl !== null) {
-      listVariableParameters["wsUrl"] = wsUrl;
-    }
-    var req3 = ocpu.rpc(
-      "listVariables",
-      listVariableParameters,
-      function(output) {
-        arrayText = output.name;
-        array = output.value;
-        console.log(array);
-        var selectVariableY = document.getElementById("variableX");
-        var selectVariableX = document.getElementById("variableY");
-        for (var i = 0; i < array.length; i++) {
-          var optionX = document.createElement("option");
-          optionX.value = array[i];
-          optionX.text = arrayText[i];
-          selectVariableX.appendChild(optionX);
-          var optionY = document.createElement("option");
-          optionY.value = array[i];
-          optionY.text = arrayText[i];
-          selectVariableY.appendChild(optionY);
-        }
-      }
-    );
-    console.log("nbVar = ", nbVar);
+    var config = initOpenSilexConnection();
+
+
+    fillInputWithVariables("variableX",config);
+    fillInputWithVariables("variableY",config);
+    
     $("#submit").click(function(e) {
       e.preventDefault();
       var btn = $(this).attr("disabled", "disabled");
   
       // Use of the R function to create the plot
-      smoothing = document.getElementById("smoothing").checked;
-      console.log("smoothing = ", smoothing);
+      smoothing = document.getElementById("trend").checked;
+      console.log("trend = ", smoothing);
       var varX = [$("#variableX").val()];
       var varY = [$("#variableY").val()];
       console.log("varX = ", varX);
@@ -66,9 +73,14 @@ $(function() {
         token: token,
         varX: varX,
         varY: varY,
-        // smoothing: smoothing
+        // trend: trend
       };
-
+      // if (startDate !== "") {
+      //   plotVarRelParameters["startDate"] = startDate;
+      // }
+      // if (endDate !== "") {
+      //   plotVarRelParameters["endDate"] = endDate;
+      // }
       if (wsUrl !== null) {
         plotVarRelParameters["wsUrl"] = wsUrl;
       }
