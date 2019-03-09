@@ -9,8 +9,8 @@
   <title>OpenSILEX - Visualisation App</title>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-  <link href="css/bootstrap.min.css" rel="stylesheet" />
-  <link href="css/style.css" rel="stylesheet" />
+    <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.12/css/jquery.dataTables.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -21,7 +21,6 @@
   <div class="wrap">
     <h2 class="main-title">Variable data comparison</h2>
     <div class="container-fluid">
-      <div class="row">
         <div class="col-md-12">
           <form role="form">
 
@@ -51,18 +50,18 @@
          
           </form>
         </div>
-      </div>
     </div>
   </div>
 
 
-  <br />
   <div class="embed-responsive embed-responsive-4by3">
     <iframe class="embed-responsive-item" id="plotVarFrame" allowfullscreen></iframe>
   </div>
-  <br />
-  <table id="getDFDatatable" class="display" style="width:80%"></table>
+  <br>
+  <ul id="navtabs" class="nav nav-tabs" role="tablist">
+  </ul>
 
+<div id="tables" class="tab-content"></div>
 
   <script src="js/jquery.min.js"></script>
   <script type="text/javascript" charset="utf8"
@@ -70,7 +69,8 @@
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
   <script src="js/tether.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
+  <!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
   <script src="js/opencpu-0.5.js"></script>
   <script src="js/opensilex.js"></script>

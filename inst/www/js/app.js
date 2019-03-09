@@ -7,30 +7,35 @@
  *  Contact: arnaud.charleroy@inra.fr
  * ******************************************************************************
  */
+variablesList = [];
 
 function plotVar(iframeInput, plotVarParameters) {
   // Run the R function
-  return req = ocpu
+  return (req = ocpu
     .call("plotVar", plotVarParameters, function(session) {
-      $("#" + iframeInput).attr("src", session.getFileURL("plotVarWidget.html"));
+      $("#" + iframeInput).attr(
+        "src",
+        session.getFileURL("plotVarWidget.html")
+      );
     })
     .fail(function(text) {
       alert("Error: " + req.responseText);
-    })
+    }));
 }
 
-function fillInputWithVariables(inputId, config) {
+function setGlobalVariablesAndInput(inputId, config) {
   listVariableParameters = { token: config.token };
   if (config.wsUrl !== null) {
     listVariableParameters["wsUrl"] = config.wsUrl;
   }
   inputData = [];
   // Fill variables
-  var variables = ocpu.rpc(
+  return ocpu.rpc(
     //Create array of variables' options
     "listVariables",
     listVariableParameters,
     function(variables) {
+      variablesList = variables;
       variables.forEach(function(rVariables) {
         variable = {};
         variable.id = rVariables.value;
@@ -43,6 +48,7 @@ function fillInputWithVariables(inputId, config) {
         maximumSelectionLength: 2,
         multiple: true
       });
+      return variables;
     }
   );
 }
@@ -57,89 +63,125 @@ function makeHeaders(colnames) {
   return str;
 }
 
+function getNameOfVariableUri(uri) {
+  var name = null;
+  variablesList.forEach(function(variableObject) {
+    if (variableObject.value == uri) {
+      name = variableObject.name;
+    }
+  });
+  return name;
+}
+
 function makeDatatable(inputId, getDFParameters) {
-  var tableId = "#" + inputId;
-  return ocpu.rpc("getDF", getDFParameters, function(df) {
-    // get the column names
-    var colnames = Object.keys(df[0][0]);
-    // create the JSON array for the columns required by DataTable
-    var columns = [];
-    getDFParameters.varURI.forEach(function(columnName){
-      colnames.forEach(function(columnName){
-          var obj = {};
-          obj["data"] = columnName;
-          columns.push(obj);
-      });
+  return ocpu
+    .rpc("getDF", getDFParameters, function(df) {
+      makeDatatableWithList(getDFParameters, df);
+    })
+    .fail(function() {
+      $(tablesDiv).html("");
+      alert("Error: " + req.responseText);
     });
-    console.log(columns)
-    data =[]
-    df.forEach(function(dataVal){
+}
+
+function makeDatatableWithList(getDFParameters, df) {
+  console.log(variablesList);
+  // div tab
+  var tablesDivId = "tables";
+  var tabNavId = "navtabs";
+  var active = true;
+
+  $("#" + tablesDivId).html("");
+  $("#" + tabNavId).html("");
+
+  // create the JSON array for the columns required by DataTable
+  var varURIs = getDFParameters.varURI;
+  varCount = 0;
+  varURIs.forEach(function(varUri) {
+    varName = getNameOfVariableUri(varUri);
+    var classTab = "";
+    if (active) {
+      classTab = 'class="active"';
+    }
+    $("#" + tabNavId).append(
+      '<li role="presentation" ' +
+        classTab +
+        ' ><a href="#var' +
+        varCount +
+        '" aria-controls="home" role="tab" data-toggle="tab">' +
+        varName +
+        "</a></li>"
+    );
+    var colnames = Object.keys(df[varUri][0]);
+    var columns = [];
+
+    var tableId = "table" + varCount;
+    colnames.forEach(function(columnName) {
+      columns.push({ title: columnName });
+    });
+    data = [];
+    df[varUri].forEach(function(dataVal) {
       temp_array = [];
-      getDFParameters.varURI.forEach(function(columnName){
-        columns.forEach(function(col){
-          temp_array.push[dataVal[col]];
-        });
+      colnames.forEach(function(col) {
+        temp_array.push(dataVal[col]);
       });
       data.push(temp_array);
     });
-    console.log(data)
-
-    // DataTable update
-    if ($.fn.DataTable.isDataTable(tableId)) {
-      $(tableId)
-        .DataTable()
-        .clear()
-        .destroy();
-      $(tableId).html("");
+    tabId = "var" + varCount;
+    var classTabPanel = 'class="tab-pane"';
+    if (active) {
+      classTabPanel = 'class="tab-pane active"';
+      active = false;
     }
-    $(tableId).append(makeHeaders(colnames));
-    $(tableId).dataTable({
+
+    var tab =
+      '<div role="tabpanel" ' + classTabPanel + ' id="' + tabId + '"></div>';
+
+    $("#" + tablesDivId).append(tab);
+    var table =
+      '<table id="' + tableId + '" class="display generateTB" width="100%"></table>';
+    $("#" + tabId).append(table);
+    $("#" + tableId).append(makeHeaders(colnames));
+    $("#" + tableId).dataTable({
       data: data,
-      columns: columns
+      columns: columns,
+      responsive: true
     });
-  }).fail(function(){
-     // DataTable update
-     if ($.fn.DataTable.isDataTable(tableId)) {
-      $(tableId)
-        .DataTable()
-        .clear()
-        .destroy();
-      $(tableId).html("");
-    }
-    alert("Error: " + req.responseText);
 
-  });
+    varCount++;
+    });
 }
 
 $(function() {
   // Remove this line in the final version
   ocpu.seturl("http://localhost:8004/ocpu/apps/niio972/variablesStudy/R");
-  $( "#startDate" ).datepicker({"dateFormat": "yy-mm-dd"});
-  $( "#endDate" ).datepicker({"dateFormat": "yy-mm-dd"});
+  $("#startDate").datepicker({ dateFormat: "yy-mm-dd" });
+  $("#endDate").datepicker({ dateFormat: "yy-mm-dd" });
   var config = initOpenSilexConnection();
-
+  variablesOutput = [];
   if (config.token == null) {
     alert("A token is needed");
   } else {
     // Variables' initialization
-    fillInputWithVariables("variable", config);
+    setGlobalVariablesAndInput("variable", config);
+
     //Show graph button
     $("#submit").click(function(e) {
       e.preventDefault();
 
       // Parameters of the R function
       smoothing = document.getElementById("smoothing").checked;
-      var nameVars = $("#variable").val();
+      var varURIs = $("#variable").val();
       var startDate = $("#startDate").val();
       var endDate = $("#endDate").val();
-      if($("#variable").val().length == 0){
-        alert("you must choose at least one variable")
-          return false;
+      if (varURIs.length == 0) {
+        alert("you must choose at least one variable");
+        return false;
       }
       functionsParameters = {
-        varURI: nameVars,
+        varURI: varURIs,
         token: config.token,
-        smoothing: smoothing,
+        smoothing: smoothing
       };
       var btn = $(this).attr("disabled", "disabled");
       if (config.wsUrl !== null) {
@@ -151,16 +193,24 @@ $(function() {
       if (endDate !== "") {
         functionsParameters["endDate"] = endDate;
       }
-      plotVar("plotVarFrame", functionsParameters)
-      .always(function() {
+      plotVar("plotVarFrame", functionsParameters).always(function() {
         btn.removeAttr("disabled");
-      });;
+      });
       // DataTable
-      makeDatatable("getDFDatatable", functionsParameters)
-      .always(function() {
+      makeDatatable(
+        "getDFDatatable",
+        functionsParameters,
+        variablesList
+      ).always(function() {
         btn.removeAttr("disabled");
       });
       // Run the R function
     });
   }
+
+  $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+    $($.fn.dataTable.tables(true)).DataTable()
+       .columns.adjust()
+       .responsive.recalc();
+}); 
 });
