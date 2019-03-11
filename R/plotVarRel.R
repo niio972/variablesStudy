@@ -36,7 +36,6 @@
 #'        vars$value[2],
 #'        token = token,
 #'        trend = TRUE)
-
 #' }
 #'
 #' @export

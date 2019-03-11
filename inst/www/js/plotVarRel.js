@@ -1,17 +1,8 @@
-/*
- * ******************************************************************************
- *                                     app.js
- *  js
- *  Copyright © INRA 2019
- *  Creation date:  06 March, 2019
- *  Contact: arnaud.charleroy@inra.fr
- * ******************************************************************************
- */
 variablesList = [];
 
 $(function() {
   // Comment for production case
-  // ocpu.seturl("http://localhost:8004/ocpu/apps/niio972/variablesStudy/R");
+  ocpu.seturl("http://localhost:8004/ocpu/apps/niio972/variablesStudy/R");
 
   // initialize parameters
   var config = initOpenSilexConnection();
@@ -25,13 +16,15 @@ $(function() {
     $("#endDate").datepicker({ dateFormat: "yy-mm-dd" });
     // variables' initialization
     // if fail disabled input
-    setGlobalVariablesAndInput("variable", config, {
-      maximumSelectionLength: 2,
-      multiple: true
-    }).fail(function(e) {
-      $("#variable").prop("disabled", true);
-      $("input").prop("disabled", true);
-    });
+    setGlobalVariablesAndInput("variableX", config, {
+      multiple: false
+    })
+    setGlobalVariablesAndInput("variableY", config, {
+      multiple: false
+    }) .fail(function(e) {
+        $("#variable").prop("disabled", true);
+        $("input").prop("disabled", true);
+      })
     $("#cssLoader").removeClass("is-active");
 
     // show graph button
@@ -39,18 +32,24 @@ $(function() {
       e.preventDefault();
 
       // parameters of the R function
-      smoothing = document.getElementById("smoothing").checked;
-      var varURIs = $("#variable").val();
+      var trend = $("#trend").prop("checked");
+      var varX = [$("#variableX").val()];
+      var varY = [$("#variableY").val()];
       var startDate = $("#startDate").val();
       var endDate = $("#endDate").val();
-      if (varURIs.length == 0) {
-        alert("you must choose at least one variable");
+      if (varY.length == 0) {
+        alert("you must choose at least one variable Y");
+        return false;
+      }
+      if (varX.length == 0) {
+        alert("you must choose at least one variable X");
         return false;
       }
       functionsParameters = {
-        varURI: varURIs,
         token: config.token,
-        smoothing: smoothing
+        varX: varX,
+        varY: varY,
+        trend: trend
       };
       var btn = $(this).attr("disabled", "disabled");
       if (config.wsUrl !== null) {
@@ -63,17 +62,17 @@ $(function() {
         functionsParameters["endDate"] = endDate;
       }
       // create a plot
-      showPlot("plotDiv", "plotVar", functionsParameters).always(function() {
+      showPlot("plotDiv", "plotVarRel", functionsParameters).always(function() {
         btn.removeAttr("disabled");
       });
-      // create multiple dataTables from list
-      makeDatatable(
-        "getDFDatatable",
-        functionsParameters,
-        variablesList
-      ).always(function() {
-        btn.removeAttr("disabled");
-      });
+      // // create multiple dataTables from list
+      // makeDatatable(
+      //   "getDFDatatable",
+      //   functionsParameters,
+      //   variablesList
+      // ).always(function() {
+      //   btn.removeAttr("disabled");
+      // });
     });
   }
 });
