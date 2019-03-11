@@ -10,7 +10,7 @@ plotVar:
       parameters :
         - startDate
         - endDate
-        - nameVar
+        - varURI
         - smoothing
         - token
         - wsUrl
@@ -25,7 +25,7 @@ plotVar:
       type: date
       format: yyyy-mm-dd
       dateValue: Y-m-d
-    nameVar:
+    varURI:
       label : 'Variables'
       type: list
       RfunctionValues : listVariables

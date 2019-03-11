@@ -6,24 +6,32 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>OpenSILEX - Visualisation App</title>
-
+  <title>OpenSILEX - Compare 2 variables</title>
+  <!-- style -->
+  <!-- fonts -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
     <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.12/css/jquery.dataTables.css" />
+  <!-- datatable -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-html5-1.5.6/datatables.min.css"/>
+  <!-- select2 -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+  <!-- jquery ui -->
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <!-- css loader -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/css-loader/3.3.1/css-loader.css">
+  <link rel="stylesheet" href="css/style.css">
 
 </head>
+<div id="cssLoader" class="loader loader-default is-active" data-text="Loading configuration "></div>
 
 <body>
   <div class="wrap">
     <h2 class="main-title">Variable data comparison</h2>
     <div class="container-fluid">
         <div class="col-md-12">
+          <!-- form -->
           <form role="form">
-
             <div class="form-group">
               <strong>
                 <label for="variable">
@@ -52,29 +60,31 @@
         </div>
     </div>
   </div>
-
-
+  <!-- plotDiv -->
   <div class="embed-responsive embed-responsive-4by3">
     <iframe class="embed-responsive-item" id="plotVarFrame" allowfullscreen></iframe>
   </div>
   <br>
+  <!-- grid tabs -->
   <ul id="navtabs" class="nav nav-tabs" role="tablist">
   </ul>
+  <!-- datagrids -->
+  <div id="tables" class="tab-content"></div>
 
-<div id="tables" class="tab-content"></div>
-
+  <!-- jquery -->
   <script src="js/jquery.min.js"></script>
-  <script type="text/javascript" charset="utf8"
-    src="http://cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-  <script src="js/tether.min.js"></script>
+  <!-- datatable js library -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-flash-1.5.6/b-html5-1.5.6/datatables.min.js"></script>
   <!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+  <!-- opencpu client -->
   <script src="js/opencpu-0.5.js"></script>
   <script src="js/opensilex.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/plotVar.js"></script>
   </div>
 </body>
 
