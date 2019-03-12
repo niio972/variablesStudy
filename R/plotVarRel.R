@@ -104,13 +104,14 @@ plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, trend = FAL
     } else {
       degFree <- length(Data$date)-1
     }
-    varSplineX <- gam::gam(values~s(dates, df = 20), data = DataX)
-    varPredX <- stats::predict(object = varSplineX, newdata = data.frame(dates = newDates), type = "response")
+    varSplineX <- gam::gam(value~s(date, df = 20), data = DataX)
+    varPredX <- stats::predict(object = varSplineX, newdata = data.frame(date = newDates), type = "response")
 
-    varSplineY <- gam::gam(values~s(dates, df = 20), data = DataY)
-    varPredY <- stats::predict(object = varSplineY, newdata = data.frame(dates = newDates), type = "response")
+    varSplineY <- gam::gam(value~s(date, df = 20), data = DataY)
+    varPredY <- stats::predict(object = varSplineY, newdata = data.frame(date = newDates), type = "response")
     DataPred <- data.frame(dates = newDates, X = varPredX, Y = varPredY)
   }else{
+    DataPred = data.frame(dates = DataX$date, X = DataX$value, Y = DataY$value)
   }
 
   ## Plotting
