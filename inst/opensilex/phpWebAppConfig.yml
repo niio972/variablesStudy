@@ -28,6 +28,7 @@ plotVar:
     varURI:
       label : 'Variables'
       type: list
+      maxSelectedItem : 2
       RfunctionValues : listVariables
       required : true
     smoothing:
@@ -61,11 +62,13 @@ plotVarRel:
       label : 'Variable Y'
       type: list
       RfunctionValues : listVariables
+      maxSelectedItem : 1
       required : true
     varX:
       label : 'Variable X'
       type: list
       RfunctionValues : listVariables
+      maxSelectedItem : 1
       required : true
     trend:
       label : 'Trend'
