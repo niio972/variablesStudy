@@ -3,7 +3,7 @@
 # Objective: draw graph of environment variable over time
 # Authors: Chourrout Elise
 # Creation: 15/02/2019
-# Update:
+# Update: 11/03/2019 (Jean-Eudes Hollebecq)
 #-------------------------------------------------------------------------------
 
 #' @title Plot Environmental Data
