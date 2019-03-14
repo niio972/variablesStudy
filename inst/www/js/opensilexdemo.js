@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- *                                     opensilex.js
+ *                                     opensilexdemo.js
  *  js
  *  Copyright © INRA 2019
  *  Creation date:  11 March, 2019
@@ -19,37 +19,13 @@ function initOpenSilexConnection() {
   var params = new window.URLSearchParams(window.location.search);
   var config = {};
   config.wsUrl = params.get("wsUrl");
-  if($("#token").length() != 0){
+  if ($("#token").length != 0) {
     config.token = $("#token").val();
-  }else{
+  } else {
     config.token = params.get("accessToken");
   }
-  
+
   return config;
-}
-
-function makeForm(config){
-  app = new Vue({
-    el: '#inputForm',
-    data: {
-      inputs : []
-    },
-      template: '<div><form id="inputForm" role="form"></form></div>',
-    computed: {
-      // un accesseur (getter) calculé
-      reversedMessage: function () {
-        var str = "";
-        this.inputs.forEach(function(input){
-          str += "<label>"
-          str += "<input type=" + input.type + " ></input>"
-          str += "</label>"
-        });
-        return str
-      }
-    }
-  });
-
-  app.config =  config;
 }
 
 $(function() {
@@ -67,7 +43,7 @@ $(function() {
  * @param {string} functionName R function name
  * @param {object} plotVarParameters function parameters
  */
-function showPlot(iframeInput,functionName, plotVarParameters) {
+function showPlot(iframeInput, functionName, plotVarParameters) {
   // Run the R function
   return (req = ocpu
     .call(functionName, plotVarParameters, function(session) {
@@ -78,7 +54,13 @@ function showPlot(iframeInput,functionName, plotVarParameters) {
     })
     .fail(function(text) {
       alert("Error: " + req.responseText);
-    }));
+    }).always(function() {
+      $("#submit").removeAttr("disabled");
+    }))
+}
+
+function setDateInput(inputId, parameters= {dateFormat :"yy-mm-dd"}){
+    $("#" + inputId).datepicker(parameters);
 }
 
 /**
@@ -102,8 +84,8 @@ function fillListInput(inputId, variables, selectParameters = {}) {
   defaultSelectParameters = {
     data: inputData
   };
-  finalSelectParameters = {...defaultSelectParameters,...selectParameters };
-  console.log(finalSelectParameters)
+  finalSelectParameters = { ...defaultSelectParameters, ...selectParameters };
+  console.log(finalSelectParameters);
   $("#" + inputId).select2(finalSelectParameters);
 }
 
@@ -118,29 +100,31 @@ function makeHeaders(colnames) {
 }
 
 /**
- * 
- * @param {string} inputId variable div id
- * @param {object} config    
-   {
-    wsUrl : "http://www.opensilex.org:8080/openSilexAPI/rest/",
-    accessToken : "16193fdee6ead394adf63466b49241fc"
-    }
- */
-function setGlobalVariablesAndInput(inputId, config, selectParameters = {}) {
-  listVariableParameters = { token: config.token };
+   * 
+   * @param {string} inputId variable div id
+   * @param {object} config    
+     {
+      wsUrl : "http://www.opensilex.org:8080/openSilexAPI/rest/",
+      accessToken : "16193fdee6ead394adf63466b49241fc"
+      }
+   */
+function setGlobalVariablesAndInput(inputId, config, selectParameters = {},variablesList) {
+  functionListParameters = { token: config.token };
+
   if (config.wsUrl !== null) {
-    listVariableParameters["wsUrl"] = config.wsUrl;
+    functionListParameters["wsUrl"] = config.wsUrl;
   }
   inputData = [];
   // Fill variables
   return ocpu.rpc(
     //Create array of variables' options
     "listVariables",
-    listVariableParameters,
-    function(variables) {
-      variablesList = variables;
-      fillListInput(inputId, variables, selectParameters);
-      return variables;
+    functionListParameters,
+
+    function(inputList) {
+      variablesList = inputList;
+      fillListInput(inputId, inputList, selectParameters);
+      return inputList;
     }
   );
 }
@@ -151,7 +135,7 @@ function setGlobalVariablesAndInput(inputId, config, selectParameters = {}) {
  */
 function getNameOfVariableUri(uri) {
   var name = null;
-  variablesList.forEach(function(variableObject) {
+  variablesListOutput.forEach(function(variableObject) {
     if (variableObject.value == uri) {
       name = variableObject.name;
     }
@@ -171,6 +155,8 @@ function makeDatatable(inputId, getDFParameters) {
     .fail(function() {
       $(tablesDiv).html("");
       alert("Error: " + req.responseText);
+    }).always(function() {
+      $("#submit").removeAttr("disabled");
     });
 }
 /**
