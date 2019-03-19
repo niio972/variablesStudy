@@ -32,7 +32,7 @@
 #' getDF(token = token, varURI = list("http://www.opensilex.org/demo/id/variables/v004",
 #'                                          "http://www.opensilex.org/demo/id/variables/v007"))
 #' }
-getDF <- function(varURI, token, smoothing = TRUE, sensor = NULL, endDate = NULL, startDate = NULL, wsUrl = "www.opensilex.org/openSilexAPI/rest/"){
+getDF <- function(varURI, token, smoothing = FALSE, sensor = NULL, endDate = NULL, startDate = NULL, wsUrl = "www.opensilex.org/openSilexAPI/rest/"){
 
   phisWSClientR::initializeClientConnection(apiID="ws_private", url = wsUrl)
   ## Data recuperation

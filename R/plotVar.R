@@ -37,7 +37,7 @@
 #'
 #' @export
 
-plotVar <- function(varURI, startDate = NULL, endDate = NULL, sensor = NULL, token, smoothing = TRUE, wsUrl = "www.opensilex.org/openSilexAPI/rest/"){
+plotVar <- function(varURI, startDate = NULL, endDate = NULL, sensor = NULL, token, smoothing = FALSE, wsUrl = "www.opensilex.org/openSilexAPI/rest/"){
   phisWSClientR::initializeClientConnection(apiID="ws_private", url = wsUrl)
 
   ### Data recuperation
