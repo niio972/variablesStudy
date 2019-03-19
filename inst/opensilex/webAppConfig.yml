@@ -7,8 +7,7 @@ integratedFunctions:
   # advanced
   plotVar:
     description : | 
-      '### Compare two variables
-      An app that help you to compare two variables'
+      An app that help you to compare two variables
     label: "Compare two variables"
     type: graphic
     graphicType: plotly
