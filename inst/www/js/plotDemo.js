@@ -36,7 +36,7 @@ function initInputs() {
   } else {
     // variables' initialization
     // if fail disabled input
-    setListInput("variable", config, {
+    setListInputFromRList("variable", config, {
       maximumSelectionLength: 2,
       multiple: true
     });
