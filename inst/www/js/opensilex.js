@@ -24,7 +24,7 @@ function initOpenSilexConnection() {
   } else {
     config.token = params.get("accessToken");
   }
-  if ($("#token").length != 0) {
+  if ($("#wsUrl").length != 0) {
     config.token = $("#wsUrl").val();
   } else {
     config.wsUrl = params.get("wsUrl");
