@@ -6,29 +6,29 @@
 # Update:
 #-------------------------------------------------------------------------------
 
-##' @title Get Data from WS2 and formate them
-##'
-##' @importFrom phisWSClientR initializeClientConnection
-##' @importFrom phisWSClientR getVariables2
-##'
-##' @param varURI uri of the variable to plot, from the \code{\link{variableList}} function or the web service directly
-##' @param variableList from \code{\link{variableList}}
-##' @param token a token from \code{\link{getToken}} function
-##'
-##' @return WSResponse
-##' @export
-##'
-##' @examples
-##' \donttest{
-##' initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
-##'  aToken <- getToken("guest@opensilex.org","guest")
-##'  token <- aToken$data
-##'  varPrettyTot <- variableList(token = token)
-##'  getDataVar(varURI = listVariables(token,
-##'                   wsUrl="www.opensilex.org/openSilexAPI/rest/")$value[1],
-##'                   variableList = varPrettyTot,
-##'                   token = token)
-##' }
+#' @title Get Data from WS2 and formate them
+#'
+#' @importFrom phisWSClientR initializeClientConnection
+#' @importFrom phisWSClientR getVariables2
+#'
+#' @param varURI uri of the variable to plot, from the \code{\link{variableList}} function or the web service directly
+#' @param variableList from \code{\link{variableList}}
+#' @param token a token from \code{\link{getToken}} function
+#'
+#' @return WSResponse
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
+#'  aToken <- getToken("guest@opensilex.org","guest")
+#'  token <- aToken$data
+#'  varPrettyTot <- variableList(token = token)
+#'  getDataVar(varURI = listVariables(token,
+#'                   wsUrl="www.opensilex.org/openSilexAPI/rest/")$value[1],
+#'                   variableList = varPrettyTot,
+#'                   token = token)
+#' }
 getDataVar <- function(varURI, variableList, token) {
 
   # Recuperation of the uri of the variable of interest

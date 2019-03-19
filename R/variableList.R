@@ -6,24 +6,26 @@
 # Update:
 #-------------------------------------------------------------------------------
 
-##' @title Get Variable's Names from WS2 and formate them
-##'
-##' @importFrom phisWSClientR initializeClientConnection
-##' @importFrom phisWSClientR getEnvironmentData
-##'
-##' @param token a token from \code{\link{getToken}} function
-##'
-##' @return WSResponse
-##' @export
-##'
-##' @examples
-##' \donttest{
-##' initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
-##'  aToken <- getToken("guest@opensilex.org","guest")
-##'  token <- aToken$data
-##'  variableList(token = token)
-##' }
-variableList <- function(token){
+#' @title Get Variable's Names from WS2 and formate them
+#'
+#' @importFrom phisWSClientR initializeClientConnection
+#' @importFrom phisWSClientR getEnvironmentData
+#'
+#' @param token a token from \code{\link{getToken}} function
+#' @param wsUrl url of the webservice
+#' @return WSResponse
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
+#'  aToken <- getToken("guest@opensilex.org","guest")
+#'  token <- aToken$data
+#'  variableList(token = token)
+#' }
+variableList <- function(token, wsUrl = "www.opensilex.org/openSilexAPI/rest/"){
+  phisWSClientR::initializeClientConnection(apiID="ws_private", url = wsUrl)
+
 
   # Recuperation of variables information
   rawVar <- phisWSClientR::getVariables2(token = token)
