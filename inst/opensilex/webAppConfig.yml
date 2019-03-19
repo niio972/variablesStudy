@@ -36,7 +36,7 @@ integratedFunctions:
         label: "Variables"
         type: list
         maxSelectedItem: 2
-        RfunctionValues: listVariables
+        RfunctionValues: variablesList
         required: true
       smoothing:
         label: "Smoothing"
@@ -54,39 +54,13 @@ integratedFunctions:
     label: "Compare two variables"
     type: graphic
     graphicType: plotly
-    linkedFunctions:
-      getDF:
-        label: "See compute data"
-        name: getDF
-        type: grid
-        parameters:
-          - startDate
-          - endDate
-          - varURI
-          - smoothing
-          - token
-          - wsUrl
     formParameters:
-      startDate:
-        label: "Start date of data"
-        type: date
-        format: yyyy-mm-dd
-        dateValue: Y-m-d
-      endDate:
-        label: "End date of data"
-        type: date
-        format: yyyy-mm-dd
-        dateValue: Y-m-d
       varURI:
         label: "Variables"
         type: list
         maxSelectedItem: 2
-        RfunctionValues: listVariables
+        RfunctionValues: variablesList
         required: true
-      smoothing:
-        label: "Smoothing"
-        type: boolean
-        defaultValue: false
       token:
         type: string
         visibility: hidden
@@ -113,13 +87,13 @@ integratedFunctions:
       varY:
         label: "Variable Y"
         type: list
-        RfunctionValues: listVariables
+        RfunctionValues: variablesList
         maxSelectedItem: 1
         required: true
       varX:
         label: "Variable X"
         type: list
-        RfunctionValues: listVariables
+        RfunctionValues: variablesList
         maxSelectedItem: 1
         required: true
       trend:
