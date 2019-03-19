@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-# Program: getDF.R
+# Program: variableList.R
 # Objective: retrieve data in suitable form for graph labelling
 # Authors: Chourrout Elise
 # Creation: 15/02/2019
@@ -21,9 +21,9 @@
 ##' initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
 ##'  aToken <- getToken("guest@opensilex.org","guest")
 ##'  token <- aToken$data
-##'  getVarPretty(token = token)
+##'  variableList(token = token)
 ##' }
-getVarPretty <- function(token){
+variableList <- function(token){
 
   # Recuperation of variables information
   rawVar <- phisWSClientR::getVariables2(token = token)
@@ -36,14 +36,15 @@ getVarPretty <- function(token){
     names[i] <- strsplit(names[i], split="_")[[1]][1]
     methods[i] <- strsplit(methods[i], split="_")[[1]][2]
   }
+  label <- rawVar$data$label
   acronyms <- rawVar$data$trait$label
   unitVar <- rawVar$data$unit$comment
   uriVar <- rawVar$data$uri
 
   # Creation of the dataTable with information of interest
-  varPretty <- data.frame(name = names, method = methods, acronym = acronyms, unity = unitVar, uri = uriVar)
-  varPretty <- data.frame(lapply(varPretty, as.character), stringsAsFactors=FALSE)
+  variableList <- data.frame(name = names, method = methods, acronym = acronyms, unity = unitVar, uri = uriVar, label = label)
+  variableList <- data.frame(lapply(variableList, as.character), stringsAsFactors=FALSE)
 
-  return(varPretty)
+  return(variableList)
 }
 
