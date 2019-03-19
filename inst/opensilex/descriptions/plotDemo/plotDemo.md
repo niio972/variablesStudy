@@ -1,3 +1,3 @@
-### Demonstration of the comparison of two variables
+### Demo app
 
-A demo app that help you to compare two variables
+A simple app that help you to compare two variables
