@@ -53,8 +53,10 @@ integratedFunctions:
         type: string
         visibility: hidden
         required: true
-  
   plotVarRel:
+    description : | 
+      '### Confront two variables
+      An app that help you to confront two variables'
     label: "Confront two variables"
     type: graphic
     graphicType: plotly
