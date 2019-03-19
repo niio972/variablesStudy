@@ -169,7 +169,7 @@ plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, trend = FAL
   p <- plotly::layout(p, yaxis = y)
   p <- plotly::layout(p, title =paste( "<b>Tendency of ", y$title, " ~ ", x$title, "</br>"))
 
-  htmlwidgets::saveWidget(p, "plotVarRelWidget.html", selfcontained = FALSE)
+  htmlwidgets::saveWidget(p, "plotWidget.html", selfcontained = FALSE)
 
   # export PlotlySchema and configuration
   jsonlite::write_json(plotly::plotly_data(p), "plotlyData")

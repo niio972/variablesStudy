@@ -161,7 +161,7 @@ plotVarDemo <- function(varURI, startDate = NULL, endDate = NULL, sensor = NULL,
 
   # Creation of the html object to screen in the variablesStudy
   # print(plotly::plotly_json(p))
-  htmlwidgets::saveWidget(p, "plotVarWidget.html", selfcontained = FALSE)
+  htmlwidgets::saveWidget(p, "plotWidget.html", selfcontained = FALSE)
   # htmlwidgets::
   # jsonlite::write_json(plotly::plotly_json(p), "plotlySchema")
   # jsonlite::write_json(jsonlite::fromJSON(plotly::plotly_json(p)), "plotlyData")

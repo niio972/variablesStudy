@@ -6,16 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>OpenSILEX - Compare 2 variables</title>
+    <title>OpenSILEX -R app demo</title>
     <!-- style -->
     <!-- fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
         integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <!-- datatable -->
-    <link rel="stylesheet" type="text/css"
-        href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-html5-1.5.6/datatables.min.css" />
     <!-- select2 -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
     <!-- jquery ui -->
@@ -25,77 +22,57 @@
     <link rel="stylesheet" href="css/style.css">
 
 </head>
-<div id="cssLoader" class="loader loader-default" data-text="Loading configuration "></div>
+<div id="cssLoader" class="loader loader-default" data-text="Loading"></div>
 
 <body>
     <div class="wrap">
-        <h2 class="main-title">Variable data comparison</h2>
+        <h2 class="main-title">Demo - Variable data comparison</h2>
         <div class="container-fluid">
             <div class="col-md-12">
                 <!-- form -->
-                <div id="inputForm">
-                    <!-- token -->
-                    <div class="form-group">
-                        <strong>
-                            <label for="token"> Token </label>
-                        </strong>
-                        <input type="text" id="token" name="token" />
+                <form role="form">
+                    <div id="inputForm">
+                        <!-- token -->
+                        <div class="form-group">
+                            <strong>
+                                <label for="token"> Token </label>
+                            </strong>
+                            <input type="text" id="token" name="token" />
+                        </div>
+                        <!-- wsUrl -->
+                        <div class="form-group">
+                            <strong>
+                                <label for="wsUrl"> wsUrl </label>
+                            </strong>
+                            <input type="text" id="wsUrl" name="wsUrl" value="http://www.opensilex.org:8080/openSilexAPI/rest" />
+                        </div>
+                        <!-- variable -->
+                        <div class="form-group">
+                            <strong>
+                                <label for="variable"> Variable </label>
+                            </strong>
+                            <select id="variable" class="form-control" required></select>
+                        </div>
+                        <!-- submit -->
+                        <div class="form-group"></div>
+                        <button id="submit" type="submit" class="btn btn-primary">
+                            Show graph!
+                        </button>
+                        <hr>
                     </div>
-                    <!-- wsUrl -->
-                    <!-- <div class="form-group">
-                        <strong>
-                            <label for="wsUrl"> wsUrl </label>
-                        </strong>
-                        <input type="text" id="wsUrl" name="wsUrl" value="http://www.opensilex.org:/openSilexAPI/rest" />
-                    </div> -->
-                    <!-- variable -->
-                    <div class="form-group">
-                        <strong>
-                            <label for="variable"> Variable </label>
-                        </strong>
-                        <select id="variable" class="form-control" required></select>
-                    </div>
-                    <!-- smoothing -->
-                    <label for="smoothing">Smoothing</label>
-                    <input type="checkbox" id="smoothing" name="smoothing" />
-                    <!-- dates -->
-                    <div class="form-inline">
-                        <label for="startDate">Start date:</label>
-                        <input type="text" id="startDate" name="startDate" />
-                        <label for="endDate">End date:</label>
-                        <input type="text" id="endDate" name="endDate" />
-                    </div>
-                    <!-- submit -->
-                    <div class="form-group"></div>
-                    <button id="submit" type="submit" class="btn btn-primary">
-                        Show graph!
-                    </button>
-                    <hr>
-             </div>
-
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-    </div>
+    
     <!-- plotDiv -->
     <div class="embed-responsive embed-responsive-4by3">
         <iframe class="embed-responsive-item" id="plotDiv" allowfullscreen></iframe>
     </div>
-    <br>
-    <!-- Grid tabs -->
-    <ul id="navtabs" class="nav nav-tabs" role="tablist">
-    </ul>
-    <!-- Grid tab contents -->
-    <div id="tables" class="tab-content"></div>
-
+    
     <!-- jquery -->
-    <script src="js/jquery.min.js"></script>
+    <script src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <!-- datatable js library -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-    <script type="text/javascript"
-        src="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-flash-1.5.6/b-html5-1.5.6/datatables.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
@@ -103,7 +80,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <!-- opencpu client -->
     <script src="js/opencpu-0.5.js"></script>
-    <script src="js/opensilexdemo.js"></script>
+    <script src="js/opensilex.js"></script>
     <!-- user script -->
     <script src="js/plotDemo.js"></script>
     

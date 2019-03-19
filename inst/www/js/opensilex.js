@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- *                                     opensilex.js
+ *                                     opensilexdemo.js
  *  js
  *  Copyright © INRA 2019
  *  Creation date:  11 March, 2019
@@ -19,37 +19,13 @@ function initOpenSilexConnection() {
   var params = new window.URLSearchParams(window.location.search);
   var config = {};
   config.wsUrl = params.get("wsUrl");
-  if($("#token").length() != 0){
+  if ($("#token").length != 0) {
     config.token = $("#token").val();
-  }else{
+  } else {
     config.token = params.get("accessToken");
   }
-  
+
   return config;
-}
-
-function makeForm(config){
-  app = new Vue({
-    el: '#inputForm',
-    data: {
-      inputs : []
-    },
-      template: '<div><form id="inputForm" role="form"></form></div>',
-    computed: {
-      // un accesseur (getter) calculé
-      reversedMessage: function () {
-        var str = "";
-        this.inputs.forEach(function(input){
-          str += "<label>"
-          str += "<input type=" + input.type + " ></input>"
-          str += "</label>"
-        });
-        return str
-      }
-    }
-  });
-
-  app.config =  config;
 }
 
 $(function() {
@@ -67,43 +43,49 @@ $(function() {
  * @param {string} functionName R function name
  * @param {object} plotVarParameters function parameters
  */
-function showPlot(iframeInput,functionName, plotVarParameters) {
+function showPlot(iframeInput, functionName, plotVarParameters) {
+  $("#cssLoader").addClass("is-active");
   // Run the R function
   return (req = ocpu
     .call(functionName, plotVarParameters, function(session) {
       $("#" + iframeInput).attr(
         "src",
-        session.getFileURL(functionName + "Widget.html")
+        session.getFileURL("plotWidget.html")
       );
-    })
-    .fail(function(text) {
+      $("#submit").removeAttr("disabled");
+      $("#cssLoader").removeClass("is-active");
+    }).fail(function(text) {
       alert("Error: " + req.responseText);
     }));
+}
+
+function setDateInput(inputId, parameters= {dateFormat :"yy-mm-dd"}){
+    $("#" + inputId).datepicker(parameters);
 }
 
 /**
  *
  * @param {string} inputId div input id
- * @param {object} variables
+ * @param {object} inputList
  *   {
  *   value : "http://www.opensilex.org:8080/openSilexAPI/rest/",
  *   name : "16193fdee6ead394adf63466b49241fc"
  *   }
  * @param {object} selectParameters custom select2 parameters
  */
-function fillListInput(inputId, variables, selectParameters = {}) {
-  variables.forEach(function(rVariables) {
-    variable = {};
-    variable.id = rVariables.value;
-    variable.text = rVariables.name;
-    inputData.push(variable);
+function fillListInput(inputId, inputList, selectParameters = {}) {
+  inputList.forEach(function(inputItem) {
+    item = {};
+    item.id = inputItem.value;
+    item.text = inputItem.name;
+    inputData.push(item);
   });
   // console.log(inputData);
   defaultSelectParameters = {
     data: inputData
   };
-  finalSelectParameters = {...defaultSelectParameters,...selectParameters };
-  console.log(finalSelectParameters)
+  // merge objects
+  finalSelectParameters = { ...defaultSelectParameters, ...selectParameters };
   $("#" + inputId).select2(finalSelectParameters);
 }
 
@@ -118,31 +100,37 @@ function makeHeaders(colnames) {
 }
 
 /**
- * 
- * @param {string} inputId variable div id
- * @param {object} config    
-   {
-    wsUrl : "http://www.opensilex.org:8080/openSilexAPI/rest/",
-    accessToken : "16193fdee6ead394adf63466b49241fc"
-    }
- */
-function setGlobalVariablesAndInput(inputId, config, selectParameters = {}) {
-  listVariableParameters = { token: config.token };
+   * 
+   * @param {string} inputId variable div id
+   * @param {object} config    
+     {
+      wsUrl : "http://www.opensilex.org:8080/openSilexAPI/rest/",
+      accessToken : "16193fdee6ead394adf63466b49241fc"
+      }
+   */
+function setListInput(inputId, config, selectParameters = {}) {
+  $("#cssLoader").addClass("is-active");
+  functionListParameters = { token: config.token };
+
   if (config.wsUrl !== null) {
-    listVariableParameters["wsUrl"] = config.wsUrl;
+    functionListParameters["wsUrl"] = config.wsUrl;
   }
   inputData = [];
   // Fill variables
   return ocpu.rpc(
     //Create array of variables' options
     "listVariables",
-    listVariableParameters,
-    function(variables) {
-      variablesList = variables;
-      fillListInput(inputId, variables, selectParameters);
-      return variables;
+    functionListParameters,
+
+    function(inputList) {
+      variablesList = inputList;
+      fillListInput(inputId, inputList, selectParameters);
+      $("#cssLoader").removeClass("is-active");
+      return inputList;
     }
-  );
+  ).fail(function(text) {
+    alert("Error: " + req.responseText);
+  });
 }
 
 /**
@@ -151,7 +139,7 @@ function setGlobalVariablesAndInput(inputId, config, selectParameters = {}) {
  */
 function getNameOfVariableUri(uri) {
   var name = null;
-  variablesList.forEach(function(variableObject) {
+  variablesListOutput.forEach(function(variableObject) {
     if (variableObject.value == uri) {
       name = variableObject.name;
     }
@@ -164,36 +152,50 @@ function getNameOfVariableUri(uri) {
  * @param {object} getDFParameters function parameters
  */
 function makeDatatable(inputId, getDFParameters) {
+  $("#cssLoader").addClass("is-active");
+  var tablesDivId = "tables";
   return ocpu
     .rpc("getDF", getDFParameters, function(dataframe) {
       makeDatatableWithList(getDFParameters, dataframe);
+      $("#cssLoader").removeClass("is-active");
+      $("#submit").removeAttr("disabled");
     })
     .fail(function() {
-      $(tablesDiv).html("");
+      $(tablesDivId).html("");
       alert("Error: " + req.responseText);
-    });
+    })
 }
 /**
  *
- * @param {object} getDFParameters function parameters
+ * @param {object} functionParameters function parameters
  * @param {array} dataframe list of object given by the R function
  */
-function makeDatatableWithList(getDFParameters, dataframe) {
+function makeDatatableWithList(functionParameters, dataframe) {
   // div required
   var tablesDivId = "tables";
   var tabNavId = "navtabs";
+  var searchedParameters = "searchedParameters";
   var active = true;
 
   // unset all content
   $("#" + tablesDivId).html("");
   $("#" + tabNavId).html("");
-
+  $("#" + searchedParameters).html("");
+  
   // create the JSON array for the columns required by DataTable
-  var varURIs = getDFParameters.varURI;
+  var varURIs = functionParameters.varURI;
   varCount = 0;
+
+  var exportedParameters = functionParameters
+  delete exportedParameters.wsUrl;
+  delete exportedParameters.token;
+  $("#" + searchedParameters).append(JSON.stringify(exportedParameters));
+  $("#" + searchedParameters).addClass("alert-info");
+  
+   
   //create a tab by variables
   varURIs.forEach(function(varUri) {
-    varName = getNameOfVariableUri(varUri);
+    varName = varUri;
     var classTab = "";
     if (active) {
       classTab = 'class="active"';
@@ -247,19 +249,19 @@ function makeDatatableWithList(getDFParameters, dataframe) {
       buttons: [
         {
           extend: "copyHtml5",
-          messageTop: varName + "Data"
+          messageTop: JSON.stringify(exportedParameters) 
         },
         {
           extend: "excelHtml5",
-          messageTop: varName + "Data"
+          messageTop: JSON.stringify(exportedParameters) 
         },
         {
           extend: "csvHtml5",
-          messageTop: varName + "Data"
+          messageTop: JSON.stringify(exportedParameters) 
         },
         {
           extend: "pdfHtml5",
-          messageTop: varName + "Data"
+          messageTop: JSON.stringify(exportedParameters) 
         }
       ],
       data: data,
