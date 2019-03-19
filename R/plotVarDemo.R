@@ -114,10 +114,10 @@ plotVarDemo <- function(varURI, token, wsUrl = "www.opensilex.org/openSilexAPI/r
     p <- plotly::layout(p, yaxis = y)
     p <- plotly::layout(p, title = "<b>Tendency of environmental variables among time</br>")
   }
-  p
+  #p
   # Creation of the html object to screen in the variablesStudy
   # print(plotly::plotly_json(p))
-  #htmlwidgets::saveWidget(p, "plotVarWidget.html", selfcontained = FALSE)
+  htmlwidgets::saveWidget(p, "plotVarWidget.html", selfcontained = FALSE)
   # htmlwidgets::
   # jsonlite::write_json(plotly::plotly_json(p), "plotlySchema")
   # jsonlite::write_json(jsonlite::fromJSON(plotly::plotly_json(p)), "plotlyData")
