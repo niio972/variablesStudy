@@ -11,7 +11,7 @@
 ##' @importFrom phisWSClientR initializeClientConnection
 ##' @importFrom phisWSClientR getVariables2
 ##'
-##' @param varURI uri of the variable to plot, from the \code{\link{listVariables}} function or the web service directly
+##' @param varURI uri of the variable to plot, from the \code{\link{variableList}} function or the web service directly
 ##' @param variableList from \code{\link{variableList}}
 ##' @param token a token from \code{\link{getToken}} function
 ##'

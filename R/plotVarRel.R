@@ -16,8 +16,8 @@
 #' @importFrom plotly add_trace
 #' @importFrom stats qnorm
 #'
-#' @param varX uri of the variable to plot in X axis, from the \code{\link{listVariables}} function or the web service directly
-#' @param varY uri of the variable to plot in Y axis, from the \code{\link{listVariables}} function or the web service directly
+#' @param varX uri of the variable to plot in X axis, from the \code{\link{variableList}} function or the web service directly
+#' @param varY uri of the variable to plot in Y axis, from the \code{\link{variableList}} function or the web service directly
 #' @param startDate date from which to plot
 #' @param endDate date to which to plot
 #' @param trend logical, draw the trend of the scatterplot
@@ -30,7 +30,7 @@
 #'  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
 #'  aToken <- getToken("guest@opensilex.org","guest")
 #'  token <- aToken$data
-#'  vars <- listVariables(token = token)
+#'  vars <- variableList(token = token)
 #'  vars
 #'  plotVarRel( vars$value[1],
 #'        vars$value[2],
@@ -46,13 +46,11 @@ plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, trend = FAL
   phisWSClientR::initializeClientConnection(apiID="ws_private", url = wsUrl)
 
   ### Collecting Data
-  varPrettyTot <- getVarPretty(token = token)
+  variableList <- variableList(token = token)
   ## Data
-  Data <- list()
-  varPretty <- NULL
   varURI <- list(varX, varY)
   Data = lapply(varURI,FUN = function(uri){
-    enviroData <- getDataVarPretty(varURI = uri, varPretty = varPrettyTot, token = token)$enviroData
+    enviroData <- getDataVar(varURI = uri, variableList = variableList, token = token)$enviroData
     yVar <- enviroData$value
     # Casting Date in the right format
     xVar <- as.POSIXct(enviroData$date, tz = "UTC", format = "%Y-%m-%dT%H:%M:%S")
@@ -69,13 +67,8 @@ plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, trend = FAL
     }
     return(DataX)
   })
-  for(uri in varURI){
-    enviroData <- getDataVarPretty(varURI = uri, varPretty = varPrettyTot, token = token)
-    varPrettyI <- t(data.frame(matrix(unlist(enviroData$varPretty))))
-    varPretty <- rbind(varPretty, varPrettyI)
-    varPretty
-  }
-  colnames(varPretty) <- c("name", "method", "acronym", "unity")
+  variableList <- variableList[which(variableList$uri %in% varURI), ]
+
   DataX <- Data[[1]]
   DataY <- Data[[2]]
 
@@ -125,9 +118,9 @@ plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, trend = FAL
   }
   colorBgHover <- "#F8F8F8"
   colorText <- "#525252"
-  y <- list(title = paste('<b>', varPretty[2,"name"], ' (',varPretty[2,"unity"], ')' , '</b>', sep = ""), color = '#282828',
+  y <- list(title = paste('<b>', variableList[2,"name"], ' (',variableList[2,"unity"], ')' , '</b>', sep = ""), color = '#282828',
             tickfont = list(family = 'serif'), gridwidth = 2)
-  x <- list(title = paste('<b>', varPretty[1,"name"], ' (',varPretty[1,"unity"], ')' , '</b>', sep = ""), color = '#282828',
+  x <- list(title = paste('<b>', variableList[1,"name"], ' (',variableList[1,"unity"], ')' , '</b>', sep = ""), color = '#282828',
             tickfont = list(family = 'serif'), gridwidth = 2)
 
   title <- list(size = 20, color = '#282828', tickfont = list(family = 'serif'))
@@ -143,10 +136,10 @@ plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, trend = FAL
   hoverlabel <- list(bgcolor = colorBgHover, font = list(color = colorText), hoveron = "")
   hoverlabel$bordercolor <- as.character(colorVar[1])
 
-  p <- plotly::add_markers(p, x = DataPred$X, y = DataPred$Y, marker = marker, name = varPretty[1,"method"], yaxis = y$title, hoverlabel = hoverlabel,
+  p <- plotly::add_markers(p, x = DataPred$X, y = DataPred$Y, marker = marker, name = variableList[1,"method"], yaxis = y$title, hoverlabel = hoverlabel,
                            text = paste(
-                             paste( round(DataPred$Y, digits = 2),varPretty[2,"unity"]),
-                             paste(" ~ ", round(DataPred$X,2),varPretty[1,"unity"] ),
+                             paste( round(DataPred$Y, digits = 2),variableList[2,"unity"]),
+                             paste(" ~ ", round(DataPred$X,2),variableList[1,"unity"] ),
                              sep = "\n"),
                            hoverinfo = 'text')
 
@@ -165,7 +158,7 @@ plotVarRel <- function(varX, varY, startDate = NULL, endDate = NULL, trend = FAL
                            name = "smoothed curve)")
   }
 
-  y <- list(title = paste('<b>', varPretty[2, "name"], ' (', varPretty[2, "unity"], ')' , '</b>', sep = ""), color = '#282828', showgrid = FALSE,
+  y <- list(title = paste('<b>', variableList[2, "name"], ' (', variableList[2, "unity"], ')' , '</b>', sep = ""), color = '#282828', showgrid = FALSE,
             gridwidth = 2,  tickfont = list(family = 'serif'), overlaying = "y", side = "right")
   p <- plotly::layout(p, yaxis = y)
   p <- plotly::layout(p, title =paste( "<b>Tendency of ", y$title, " ~ ", x$title, "</br>"))

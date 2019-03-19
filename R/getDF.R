@@ -10,7 +10,7 @@
 #'
 #' @description get the dataset of incertitudes for the data selected
 #'
-#' @param varURI uri of the variable to plot, from the \code{\link{listVariables}} function or the web service directly
+#' @param varURI uri of the variable to plot, from the \code{\link{variableList}} function or the web service directly
 #' @param token a token from \code{\link{getToken}} function
 #' @param smoothing logical, smoothing of the data,  returns the incertitudes from the smoothing
 #' @param sensor character, uri of a sensor to filter with
@@ -27,7 +27,7 @@
 #' initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
 #' aToken <- getToken("guest@opensilex.org","guest")
 #' token <- aToken$data
-#' vars <- listVariables(token = token, wsUrl = "www.opensilex.org/openSilexAPI/rest/")
+#' vars <- variableList(token = token, wsUrl = "www.opensilex.org/openSilexAPI/rest/")
 #' vars
 #' getDF(token = token, varURI = list("http://www.opensilex.org/demo/id/variables/v004",
 #'                                          "http://www.opensilex.org/demo/id/variables/v007"))
@@ -37,15 +37,12 @@ getDF <- function(varURI, token, smoothing = TRUE, sensor = NULL, endDate = NULL
   phisWSClientR::initializeClientConnection(apiID="ws_private", url = wsUrl)
   ## Data recuperation
   # Variable's information
-  varPretty <- NULL
-  varPrettyTot <- getVarPretty(token = token)
-  varPretty <- varPrettyTot[ varPrettyTot$uri %in% varURI, ]
+  variableList <- variableList(token = token)
+  variableList <- variableList[ variableList$uri %in% varURI, ]
 
   # Data
-  Data <- NULL
-
   Data = lapply(varURI, FUN = function(uri){
-    enviroData <- getDataVarPretty(varURI = uri, varPretty = varPrettyTot, token = token)$enviroData
+    enviroData <- getDataVar(varURI = uri, variableList = variableList, token = token)$enviroData
     yVar <- enviroData$value
     # Casting Date in the right format
     xVar <- as.POSIXct(enviroData$date, tz = "UTC", format = "%Y-%m-%dT%H:%M:%S")
@@ -82,10 +79,14 @@ getDF <- function(varURI, token, smoothing = TRUE, sensor = NULL, endDate = NULL
       varPred <- stats::predict(varSpline, se.fit = TRUE)
       dist <- abs(as.numeric(DataX$value) - as.numeric(varPred$fit))
       DataX <- cbind(DataX, dist)
-      names(DataX)[length(DataX)] <- paste("Distance of ",varPretty[which(varPretty$uri == uri),"name"], " from smoothed curve", sep = "")
+      names(DataX)[length(DataX)-1] <- paste("Value of ",variableList[which(variableList$uri == uri),"name"], sep = "")
+      names(DataX)[length(DataX)] <- paste("Distance of ",variableList[which(variableList$uri == uri),"name"], " from smoothed curve", sep = "")
+    }else{
+      names(DataX)[length(DataX)] <- paste("Value of ",variableList[which(variableList$uri == uri),"name"], sep = "")
     }
+
     return(DataX)
   })
-  names(Data)=varURI
+  names(Data)=variableList$name
   return(Data)
 }
