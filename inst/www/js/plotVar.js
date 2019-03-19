@@ -20,7 +20,6 @@ $(function() {
   $("#submit").click(function(e) {
     e.preventDefault();
     functionsParameters = getInputs();
-    console.log(functionsParameters);
     // basical
     // create a plot from htmlwidget named function name .e.g plotVar with Widget.html
     showPlot("plotDiv", "plotVar", functionsParameters);
