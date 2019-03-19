@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-# Program: getDF.R
+# Program: getDataVar.R
 # Objective: transform data in suitable form for graph
 # Authors: Chourrout Elise
 # Creation: 15/02/2019
@@ -12,7 +12,7 @@
 ##' @importFrom phisWSClientR getVariables2
 ##'
 ##' @param varURI uri of the variable to plot, from the \code{\link{listVariables}} function or the web service directly
-##' @param varPretty from \code{\link{getVarPretty}}
+##' @param variableList from \code{\link{variableList}}
 ##' @param token a token from \code{\link{getToken}} function
 ##'
 ##' @return WSResponse
@@ -23,29 +23,29 @@
 ##' initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
 ##'  aToken <- getToken("guest@opensilex.org","guest")
 ##'  token <- aToken$data
-##'  varPrettyTot <- getVarPretty(token = token)
-##'  getDataVarPretty(varURI = listVariables(token,
+##'  varPrettyTot <- variableList(token = token)
+##'  getDataVar(varURI = listVariables(token,
 ##'                   wsUrl="www.opensilex.org/openSilexAPI/rest/")$value[1],
-##'                   varPretty = varPrettyTot,
+##'                   variableList = varPrettyTot,
 ##'                   token = token)
 ##' }
-getDataVarPretty <- function(varURI, varPretty, token) {
+getDataVar <- function(varURI, variableList, token) {
 
   # Recuperation of the uri of the variable of interest
-  numVar <- match(varURI, varPretty$uri)
+  numVar <- match(varURI, variableList$uri)
 
-  nameUriVar <-  varPretty$uri[numVar]
+  nameUriVar <-  variableList$uri[numVar]
 
   # Recuperation of the data from the WS
   myCount <- phisWSClientR::getEnvironmentData(token = token, variable = varURI)$totalCount
   enviroData <- phisWSClientR::getEnvironmentData(token = token, variable =  varURI, verbose = TRUE, pageSize = myCount)$data
 
   # Creation of the dataTable to return
-  nomVar <- paste(toupper(substr(varPretty$name[numVar],1,1)), substr(varPretty$name[numVar],2,nchar(varPretty$name[numVar])), sep = "")
-  methodVar <- as.character(varPretty$method[numVar])
-  acronymVar <- as.character(varPretty$acronym[numVar])
-  unityVar <- as.character(varPretty$unity[numVar])
-  varPretty <- list(name = nomVar, method = methodVar, acronym = acronymVar, unity = unityVar)
+  nomVar <- paste(toupper(substr(variableList$name[numVar],1,1)), substr(variableList$name[numVar],2,nchar(variableList$name[numVar])), sep = "")
+  methodVar <- as.character(variableList$method[numVar])
+  acronymVar <- as.character(variableList$acronym[numVar])
+  unityVar <- as.character(variableList$unity[numVar])
+  variableList <- list(name = nomVar, method = methodVar, acronym = acronymVar, unity = unityVar)
 
-  return(list(enviroData = enviroData, varPretty = varPretty))
+  return(list(enviroData = enviroData, variableList = variableList))
 }

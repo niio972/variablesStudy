@@ -29,7 +29,7 @@ listVariables <-function(token, wsUrl="www.opensilex.org/openSilexAPI/rest/"){
   # creation of the dataTable with name and methods of the variables
   listVar <- NULL
   for (i in 1:8){
-    listVar$name[i] <-  paste(toupper(substr(varPretty$name[i],1,1)), substr(varPretty$name[i],2,nchar(varPretty$name[i])), " (", varPretty$method[i], ")", sep = "")
+    listVar$name[i] <- varPretty$label[i]
     listVar$value[i] <- varPretty$uri[i]
 
   }
