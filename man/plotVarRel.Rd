@@ -8,9 +8,9 @@ plotVarRel(varX, varY, startDate = NULL, endDate = NULL,
   trend = FALSE, wsUrl = "www.opensilex.org/openSilexAPI/rest/", token)
 }
 \arguments{
-\item{varX}{uri of the variable to plot in X axis, from the \code{\link{listVariables}} function or the web service directly}
+\item{varX}{uri of the variable to plot in X axis, from the \code{\link{variableList}} function or the web service directly}
 
-\item{varY}{uri of the variable to plot in Y axis, from the \code{\link{listVariables}} function or the web service directly}
+\item{varY}{uri of the variable to plot in Y axis, from the \code{\link{variableList}} function or the web service directly}
 
 \item{startDate}{date from which to plot}
 
@@ -30,7 +30,7 @@ Plot two Environmental variables relationship
  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
  aToken <- getToken("guest@opensilex.org","guest")
  token <- aToken$data
- vars <- listVariables(token = token)
+ vars <- variableList(token = token)
  vars
  plotVarRel( vars$value[1],
        vars$value[2],

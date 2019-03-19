@@ -18,7 +18,7 @@
 #' @importFrom jsonlite fromJSON
 #' @importFrom jsonlite write_json
 #'
-#' @param varURI uri of the variable to plot from the \code{\link{listVariables}} function or the web service directly
+#' @param varURI uri of the variable to plot from the \code{\link{variableList}} function or the web service directly
 #' @param startDate date from which to plot
 #' @param endDate date to which to plot
 #' @param sensor uri of the sensor that recorded the values
@@ -31,7 +31,7 @@
 #'  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
 #'  aToken <- getToken("guest@opensilex.org","guest")
 #'  token <- aToken$data
-#'  vars <- listVariables(token = token)
+#'  vars <- variableList(token = token)
 #'  plotVar(vars$value[1], token = token)
 #' }
 #'
@@ -41,12 +41,11 @@ plotVar <- function(varURI, startDate = NULL, endDate = NULL, sensor = NULL, tok
   phisWSClientR::initializeClientConnection(apiID="ws_private", url = wsUrl)
 
   ### Data recuperation
-  varPrettyTot <- getVarPretty(token = token)
+  variableList <- variableList(token = token)
   ## Data
   Data <- list()
-  varPretty <- NULL
   Data = lapply(varURI,FUN = function(uri){
-    enviroData <- getDataVarPretty(varURI = uri, varPretty = varPrettyTot, token = token)$enviroData
+    enviroData <- getDataVar(varURI = uri, variableList = variableList, token = token)$enviroData
     yVar <- enviroData$value
     # Casting Date in the right format
     xVar <- as.POSIXct(enviroData$date, tz = "UTC", format = "%Y-%m-%dT%H:%M:%S")
@@ -72,13 +71,7 @@ plotVar <- function(varURI, startDate = NULL, endDate = NULL, sensor = NULL, tok
     }
     return(DataX)
   })
-  for(uri in varURI){
-    enviroData <- getDataVarPretty(varURI = uri, varPretty = varPrettyTot, token = token)
-    varPrettyI <- t(data.frame(matrix(unlist(enviroData$varPretty))))
-    varPretty <- rbind(varPretty, varPrettyI)
-    varPretty
-  }
-  colnames(varPretty) <- c("name", "method", "acronym", "unity")
+  variableList <- variableList[which(variableList$uri %in% varURI), ]
 
   ### Plotting
   ## Theme
@@ -94,7 +87,7 @@ plotVar <- function(varURI, startDate = NULL, endDate = NULL, sensor = NULL, tok
   colorText <- "#525252"
 
   # Labels and grid
-  y <- list(title = paste('<b>', varPretty[1,"name"], ' (',varPretty[1,"unity"], ')' , '</b>', sep = ""), color = '#282828',
+  y <- list(title = paste('<b>', variableList[1,"name"], ' (',variableList[1,"unity"], ')' , '</b>', sep = ""), color = '#282828',
             tickfont = list(family = 'serif'), gridwidth = 2)
   x <- list(title = '<b>Date</b>', tickfont = list(family = 'serif'), gridwidth = 2)
   title <- list(size = 20, color = '#282828', tickfont = list(family = 'serif'))
@@ -135,7 +128,7 @@ plotVar <- function(varURI, startDate = NULL, endDate = NULL, sensor = NULL, tok
 
       # Screening of the smoothed curve
       p <- plotly::add_lines(p, x = Data[[i]]$date, y = varPred$fit, line = list(color = as.character(colorVar[i])), yaxis = nameY,
-                             name = paste(varPretty[i,"acronym"], "(smoothed curve)", sep = " "))
+                             name = paste(variableList[i,"acronym"], "(smoothed curve)", sep = " "))
 
       # Screening of the confidence interval
       p <- plotly::add_ribbons(p, x = Data[[i]]$date, ymin = modeleDf$lb, ymax = modeleDf$ub,  yaxis = nameY,
@@ -144,24 +137,24 @@ plotVar <- function(varURI, startDate = NULL, endDate = NULL, sensor = NULL, tok
                                name = "Standard Error", showlegend = FALSE)
 
       # Screening of the values as markers
-      p <- plotly::add_markers(p, x = Data[[i]]$date, y = yVar, marker = marker, opacity = 0.2, name = varPretty[i,"method"], yaxis = nameY, hoverlabel = hoverlabel,
-                               text = ~paste(Data[[i]]$date, '<br>', varPretty[i,"acronym"], ': <b>', yVar, varPretty[i,"unity"], '</b>'), hoverinfo = 'text')
+      p <- plotly::add_markers(p, x = Data[[i]]$date, y = yVar, marker = marker, opacity = 0.2, name = variableList[i,"method"], yaxis = nameY, hoverlabel = hoverlabel,
+                               text = ~paste(Data[[i]]$date, '<br>', variableList[i,"acronym"], ': <b>', yVar, variableList[i,"unity"], '</b>'), hoverinfo = 'text')
     } else {
       # Screening of the values without smoothing as lines
-      p <- plotly::add_lines(p, x = Data[[i]]$date, y = yVar, line = list(color = as.character(colorVar[i])), name = varPretty[i,"method"], yaxis = nameY, hoverlabel = hoverlabel,
-                               text = ~paste(Data[[i]]$date, '<br>', varPretty[i,"acronym"], ': <b>', yVar, varPretty[i,"unity"], '</b>'), hoverinfo = 'text')    }
+      p <- plotly::add_lines(p, x = Data[[i]]$date, y = yVar, line = list(color = as.character(colorVar[i])), name = variableList[i,"method"], yaxis = nameY, hoverlabel = hoverlabel,
+                               text = ~paste(Data[[i]]$date, '<br>', variableList[i,"acronym"], ': <b>', yVar, variableList[i,"unity"], '</b>'), hoverinfo = 'text')    }
 
   }
   # Labels
   if (length(varURI) == 1){
-    p <- plotly::layout(p, title = paste('<b>Tendency of ', varPretty[1,"name"], '</b><br><i>', varPretty[1,"method"], '</i>' , sep = ""))
+    p <- plotly::layout(p, title = paste('<b>Tendency of ', variableList[1,"name"], '</b><br><i>', variableList[1,"method"], '</i>' , sep = ""))
   } else if (i == 2) {
-    y <- list(title = paste('<b>', varPretty[2, "name"], ' (', varPretty[2, "unity"], ')' , '</b>', sep = ""), color = '#282828', showgrid = FALSE,
+    y <- list(title = paste('<b>', variableList[2, "name"], ' (', variableList[2, "unity"], ')' , '</b>', sep = ""), color = '#282828', showgrid = FALSE,
               gridwidth = 2,  tickfont = list(family = 'serif'), overlaying = "y", side = "right")
     p <- plotly::layout(p, yaxis2 = y)
     p <- plotly::layout(p, title = "<b>Tendency of environmental variables among time</br>")
   } else {
-    y <- list(title = paste('<b>', varPretty[2, "name"], ' (', varPretty[2, "unity"], ')' , '</b>', sep = ""), color = '#282828', showgrid = FALSE,
+    y <- list(title = paste('<b>', variableList[2, "name"], ' (', variableList[2, "unity"], ')' , '</b>', sep = ""), color = '#282828', showgrid = FALSE,
               gridwidth = 2,  tickfont = list(family = 'serif'), overlaying = "y", side = "right")
     p <- plotly::layout(p, yaxis = y)
     p <- plotly::layout(p, title = "<b>Tendency of environmental variables among time</br>")

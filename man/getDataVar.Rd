@@ -7,7 +7,7 @@
 getDataVar(varURI, variableList, token)
 }
 \arguments{
-\item{varURI}{uri of the variable to plot, from the \code{\link{listVariables}} function or the web service directly}
+\item{varURI}{uri of the variable to plot, from the \code{\link{variableList}} function or the web service directly}
 
 \item{variableList}{from \code{\link{variableList}}}
 

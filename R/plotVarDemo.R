@@ -9,21 +9,12 @@
 #' @title Plot Environmental Data
 #' @description Demonstration function
 #' @importFrom magrittr %>%
-#' @importFrom gam s
 #' @importFrom plotly layout
 #' @importFrom plotly plot_ly
 #' @importFrom plotly add_trace
-#' @importFrom plotly plotly_json
-#' @importFrom stats qnorm
-#' @importFrom jsonlite fromJSON
-#' @importFrom jsonlite write_json
 #'
-#' @param varURI uri of the variable to plot from the \code{\link{listVariables}} function or the web service directly
-#' @param startDate date from which to plot
-#' @param endDate date to which to plot
-#' @param sensor uri if the sensor that recorded the values
+#' @param varURI uri of the variable to plot from the \code{\link{variableList}} function or the web service directly
 #' @param token a token from \code{\link{getToken}} function
-#' @param smoothing logical, smoothing of the data
 #' @param wsUrl url of the webservice
 
 #' @examples
@@ -31,7 +22,7 @@
 #'  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
 #'  aToken <- getToken("guest@opensilex.org","guest")
 #'  token <- aToken$data
-#'  vars <- listVariables(token = token)
+#'  vars <- variableList(token = token)
 #'  vars
 #'  plotVar(vars$value[1], token = token)
 #' }

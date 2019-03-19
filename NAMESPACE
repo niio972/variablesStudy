@@ -2,7 +2,6 @@
 
 export(getDF)
 export(getDataVar)
-export(listVariables)
 export(plotVar)
 export(plotVarDemo)
 export(plotVarRel)

@@ -9,7 +9,7 @@ plotVar(varURI, startDate = NULL, endDate = NULL, sensor = NULL,
   wsUrl = "www.opensilex.org/openSilexAPI/rest/")
 }
 \arguments{
-\item{varURI}{uri of the variable to plot from the \code{\link{listVariables}} function or the web service directly}
+\item{varURI}{uri of the variable to plot from the \code{\link{variableList}} function or the web service directly}
 
 \item{startDate}{date from which to plot}
 
@@ -31,7 +31,7 @@ Plot Environmental Data
  initializeClientConnection(apiID="ws_private", url = "www.opensilex.org/openSilexAPI/rest/")
  aToken <- getToken("guest@opensilex.org","guest")
  token <- aToken$data
- vars <- listVariables(token = token)
+ vars <- variableList(token = token)
  plotVar(vars$value[1], token = token)
 }
 
