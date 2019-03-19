@@ -4,10 +4,12 @@
 \alias{variableList}
 \title{Get Variable's Names from WS2 and formate them}
 \usage{
-variableList(token)
+variableList(token, wsUrl = "www.opensilex.org/openSilexAPI/rest/")
 }
 \arguments{
 \item{token}{a token from \code{\link{getToken}} function}
+
+\item{wsUrl}{url of the webservice}
 }
 \value{
 WSResponse

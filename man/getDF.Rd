@@ -4,8 +4,9 @@
 \alias{getDF}
 \title{getDF}
 \usage{
-getDF(varURI, token, smoothing = TRUE, sensor = NULL, endDate = NULL,
-  startDate = NULL, wsUrl = "www.opensilex.org/openSilexAPI/rest/")
+getDF(varURI, token, smoothing = FALSE, sensor = NULL,
+  endDate = NULL, startDate = NULL,
+  wsUrl = "www.opensilex.org/openSilexAPI/rest/")
 }
 \arguments{
 \item{varURI}{uri of the variable to plot, from the \code{\link{variableList}} function or the web service directly}
