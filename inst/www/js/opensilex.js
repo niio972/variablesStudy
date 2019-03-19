@@ -116,7 +116,7 @@ function makeHeaders(colnames) {
       accessToken : "16193fdee6ead394adf63466b49241fc"
       }
    */
-function setListInputFromRList(inputId, config, selectParameters = {}) {
+function setListInputFromRList(inputId, RfunctionName, config, selectParameters = {}) {
   $("#cssLoader").addClass("is-active");
   functionListParameters = { token: config.token };
 
@@ -127,7 +127,7 @@ function setListInputFromRList(inputId, config, selectParameters = {}) {
   // Fill variables
   return ocpu.rpc(
     //Create array of variables' options
-    "listVariables",
+    "variableList",
     functionListParameters,
 
     function(inputList) {

@@ -41,7 +41,7 @@ function initInputs() {
     setDateInput("endDate", { dateFormat: "yy-mm-dd" });
     // variables' initialization
     // if fail disabled input
-    setListInputFromRList("variable", config, {
+    setListInputFromRList("variable","variableList", config, {
       maximumSelectionLength: 2,
       multiple: true
     });
