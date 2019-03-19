@@ -30,6 +30,24 @@ $(function() {
   });
 });
 
+function initInputs() {
+  config = initOpenSilexConnection();
+  // test token send in url
+  if (config.token == null || config.token == "") {
+    alert("An accessToken is required");
+  } else {
+    // set form inputs
+    setDateInput("startDate", { dateFormat: "yy-mm-dd" });
+    setDateInput("endDate", { dateFormat: "yy-mm-dd" });
+    // variables' initialization
+    // if fail disabled input
+    setListInputFromRList("variable", config, {
+      maximumSelectionLength: 2,
+      multiple: true
+    });
+  }
+}
+
 function getInputs() {
   // input parameters in the form of the R function
   var smoothing = $("smoothing").prop("checked");
@@ -58,20 +76,4 @@ function getInputs() {
   return functionsParameters;
 }
 
-function initInputs() {
-  config = initOpenSilexConnection();
-  // test token send in url
-  if (config.token == null || config.token == "") {
-    alert("An accessToken is required");
-  } else {
-    // set form inputs
-    setDateInput("startDate", { dateFormat: "yy-mm-dd" });
-    setDateInput("endDate", { dateFormat: "yy-mm-dd" });
-    // variables' initialization
-    // if fail disabled input
-    setListInput("variable", config, {
-      maximumSelectionLength: 2,
-      multiple: true
-    });
-  }
-}
+

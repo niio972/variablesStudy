@@ -61,6 +61,8 @@ function showPlot(iframeInput, functionName, plotVarParameters) {
       $("#submit").removeAttr("disabled");
       $("#cssLoader").removeClass("is-active");
     }).fail(function(text) {
+      $("#submit").removeAttr("disabled");
+      $("#cssLoader").removeClass("is-active");
       alert("Error: " + req.responseText);
     }));
 }
@@ -114,7 +116,7 @@ function makeHeaders(colnames) {
       accessToken : "16193fdee6ead394adf63466b49241fc"
       }
    */
-function setListInput(inputId, config, selectParameters = {}) {
+function setListInputFromRList(inputId, config, selectParameters = {}) {
   $("#cssLoader").addClass("is-active");
   functionListParameters = { token: config.token };
 
@@ -135,6 +137,7 @@ function setListInput(inputId, config, selectParameters = {}) {
       return inputList;
     }
   ).fail(function(text) {
+    $("#cssLoader").removeClass("is-active");
     alert("Error: " + req.responseText);
   });
 }
@@ -167,6 +170,8 @@ function makeDatatable(inputId, getDFParameters) {
       $("#submit").removeAttr("disabled");
     })
     .fail(function() {
+      $("#submit").removeAttr("disabled");
+      $("#cssLoader").removeClass("is-active");
       $(tablesDivId).html("");
       alert("Error: " + req.responseText);
     })

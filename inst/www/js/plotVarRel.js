@@ -66,10 +66,10 @@ function initInputs() {
     setDateInput("startDate", { dateFormat: "yy-mm-dd" });
     setDateInput("endDate", { dateFormat: "yy-mm-dd" });
     // variables' initialization
-    setListInput("variableX", config, {
+    setListInputFromRList("variableX", config, {
       multiple: false
     })
-    setListInput("variableY", config, {
+    setListInputFromRList("variableY", config, {
       multiple: false
     }) 
   }
