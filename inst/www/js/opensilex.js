@@ -18,12 +18,18 @@
 function initOpenSilexConnection() {
   var params = new window.URLSearchParams(window.location.search);
   var config = {};
-  config.wsUrl = params.get("wsUrl");
+  
   if ($("#token").length != 0) {
     config.token = $("#token").val();
   } else {
     config.token = params.get("accessToken");
   }
+  if ($("#token").length != 0) {
+    config.token = $("#wsUrl").val();
+  } else {
+    config.wsUrl = params.get("wsUrl");
+  }
+
 
   return config;
 }
