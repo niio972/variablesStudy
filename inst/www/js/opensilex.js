@@ -84,8 +84,8 @@ function setDateInput(inputId, parameters= {dateFormat :"yy-mm-dd"}){
 function fillListInput(inputId, inputList, selectParameters = {}) {
   inputList.forEach(function(inputItem) {
     item = {};
-    item.id = inputItem.value;
-    item.text = inputItem.name;
+    item.id = inputItem.uri;
+    item.text = inputItem.label;
     inputData.push(item);
   });
   // console.log(inputData);
