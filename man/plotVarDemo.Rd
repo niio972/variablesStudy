@@ -4,12 +4,15 @@
 \alias{plotVarDemo}
 \title{Plot Environmental Data}
 \usage{
-plotVarDemo(varURI, startDate = NULL, endDate = NULL, sensor = NULL,
-  token, smoothing = TRUE,
+plotVarDemo(varURI, token,
   wsUrl = "www.opensilex.org/openSilexAPI/rest/")
 }
 \arguments{
 \item{varURI}{uri of the variable to plot from the \code{\link{listVariables}} function or the web service directly}
+
+\item{token}{a token from \code{\link{getToken}} function}
+
+\item{wsUrl}{url of the webservice}
 
 \item{startDate}{date from which to plot}
 
@@ -17,11 +20,7 @@ plotVarDemo(varURI, startDate = NULL, endDate = NULL, sensor = NULL,
 
 \item{sensor}{uri if the sensor that recorded the values}
 
-\item{token}{a token from \code{\link{getToken}} function}
-
 \item{smoothing}{logical, smoothing of the data}
-
-\item{wsUrl}{url of the webservice}
 }
 \description{
 Demonstration function

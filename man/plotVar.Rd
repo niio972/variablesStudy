@@ -5,7 +5,7 @@
 \title{Plot Environmental Data}
 \usage{
 plotVar(varURI, startDate = NULL, endDate = NULL, sensor = NULL,
-  token, smoothing = TRUE,
+  token, smoothing = FALSE,
   wsUrl = "www.opensilex.org/openSilexAPI/rest/")
 }
 \arguments{
