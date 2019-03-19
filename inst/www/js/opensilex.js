@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- *                                     opensilexdemo.js
+ *                                     opensilex.js
  *  js
  *  Copyright © INRA 2019
  *  Creation date:  11 March, 2019
