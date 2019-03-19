@@ -36,7 +36,7 @@ integratedFunctions:
         label: "Variables"
         type: list
         maxSelectedItem: 2
-        RfunctionValues: variablesList
+        RfunctionValues: variableList
         required: true
       smoothing:
         label: "Smoothing"
@@ -59,7 +59,7 @@ integratedFunctions:
         label: "Variables"
         type: list
         maxSelectedItem: 2
-        RfunctionValues: variablesList
+        RfunctionValues: variableList
         required: true
       token:
         type: string
@@ -87,13 +87,13 @@ integratedFunctions:
       varY:
         label: "Variable Y"
         type: list
-        RfunctionValues: variablesList
+        RfunctionValues: variableList
         maxSelectedItem: 1
         required: true
       varX:
         label: "Variable X"
         type: list
-        RfunctionValues: variablesList
+        RfunctionValues: variableList
         maxSelectedItem: 1
         required: true
       trend:
