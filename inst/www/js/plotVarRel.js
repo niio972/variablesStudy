@@ -14,10 +14,6 @@ $(function() {
     // basical
     // create a plot from htmlwidget named function name .e.g plotVar with Widget.html
     showPlot("plotDiv", "plotVarRel", functionsParameters);
-
-    // create multiple dataTables from list
-    // advanced
-    makeDatatable("getDFDatatable", functionsParameters);
   });
 });
 

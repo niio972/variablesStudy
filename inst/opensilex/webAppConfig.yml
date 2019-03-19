@@ -1,8 +1,9 @@
-# function available
+# function available minimum required
 availableFunctions:
   - plotDemo
   - plotVar
   - plotVarRel
+# web client integrated function configuration
 plotVar:
   label : 'Compare two variables'
   type : graphic
@@ -19,7 +20,7 @@ plotVar:
         - smoothing
         - token
         - wsUrl
-  formParameters:
+  formParameters:  # form parameters 
     startDate:
       label : 'Start date of data'
       type: date
