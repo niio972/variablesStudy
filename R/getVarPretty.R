@@ -36,12 +36,13 @@ getVarPretty <- function(token){
     names[i] <- strsplit(names[i], split="_")[[1]][1]
     methods[i] <- strsplit(methods[i], split="_")[[1]][2]
   }
+  label <- rawVar$data$label
   acronyms <- rawVar$data$trait$label
   unitVar <- rawVar$data$unit$comment
   uriVar <- rawVar$data$uri
 
   # Creation of the dataTable with information of interest
-  varPretty <- data.frame(name = names, method = methods, acronym = acronyms, unity = unitVar, uri = uriVar)
+  varPretty <- data.frame(name = names, method = methods, acronym = acronyms, unity = unitVar, uri = uriVar, label = label)
   varPretty <- data.frame(lapply(varPretty, as.character), stringsAsFactors=FALSE)
 
   return(varPretty)
