@@ -20,6 +20,7 @@ $(function() {
   $("#submit").click(function(e) {
     e.preventDefault();
     functionsParameters = getInputs();
+    console.log(functionsParameters);
     // basical
     // create a plot from htmlwidget named function name .e.g plotVar with Widget.html
     showPlot("plotDiv", "plotVar", functionsParameters);
@@ -50,7 +51,7 @@ function initInputs() {
 
 function getInputs() {
   // input parameters in the form of the R function
-  var smoothing = $("smoothing").prop("checked");
+  var smoothing = $("#smoothing").prop("checked");
   var varURIs = $("#variable").val();
   var startDate = $("#startDate").val();
   var endDate = $("#endDate").val();

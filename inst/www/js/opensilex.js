@@ -9,6 +9,18 @@
  */
 
 /**
+ * Permit to resize datatables inner jquery tabs
+ */
+$(function() {
+  $('a[data-toggle="tab"]').on("shown.bs.tab", function(e) {
+    $($.fn.dataTable.tables(true))
+      .DataTable()
+      .columns.adjust()
+      .responsive.recalc();
+  });
+});
+
+/**
  * return object the following object from url 
     {
     wsUrl : "http://www.opensilex.org:8080/openSilexAPI/rest/",
@@ -34,14 +46,6 @@ function initOpenSilexConnection() {
   return config;
 }
 
-$(function() {
-  $('a[data-toggle="tab"]').on("shown.bs.tab", function(e) {
-    $($.fn.dataTable.tables(true))
-      .DataTable()
-      .columns.adjust()
-      .responsive.recalc();
-  });
-});
 
 /**
  * Link a R plotly graph to a div
@@ -66,7 +70,11 @@ function showPlot(iframeInput, functionName, plotVarParameters) {
       alert("Error: " + req.responseText);
     }));
 }
-
+/**
+ * 
+ * @param {string} inputId html input tag id
+ * @param {object} parameters datepicker parameters
+ */
 function setDateInput(inputId, parameters= {dateFormat :"yy-mm-dd"}){
     $("#" + inputId).datepicker(parameters);
 }
@@ -203,10 +211,12 @@ function makeDatatableWithList(functionParameters, dataframe) {
   $("#" + searchedParameters).append(JSON.stringify(exportedParameters));
   $("#" + searchedParameters).addClass("alert-info");
   
-   
+     
+  var variablesNames = Object.keys(dataframe);
+
   //create a tab by variables
   varURIs.forEach(function(varUri) {
-    varName = varUri;
+    var varName = variablesNames[varCount];
     var classTab = "";
     if (active) {
       classTab = 'class="active"';
@@ -221,7 +231,7 @@ function makeDatatableWithList(functionParameters, dataframe) {
         "</a></li>"
     );
     // create datatable columns for one variable
-    var colnames = Object.keys(dataframe[varUri][0]);
+    var colnames = Object.keys(dataframe[varName][0]);
     var columns = [];
     var tableId = "table" + varCount;
     colnames.forEach(function(columnName) {
@@ -229,7 +239,7 @@ function makeDatatableWithList(functionParameters, dataframe) {
     });
     // get data for one variable
     data = [];
-    dataframe[varUri].forEach(function(dataVal) {
+    dataframe[varName].forEach(function(dataVal) {
       temp_array = [];
       colnames.forEach(function(col) {
         temp_array.push(dataVal[col]);
@@ -248,6 +258,7 @@ function makeDatatableWithList(functionParameters, dataframe) {
       '<div role="tabpanel" ' + classTabPanel + ' id="' + tabId + '"></div>';
 
     $("#" + tablesDivId).append(tab);
+
     // create datatable in tab panel
     var table =
       '<table id="' +
